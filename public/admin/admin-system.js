@@ -61,8 +61,15 @@
     card.append(head, body, h); m.appendChild(card);
     bC.addEventListener("click", () => showSystem(false));
     bR.addEventListener("click", () => refresh());
-    bS.addEventListener("click", () => { S.tab = "settings"; render(); });
-    bA.addEventListener("click", () => { S.tab = "audit"; render(); if (!S.loaded) loadAudit(); });
+    bS.addEventListener("click", () => {
+      S.tab = "settings"; render();
+      if (m.classList.contains("show") && window.adminNav && location.hash !== "#/system") window.adminNav.go("system");
+    });
+    bA.addEventListener("click", () => {
+      if (!can("audit.read")) return;
+      S.tab = "audit"; render(); if (!S.loaded) loadAudit();
+      if (m.classList.contains("show") && window.adminNav && location.hash !== "#/audit") window.adminNav.go("audit");
+    });
   }
 
   function applyText() {
@@ -211,6 +218,21 @@
     $("sysTabS").classList.toggle("pri", S.tab === "settings"); $("sysTabA").classList.toggle("pri", S.tab === "audit");
     if (S.tab === "audit" && can("audit.read")) renderAudit(box); else { S.tab = "settings"; renderSettings(box); }
   }
+  // Translating the open view must not discard unsaved settings or audit filters.
+  function renderTranslated() {
+    const old = Array.from($("sysBody").querySelectorAll("input, select, textarea"));
+    const focused = old.indexOf(document.activeElement);
+    const values = old.map((el) => ({ value: el.value, checked: el.checked }));
+    let selection = null;
+    if (focused >= 0) { try { selection = [old[focused].selectionStart, old[focused].selectionEnd]; } catch (_e) {} }
+    render();
+    const fresh = Array.from($("sysBody").querySelectorAll("input, select, textarea"));
+    fresh.forEach((el, i) => { if (values[i]) { el.value = values[i].value; if (el.type === "checkbox" || el.type === "radio") el.checked = values[i].checked; } });
+    if (fresh[focused]) {
+      fresh[focused].focus();
+      if (selection && selection[0] != null) { try { fresh[focused].setSelectionRange(...selection); } catch (_e) {} }
+    }
+  }
   async function refresh() { try { await loadSettings(); render(); if (S.tab === "audit") loadAudit(); hint(""); } catch (e) { hint(errText(e)); } }
 
   function showSystem(show) { const m = $("systemModal"); m.classList.toggle("show", !!show); }
@@ -223,7 +245,7 @@
       if (typeof token === "undefined" || !token) return showAuth(true);
       try { S.tab = "settings"; S.loaded = false; S.page = 0; await loadSettings(); render(); showSystem(true); } catch (e) { if (typeof toast === "function") toast(errText(e)); }
     });
-    new MutationObserver(() => { if ($("systemModal").classList.contains("show")) render(); else applyText(); }).observe(document.documentElement, { attributes: true, attributeFilter: ["lang"] });
+    new MutationObserver(() => { if ($("systemModal").classList.contains("show")) renderTranslated(); else applyText(); }).observe(document.documentElement, { attributes: true, attributeFilter: ["lang"] });
   }
   init();
 })();

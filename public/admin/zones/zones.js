@@ -290,6 +290,22 @@
 
   /* ---------- boot ---------- */
   function wire() {
+    // When embedded, the existing Back link returns to Orders in the parent shell.
+    if (window.parent !== window && new URLSearchParams(location.search).get("embedded") === "1") {
+      $("znBack").addEventListener("click", (e) => {
+        e.preventDefault();
+        if (window.parent.adminNav) window.parent.adminNav.go("home");
+      });
+      window.addEventListener("message", (e) => {
+        if (e.origin !== location.origin || e.source !== window.parent || !e.data || e.data.type !== "siymon:zones-visible") return;
+        if (S.map && typeof S.map.invalidateSize === "function") S.map.invalidateSize();
+      });
+      window.addEventListener("storage", (e) => {
+        if (e.key !== LANG_KEY || !T[e.newValue] || e.newValue === lang) return;
+        if (S.draft) readForm();
+        lang = e.newValue; applyLabels();
+      });
+    }
     $("znLang").addEventListener("change", (e) => { lang = e.target.value; try { localStorage.setItem(LANG_KEY, lang); } catch (_e) { /* ignore */ } if (S.draft) readForm(); applyLabels(); });
     $("znNew").addEventListener("click", startNew);
     $("znForm").addEventListener("submit", save);

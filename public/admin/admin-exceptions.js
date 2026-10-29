@@ -105,10 +105,18 @@
     const r = await api("/api/admin/exceptions?" + qs.toString());
     S.list = r.cases || []; S.counts = r.counts; S.settings = r.settings; S.outcomes = r.outcomes || S.outcomes;
     renderStats(); renderList();
-    if (S.active) { try { await loadDetail(S.active, true); } catch (e) { if (e.status === 404) { S.active = null; S.detail = null; renderDetail(); } } }
+    const active = S.active;
+    if (active) { try { await loadDetail(active, true); } catch (e) { if (e.status === 404 && S.active === active) { S.active = null; S.detail = null; renderDetail(); } } }
     hint("");
   }
-  async function loadDetail(id, quiet) { const r = await api("/api/admin/exceptions/" + encodeURIComponent(id)); S.detail = r.case; if (!quiet || S.active === id) renderDetail(); renderList(); }
+  const detailHasDraft = () => !!document.querySelector("#exDetail .ex-form:not([hidden])");
+  async function loadDetail(id, quiet) {
+    const r = await api("/api/admin/exceptions/" + encodeURIComponent(id));
+    if (S.active !== id) return; // selection changed while the request was in flight
+    S.detail = r.case;
+    if (!quiet || !detailHasDraft()) renderDetail();
+    renderList();
+  }
   const refresh = (manual) => load().catch((e) => hint(manual ? errText(e) : ""));
 
   /* ---------------- render ---------------- */
@@ -168,7 +176,7 @@
       fields.forEach((f) => form.appendChild(f));
       const row = mk("div", "ex-row"), ok = mk("button", "ex-b pri" + (danger ? " bad" : ""), x.confirm), no = mk("button", "ex-b", x.cancel); ok.type = no.type = "button";
       no.addEventListener("click", () => { form.hidden = true; });
-      ok.addEventListener("click", async () => { if (S.busy) return; S.busy = true; ok.disabled = true; try { await submit(); form.hidden = true; } catch (e) { hint(errText(e)); } finally { S.busy = false; ok.disabled = false; } });
+      ok.addEventListener("click", async () => { if (S.busy) return; S.busy = true; ok.disabled = true; try { await submit(); form.hidden = true; renderDetail(); } catch (e) { hint(errText(e)); } finally { S.busy = false; ok.disabled = false; } });
       row.append(ok, no); form.appendChild(row);
     };
     const run = async (path, body, okMsg) => { const r = await post("/api/admin/exceptions/" + encodeURIComponent(c.id) + "/" + path, body); S.detail = r.case; hint(okMsg || x.done, true); await load(); return r; };
@@ -231,7 +239,7 @@
       try { S.active = null; S.detail = null; S.showSettings = false; applyText(); renderDetail(); const r = await api("/api/admin/exceptions?status=active"); S.outcomes = r.outcomes || []; $("exStatus").value = "active"; S.list = r.cases || []; S.counts = r.counts; S.settings = r.settings; renderStats(); renderList(); showExceptions(true); }
       catch (e) { if (typeof toast === "function") toast(errText(e)); }
     });
-    new MutationObserver(() => { applyText(); renderStats(); renderList(); renderDetail(); }).observe(document.documentElement, { attributes: true, attributeFilter: ["lang"] });
+    new MutationObserver(() => { applyText(); renderStats(); renderList(); if (!detailHasDraft() && !S.showSettings) renderDetail(); }).observe(document.documentElement, { attributes: true, attributeFilter: ["lang"] });
     S.badgeTimer = setInterval(refreshBadge, 30000); setTimeout(refreshBadge, 3000);
   }
   init();

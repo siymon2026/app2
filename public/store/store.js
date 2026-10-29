@@ -8,6 +8,8 @@
   const TOKEN_KEY = "siymon_store_token";
   const STORE_KEY = "siymon_store_id";
   const LIST_KEY = "siymon_store_list";
+  // Admin impersonation is confined to this tab; normal store sessions stay in localStorage.
+  const authStorage = window.parent !== window && new URLSearchParams(location.search).get("adminEmbed") === "1" ? sessionStorage : localStorage;
   const LANG_KEY = "siymon_lang_v1";
   const THEME_KEY = "siymon_store_theme";
 
@@ -190,14 +192,14 @@
   try {
     const hp = new URLSearchParams((location.hash || "").replace(/^#/, ""));
     if (hp.get("admintoken")) {
-      localStorage.setItem(TOKEN_KEY, hp.get("admintoken"));
-      if (hp.get("store")) localStorage.setItem(STORE_KEY, hp.get("store")); else localStorage.removeItem(STORE_KEY);
-      localStorage.removeItem(LIST_KEY);
+      authStorage.setItem(TOKEN_KEY, hp.get("admintoken"));
+      if (hp.get("store")) authStorage.setItem(STORE_KEY, hp.get("store")); else authStorage.removeItem(STORE_KEY);
+      authStorage.removeItem(LIST_KEY);
       history.replaceState(null, "", location.pathname + location.search);
     }
   } catch (_e) {}
-  let token = localStorage.getItem(TOKEN_KEY) || "";
-  let storeId = localStorage.getItem(STORE_KEY) || "";
+  let token = authStorage.getItem(TOKEN_KEY) || "";
+  let storeId = authStorage.getItem(STORE_KEY) || "";
   const S = { me: null, view: "dashboard", stats: null, prevNew: null, ord: { stage: "all", q: "", from: "", to: "" }, prod: { q: "", status: "", cat: "" }, days: 7, chatOrder: null, refresh: null, timers: [] };
 
   class ApiError extends Error { constructor(m, status, data) { super(m); this.status = status; this.data = data; } }
@@ -236,7 +238,7 @@
   function logout() {
     stopTimers();
     token = ""; storeId = ""; S.me = null; S.stats = null; S.prevNew = null; S.prevPh = null;
-    localStorage.removeItem(TOKEN_KEY); localStorage.removeItem(STORE_KEY); localStorage.removeItem(LIST_KEY);
+    authStorage.removeItem(TOKEN_KEY); authStorage.removeItem(STORE_KEY); authStorage.removeItem(LIST_KEY);
     renderLogin();
   }
 
@@ -300,18 +302,18 @@
       data.stores = [];
     }
     token = data.token;
-    localStorage.setItem(TOKEN_KEY, token);
+    authStorage.setItem(TOKEN_KEY, token);
     const list = Array.isArray(data.stores) ? data.stores : [];
-    localStorage.setItem(LIST_KEY, JSON.stringify(list));
+    authStorage.setItem(LIST_KEY, JSON.stringify(list));
     if (list.length > 1) return renderPicker(list);
     storeId = list.length ? String(list[0].id) : "";
-    storeId ? localStorage.setItem(STORE_KEY, storeId) : localStorage.removeItem(STORE_KEY);
+    storeId ? authStorage.setItem(STORE_KEY, storeId) : authStorage.removeItem(STORE_KEY);
     await boot();
   }
 
   function renderPicker(list) {
     stopTimers();
-    const buttons = list.map((s) => h("button", { class: "btn", type: "button", onclick: async () => { storeId = String(s.id); localStorage.setItem(STORE_KEY, storeId); await boot(); } },
+    const buttons = list.map((s) => h("button", { class: "btn", type: "button", onclick: async () => { storeId = String(s.id); authStorage.setItem(STORE_KEY, storeId); await boot(); } },
       h("div", {}, h("div", { style: "font-weight:700" }, nm(s.name)), h("div", { class: "muted" }, t("role_" + s.role)))));
     clear($("app")).appendChild(h("div", { class: "login" }, h("div", { class: "card" }, h("h2", {}, t("chooseStore")), h("div", { class: "picker" }, buttons),
       h("div", { class: "row", style: "margin-top:12px" }, h("button", { class: "btn sm", type: "button", onclick: logout }, t("logout"))))));
@@ -326,15 +328,15 @@
     } catch (e) {
       if (e.status === 400 && e.data && e.data.error === "store_required") {
         let list = [];
-        try { list = JSON.parse(localStorage.getItem(LIST_KEY) || "[]"); } catch (_e) {}
+        try { list = JSON.parse(authStorage.getItem(LIST_KEY) || "[]"); } catch (_e) {}
         if (list.length) return renderPicker(list);
       }
-      if (e.status === 403) { storeId = ""; localStorage.removeItem(STORE_KEY); }
+      if (e.status === 403) { storeId = ""; authStorage.removeItem(STORE_KEY); }
       return e.status === 401 ? undefined : renderLogin(errText(e));
     }
     storeId = String(S.me.store.id);
-    localStorage.setItem(STORE_KEY, storeId);
-    localStorage.setItem(LIST_KEY, JSON.stringify(S.me.stores));
+    authStorage.setItem(STORE_KEY, storeId);
+    authStorage.setItem(LIST_KEY, JSON.stringify(S.me.stores));
     if (!S.me.sections.includes(S.view)) S.view = S.me.sections[0] || "dashboard";
     renderShell();
     startPolling();
@@ -386,7 +388,7 @@
     const nav = h("nav", { class: "nav" }, me.sections.map((k) =>
       h("a", { class: S.view === k ? "on" : "", "data-k": k, role: "button", tabindex: "0", onclick: () => go(k), onkeydown: (e) => { if (e.key === "Enter") go(k); } },
         h("span", { class: "ic" }, iconTile(ICONS[k] || "dashboard")), h("span", {}, t(k)), h("span", { class: "badge hidden", id: "bd_" + k }))));
-    const switcher = me.stores.length > 1 ? h("select", { class: "input", style: "max-width:220px", "aria-label": t("chooseStore"), onchange: async (e) => { storeId = e.target.value; localStorage.setItem(STORE_KEY, storeId); S.view = "dashboard"; S.chatOrder = null; await boot(); } },
+    const switcher = me.stores.length > 1 ? h("select", { class: "input", style: "max-width:220px", "aria-label": t("chooseStore"), onchange: async (e) => { storeId = e.target.value; authStorage.setItem(STORE_KEY, storeId); S.view = "dashboard"; S.chatOrder = null; await boot(); } },
       me.stores.map((s) => h("option", { value: String(s.id), selected: String(s.id) === String(me.store.id) }, nm(s.name)))) : null;
     const side = h("aside", { class: "side" },
       h("div", { class: "who" }, h("div", { class: "brand" }, h("img", { src: safeImg(me.store.logo) || "/icons/icon-192.png", alt: "" }),
@@ -1388,7 +1390,7 @@ ${tot(L.sub, amt(sub))}${disc > 0 ? tot(L.disc, "−" + amt(disc)) : ""}${tot(L.
   function toggleTheme() { localStorage.setItem(THEME_KEY, (localStorage.getItem(THEME_KEY) || "dark") === "dark" ? "light" : "dark"); applyTheme(); }
   function toggleLang() {
     lang = lang === "ar" ? "fr" : "ar"; localStorage.setItem(LANG_KEY, lang);
-    if (S.me) renderShell(); else if (token) renderPicker(JSON.parse(localStorage.getItem(LIST_KEY) || "[]")); else renderLogin();
+    if (S.me) renderShell(); else if (token) renderPicker(JSON.parse(authStorage.getItem(LIST_KEY) || "[]")); else renderLogin();
   }
 
   document.addEventListener("visibilitychange", () => { if (!document.hidden) pollStats(); });

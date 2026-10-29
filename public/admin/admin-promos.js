@@ -4,27 +4,22 @@
 (function () {
   "use strict";
   var doc = document;
-  var L = function (ar, en, fr) { var l = (doc.documentElement.lang || lang || "ar").slice(0, 2); return l === "ar" ? ar : l === "fr" ? (fr || en) : en; };
+  var L = window.adminPageElements.L, h = window.adminPageElements.h;
   var say = function (m) { try { toast(m); } catch (e) {} };
-  function h(tag, props) {
-    var e = doc.createElement(tag), k, kids = Array.prototype.slice.call(arguments, 2);
-    for (k in (props || {})) {
-      var v = props[k]; if (v == null || v === false) continue;
-      if (k === "class") e.className = v;
-      else if (k.indexOf("on") === 0 && typeof v === "function") e.addEventListener(k.slice(2), v);
-      else e.setAttribute(k, v === true ? "" : String(v));
-    }
-    kids.forEach(function (kid) { (Array.isArray(kid) ? kid : [kid]).forEach(function (c) { if (c == null || c === false) return; e.appendChild(c instanceof Node ? c : doc.createTextNode(String(c))); }); });
-    return e;
-  }
   var numOrNull = function (v) { v = String(v == null ? "" : v).trim(); return v === "" ? null : Number(v); };
   var dateOrNull = function (v) { return v ? new Date(v + "T23:59:59").toISOString() : null; };
 
+  function showPromos(show) {
+    var m = doc.getElementById("promosModal"); m.classList.toggle("show", !!show);
+    if (!show) { m.replaceChildren(); }
+  }
+  window.showPromos = showPromos;
+
   function open() {
     var list = h("div", { class: "sen-list" }, h("p", { class: "sen-muted" }, "…"));
-    var ov = h("div", { class: "sen-ov", onclick: function (e) { if (e.target === ov) ov.remove(); } });
-    var box = h("div", { class: "sen-box", role: "dialog", "aria-modal": "true" });
-    ov.appendChild(box);
+    var ov = doc.getElementById("promosModal");
+    var box = h("div", { class: "modal-card sen-box", role: "region" });
+    ov.replaceChildren(box);
     var f = {
       code: h("input", { class: "sen-search", type: "text", maxlength: "24", placeholder: L("الكود (مثال: WELCOME10)", "Code (e.g. WELCOME10)", "Code (ex. WELCOME10)"), autocomplete: "off" }),
       type: h("select", { class: "sen-search" }, h("option", { value: "percent" }, L("نسبة %", "Percent %", "Pourcentage %")), h("option", { value: "fixed" }, L("مبلغ ثابت", "Fixed amount", "Montant fixe"))),
@@ -71,34 +66,23 @@
     } }, L("إنشاء الكود", "Create code", "Créer le code"));
 
     box.appendChild(h("div", { class: "sen-head" }, h("h3", {}, L("أكواد الخصم", "Discount codes", "Codes promo")),
-      h("button", { class: "sen-x", type: "button", "aria-label": L("إغلاق", "Close", "Fermer"), onclick: function () { ov.remove(); } }, "✕")));
+      h("button", { class: "sen-x", type: "button", "aria-label": L("إغلاق", "Close", "Fermer"), onclick: function () { showPromos(false); } }, "✕")));
     box.appendChild(h("p", { class: "sen-muted" }, L("الخصم على قيمة البضاعة فقط (لا على التوصيل) وتتحمّله المنصة: لا ينقص من مستحقات المتجر. يتطلب تسجيل دخول الزبون.", "Discount applies to goods only (not delivery) and is funded by the platform: the store's net is unchanged. Customers must be signed in.", "La remise porte sur les marchandises uniquement et est financée par la plateforme. Connexion client requise.")));
     box.appendChild(list);
     box.appendChild(h("h4", {}, L("كود جديد", "New code", "Nouveau code")));
     Object.keys(f).forEach(function (k) {
-      if (k === "first") { box.appendChild(h("label", { class: "sen-muted" }, f.first, " " + L("لأول طلب للزبون فقط", "First order only", "Première commande uniquement"))); return; }
+      if (k === "first") { box.appendChild(h("label", { class: "sen-muted" }, f.first, " ", L("لأول طلب للزبون فقط", "First order only", "Première commande uniquement"))); return; }
       box.appendChild(f[k]);
     });
     box.appendChild(add);
-    doc.body.appendChild(ov);
+    showPromos(true);
     load();
   }
 
-  function setup(tries) {
-    var nav = doc.getElementById("sideNav");
-    if (!nav || doc.getElementById("sbPromos")) return;
-    var tok = null; try { tok = localStorage.getItem("siymon_admin_token_v2"); } catch (e) {}
-    if (!tok) { if (tries < 600) setTimeout(function () { setup(tries + 1); }, 2000); return; }
-    api("/api/admin/me").then(function (me) {
-      if (!me || !me.permissions || me.permissions.indexOf("*") < 0) return; // system_admin only
-      if (doc.getElementById("sbPromos")) return;
-      var btn = h("button", { class: "sb-item", id: "sbPromos", type: "button", "data-key": "promos" });
-      btn.innerHTML = '<span class="sb-tile t-green"><svg class="sb-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.59 13.41 13.42 20.58a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82Z"/><circle cx="7" cy="7" r="1.5"/></svg></span>';
-      var txt = h("span", { class: "sb-text" }, L("أكواد الخصم", "Discount codes", "Codes promo")); btn.appendChild(txt);
-      btn.setAttribute("data-tip", txt.textContent);
-      btn.addEventListener("click", function () { open(); doc.body.classList.remove("sb-open"); });
-      nav.appendChild(btn);
-    }).catch(function () { if (tries < 600) setTimeout(function () { setup(tries + 1); }, 2000); });
-  }
-  if (doc.readyState === "loading") doc.addEventListener("DOMContentLoaded", function () { setup(0); }); else setup(0);
+
+  // The shared hash router clicks the original source button after checking the role.
+  doc.getElementById("promosBtn").addEventListener("click", function () {
+    if (window.adminPerms && !window.adminPerms.canNav("promos")) return;
+    open();
+  });
 })();

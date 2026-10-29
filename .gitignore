@@ -1,0 +1,5 @@
+# Local dependencies and Python browser-test environments
+node_modules/
+.venv/
+__pycache__/
+*.py[cod]

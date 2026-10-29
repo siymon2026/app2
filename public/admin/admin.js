@@ -867,6 +867,13 @@ function cycleLang() {
   applyI18n();
   render();
 }
+window.addEventListener("storage", (e) => {
+  if (e.key === LANG_KEY && e.newValue && I18N[e.newValue] && e.newValue !== lang) {
+    lang = e.newValue;
+    applyI18n();
+    render();
+  }
+});
 function setSound(on) {
   soundEnabled = !!on;
   localStorage.setItem(SOUND_KEY, soundEnabled ? "1" : "0");
@@ -994,10 +1001,11 @@ async function uploadMealImage(file) {
 }
 
 async function api(url, opts = {}) {
+  const requestToken = token;
   const headers = Object.assign({}, opts.headers || {}, {
     "Content-Type": "application/json",
   });
-  if (token) headers["X-Admin-Token"] = token;
+  if (requestToken) headers["X-Admin-Token"] = requestToken;
   // a request that never answers must not freeze a loader (and the refresh loop behind it) forever
   let ctl = null, tm = null;
   if (!opts.signal && typeof AbortController !== "undefined") {
@@ -1018,6 +1026,13 @@ async function api(url, opts = {}) {
     body = await res.json();
   } catch (e) {
     body = null;
+  }
+  // An in-flight response belongs to the account that made the request. Do not
+  // let it populate a page after logout or a switch to a less privileged user.
+  let storedToken = requestToken;
+  try { storedToken = localStorage.getItem(TOKEN_KEY); } catch (_e) {}
+  if (requestToken && (requestToken !== token || requestToken !== storedToken)) {
+    const e = new Error("Session changed"); e.status = 0; e.staleSession = true; throw e;
   }
   if (!res.ok) {
     const err = body?.error || `HTTP ${res.status}`;
@@ -4856,10 +4871,6 @@ async function printBluetooth(order) {
 function bindEvents() {
   el("themeToggle").addEventListener("click", toggleTheme);
   el("adminLangToggle").addEventListener("click", cycleLang);
-
-  el("restaurantPortalBtn")?.addEventListener("click", () => {
-    window.open("/restaurant/", "_blank");
-  });
 
   el("soundToggle").addEventListener("click", () => setSound(!soundEnabled));
   el("soundGateBtn")?.addEventListener("click", () => {

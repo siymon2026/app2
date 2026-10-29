@@ -8,10 +8,10 @@
     <link rel="stylesheet" href="/admin/admin.css">
   <link rel="stylesheet" href="/pw-toggle.css">
   <link rel="stylesheet" href="/admin/admin-dispatch.css" />
-  <link rel="stylesheet" href="/admin/admin-nav.css">
+  <link rel="stylesheet" href="/admin/admin-nav.css?v=20261029">
   <link rel="stylesheet" href="/admin/admin-stores.css">
   <link rel="stylesheet" href="/admin/admin-store-types.css">
-  <link rel="stylesheet" href="/admin/admin-enter.css?v=20261023">
+  <link rel="stylesheet" href="/admin/admin-enter.css?v=20261029">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
   <link rel="stylesheet" href="/admin/admin-support.css">
   <link rel="stylesheet" href="/admin/admin-store-support.css?v=1">
@@ -48,6 +48,7 @@
       <button class="sb-item" type="button" data-key="reports" data-src="reportsBtn" data-text="reportsText" data-modal="reportsModal"><svg class="sb-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg><span class="sb-text"></span><span class="sb-badge" hidden></span></button>
       <button class="sb-item" type="button" data-key="notifications" data-src="notificationsBtn" data-text="notificationsText" data-modal="notificationsModal"><svg class="sb-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><span class="sb-text" data-i="notifications"></span><span class="sb-badge" hidden></span></button>
       <button class="sb-item" type="button" data-key="system" data-src="systemBtn" data-text="systemText" data-modal="systemModal"><svg class="sb-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 4 5v6c0 5 3.4 9.4 8 11 4.6-1.6 8-6 8-11V5z"/><path d="m9 12 2 2 4-4"/></svg><span class="sb-text"></span><span class="sb-badge" hidden></span></button>
+      <button class="sb-item" type="button" data-key="audit" data-src="systemBtn" data-modal="systemModal"><svg class="sb-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 3h16v18H4zM8 7h8M8 11h8M8 15h5"/></svg><span class="sb-text" data-i="audit"></span></button>
       <div class="sb-sep" role="separator"></div>
       <button class="sb-item" type="button" data-key="settings" data-src="settingsBtn" data-text="settingsText" data-modal="settingsModal"><svg class="sb-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg><span class="sb-text" data-i="settings"></span><span class="sb-badge" hidden></span></button>
       <div class="sb-label" data-i="group"></div>
@@ -59,8 +60,12 @@
         <button class="sb-subitem" type="button" data-key="subMeals" data-tab="menuTabItems" data-text="menuTabItems"><span class="sb-text"></span></button>
       </div>
       <button class="sb-item" type="button" data-key="topups" data-src="topupsBtn" data-text="topupsText" data-modal="topupsModal"><span class="sb-tile t-green"><svg class="sb-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/></svg></span><span class="sb-text" data-i="topups"></span><span class="sb-badge" hidden></span></button>
-      <a class="sb-item" id="sbZones" href="/admin/zones/" data-key="zones"><span class="sb-tile t-green"><svg class="sb-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></span><span class="sb-text" data-i="zones"></span></a>
-      <a class="sb-item" id="sbPortal" href="/restaurant/" target="_blank" rel="noopener" data-key="portal" data-text="restaurantPortalText"><span class="sb-tile t-blue"><svg class="sb-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></span><span class="sb-text" data-i="portal"></span></a>
+      <button class="sb-item" id="sbZones" type="button" data-key="zones" data-src="zonesBtn" data-modal="zonesModal"><span class="sb-tile t-green"><svg class="sb-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></span><span class="sb-text" data-i="zones"></span></button>
+      <button class="sb-item" id="sbStoreEnter" type="button" data-key="storeEnter" data-src="storeEnterBtn" data-modal="storeEnterModal"><span class="sb-tile t-orange"><svg class="sb-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8M9 22v-6h6v6"/></svg></span><span class="sb-text" data-i="storeEnter"></span></button>
+      <button class="sb-item" id="sbPortal" type="button" data-key="portal" data-src="restaurantPortalBtn" data-modal="portalModal" data-text="restaurantPortalText"><span class="sb-tile t-blue"><svg class="sb-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></span><span class="sb-text" data-i="portal"></span></button>
+      <button class="sb-item" id="sbStaff" type="button" data-key="staff" data-src="staffBtn" data-modal="staffModal"><span class="sb-tile t-orange"><svg class="sb-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></span><span class="sb-text" data-i="staff"></span></button>
+      <button class="sb-item" id="sbPromos" type="button" data-key="promos" data-src="promosBtn" data-modal="promosModal"><span class="sb-tile t-green"><svg class="sb-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.59 13.41 13.42 20.58a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82Z"/><circle cx="7" cy="7" r="1.5"/></svg></span><span class="sb-text" data-i="promos"></span></button>
+      <button class="sb-item" id="sbPayments" type="button" data-key="payments" data-src="paymentsBtn" data-modal="paymentsModal"><span class="sb-tile t-green"><svg class="sb-ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></span><span class="sb-text" data-i="payments"></span></button>
     </nav>
     <div class="sb-bottom">
       <div class="sb-theme" role="group" aria-label="Theme">
@@ -120,7 +125,12 @@
           <button class="btn nav" id="reportsBtn" type="button" title="Reports"><span id="reportsText">Reports</span></button>
           <button class="btn nav" id="notificationsBtn" type="button" title="Notifications"><span id="notificationsText">Notifications</span></button>
           <button class="btn nav" id="topupsBtn" type="button" title="Topups"><span id="topupsText">Topups</span></button>
-          <a class="btn nav" id="restaurantPortalBtn" href="/restaurant/" target="_blank" rel="noopener" title="Restaurant Portal"><span id="restaurantPortalText">Restaurant Portal</span></a>
+          <button class="btn nav" id="restaurantPortalBtn" type="button" title="Restaurant Portal"><span id="restaurantPortalText">Restaurant Portal</span></button>
+          <button class="btn nav" id="storeEnterBtn" type="button">Enter store</button>
+          <button class="btn nav" id="zonesBtn" type="button">Service zones</button>
+          <button class="btn nav" id="staffBtn" type="button">Staff</button>
+          <button class="btn nav" id="promosBtn" type="button">Discount codes</button>
+          <button class="btn nav" id="paymentsBtn" type="button">Payment methods</button>
           <button class="btn nav" id="menuManageBtn" type="button" title="Menu"><span id="menuManageText">Menu</span></button>
           <button class="btn nav primary" id="settingsBtn" type="button" title="Settings"><span id="settingsText">Settings</span></button>
         </div>
@@ -192,6 +202,7 @@
 
   <!-- Admin pages: every sidebar section renders here, inside the shared layout (sidebar + header stay in place) -->
   <section class="admin-wrap admin-pages" id="adminPages" aria-live="polite">
+  <p id="adminPageLoading" data-i="loading" role="status" hidden></p>
   <div class="modal page-view" id="settingsModal" data-page="settings">
     <div class="modal-card">
       <h3 id="settingsTitle">Settings</h3>
@@ -873,7 +884,81 @@
       </div>
     </div>
   </div>
+  <div class="modal page-view" id="exceptionsModal" data-page="exceptions"></div>
+  <div class="modal page-view" id="systemModal" data-page="system"></div>
+  <div class="modal page-view" id="feedbackModal" data-page="feedback"></div>
+
+  <div class="modal page-view" id="storeSupportModal" data-page="storeSupport">
+    <div class="modal-card ss-card" role="dialog" aria-labelledby="ssTitle">
+      <div class="ss-head">
+        <h3 id="ssTitle">Store support</h3>
+        <div class="ss-tabs" role="tablist">
+          <button type="button" id="ssTabTickets" role="tab" class="on">Tickets<span class="ss-b" id="ssTicketBadge" hidden></span></button>
+          <button type="button" id="ssTabChannels" role="tab">Channels</button>
+        </div>
+        <button class="ss-ib" id="ssRefresh" type="button" aria-label="Refresh" title="Refresh">↻</button>
+        <button class="ss-ib" id="ssClose" type="button" aria-label="Close" title="Close">✕</button>
+      </div>
+      <div class="ss-body" id="ssBody">
+        <div class="ss-list">
+          <div class="ss-filters">
+            <select id="ssStatus" aria-label="Status"></select>
+            <input id="ssSearch" type="search" autocomplete="off" />
+          </div>
+          <div class="ss-items" id="ssItems"></div>
+        </div>
+        <div class="ss-thread">
+          <div class="ss-empty" id="ssEmpty">—</div>
+          <div id="ssThreadBox" style="display:flex;flex-direction:column;min-height:0;flex:1" hidden>
+            <div class="ss-thead">
+              <button class="ss-ib ss-back" id="ssBackBtn" type="button" aria-label="Back">‹</button>
+              <div><b id="ssWho"></b><small id="ssSubj"></small></div>
+              <button class="ss-btn" id="ssStatusBtn" type="button" data-to="closed"></button>
+            </div>
+            <div class="ss-msgs" id="ssMsgs"></div>
+            <div class="ss-compose">
+              <input id="ssInput" type="text" maxlength="2000" autocomplete="off" />
+              <button class="ss-btn pri" id="ssSend" type="button"></button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="ssChannels" hidden>
+        <div class="ss-tools"><p id="ssChNote"></p><button class="ss-btn pri" id="ssAddCh" type="button"></button></div>
+        <div class="ss-chlist" id="ssChList"></div>
+        <div class="ss-form" id="ssForm" hidden>
+          <div class="row">
+            <label><span data-ssl="kind">Type</span>
+              <select id="ssfKind"><option value="phone">Phone</option><option value="whatsapp">WhatsApp</option><option value="email">Email</option><option value="telegram">Telegram</option></select></label>
+            <label><span data-ssl="value">Number or address</span><input id="ssfValue" dir="ltr" maxlength="120" autocomplete="off" /></label>
+          </div>
+          <div class="row">
+            <label><span data-ssl="labelAr">Name (Arabic)</span><input id="ssfAr" maxlength="60" /></label>
+            <label><span data-ssl="labelFr">Name (French)</span><input id="ssfFr" maxlength="60" /></label>
+            <label><span data-ssl="labelEn">Name (English)</span><input id="ssfEn" maxlength="60" /></label>
+          </div>
+          <label><span data-ssl="hours">Hours</span><input id="ssfHours" maxlength="80" /></label>
+          <div class="chk">
+            <label><input type="checkbox" id="ssfA_stores" /><span data-ssl="stores">Stores</span></label>
+            <label><input type="checkbox" id="ssfA_drivers" /><span data-ssl="drivers">Drivers</span></label>
+            <label><input type="checkbox" id="ssfA_customers" /><span data-ssl="customers">Customers</span></label>
+            <label><input type="checkbox" id="ssfEnabled" checked /><span data-ssl="enabled">Enabled</span></label>
+          </div>
+          <div class="ss-tools"><span></span><span><button class="ss-btn" id="ssfCancel" type="button" data-ssl="cancel">Cancel</button> <button class="ss-btn pri" id="ssfSave" type="button" data-ssl="save">Save</button></span></div>
+        </div>
+      </div>
+      <div class="ss-hint" id="ssHint" role="alert"></div>
+    </div>
+  </div>
+
+
   <div class="modal page-view" id="reportsModal" data-page="reports"><div class="modal-card" role="dialog" aria-labelledby="rpTitle" style="padding:16px"><h3 id="rpTitle" style="margin:0 0 12px"></h3><div id="rpMount"></div></div></div>
+  <div class="modal page-view" id="staffModal" data-page="staff"></div>
+  <div class="modal page-view" id="promosModal" data-page="promos"></div>
+  <div class="modal page-view" id="paymentsModal" data-page="payments"></div>
+  <div class="modal page-view" id="storeEnterModal" data-page="store-enter"></div>
+  <div class="modal page-view" id="portalModal" data-page="portal"></div>
+  <div class="modal page-view" id="zonesModal" data-page="zones"></div>
   </section>
 
   <!-- Auth modal (glass split card) -->
@@ -1178,94 +1263,28 @@
 
   <script src="/pw-toggle.js"></script>
   <script src="/admin/admin-login.js"></script>
-  <script src="/admin/admin-perms.js?v=20261026"></script>
+  <script src="/admin/admin-perms.js?v=20261029"></script>
   <script src="/admin/admin-refresh.js?v=20261026"></script>
-  <script src="/admin/admin.js?v=20261026"></script>
+  <script src="/admin/admin.js?v=20261029"></script>
   <script src="/admin/admin-stores.js"></script>
   <script src="/admin/admin-store-types.js"></script>
-  <script src="/admin/admin-enter.js?v=20261023"></script>
-  <div class="modal page-view" id="exceptionsModal" data-page="exceptions"></div>
-  <div class="modal page-view" id="systemModal" data-page="system"></div>
-  <div class="modal page-view" id="feedbackModal" data-page="feedback"></div>
+  <script src="/admin/admin-enter.js?v=20261029"></script>
 
-  <div class="modal page-view" id="storeSupportModal" data-page="storeSupport">
-    <div class="modal-card ss-card" role="dialog" aria-labelledby="ssTitle">
-      <div class="ss-head">
-        <h3 id="ssTitle">Store support</h3>
-        <div class="ss-tabs" role="tablist">
-          <button type="button" id="ssTabTickets" role="tab" class="on">Tickets<span class="ss-b" id="ssTicketBadge" hidden></span></button>
-          <button type="button" id="ssTabChannels" role="tab">Channels</button>
-        </div>
-        <button class="ss-ib" id="ssRefresh" type="button" aria-label="Refresh" title="Refresh">↻</button>
-        <button class="ss-ib" id="ssClose" type="button" aria-label="Close" title="Close">✕</button>
-      </div>
-      <div class="ss-body" id="ssBody">
-        <div class="ss-list">
-          <div class="ss-filters">
-            <select id="ssStatus" aria-label="Status"></select>
-            <input id="ssSearch" type="search" autocomplete="off" />
-          </div>
-          <div class="ss-items" id="ssItems"></div>
-        </div>
-        <div class="ss-thread">
-          <div class="ss-empty" id="ssEmpty">—</div>
-          <div id="ssThreadBox" style="display:flex;flex-direction:column;min-height:0;flex:1" hidden>
-            <div class="ss-thead">
-              <button class="ss-ib ss-back" id="ssBackBtn" type="button" aria-label="Back">‹</button>
-              <div><b id="ssWho"></b><small id="ssSubj"></small></div>
-              <button class="ss-btn" id="ssStatusBtn" type="button" data-to="closed"></button>
-            </div>
-            <div class="ss-msgs" id="ssMsgs"></div>
-            <div class="ss-compose">
-              <input id="ssInput" type="text" maxlength="2000" autocomplete="off" />
-              <button class="ss-btn pri" id="ssSend" type="button"></button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div id="ssChannels" hidden>
-        <div class="ss-tools"><p id="ssChNote"></p><button class="ss-btn pri" id="ssAddCh" type="button"></button></div>
-        <div class="ss-chlist" id="ssChList"></div>
-        <div class="ss-form" id="ssForm" hidden>
-          <div class="row">
-            <label><span data-ssl="kind">Type</span>
-              <select id="ssfKind"><option value="phone">Phone</option><option value="whatsapp">WhatsApp</option><option value="email">Email</option><option value="telegram">Telegram</option></select></label>
-            <label><span data-ssl="value">Number or address</span><input id="ssfValue" dir="ltr" maxlength="120" autocomplete="off" /></label>
-          </div>
-          <div class="row">
-            <label><span data-ssl="labelAr">Name (Arabic)</span><input id="ssfAr" maxlength="60" /></label>
-            <label><span data-ssl="labelFr">Name (French)</span><input id="ssfFr" maxlength="60" /></label>
-            <label><span data-ssl="labelEn">Name (English)</span><input id="ssfEn" maxlength="60" /></label>
-          </div>
-          <label><span data-ssl="hours">Hours</span><input id="ssfHours" maxlength="80" /></label>
-          <div class="chk">
-            <label><input type="checkbox" id="ssfA_stores" /><span data-ssl="stores">Stores</span></label>
-            <label><input type="checkbox" id="ssfA_drivers" /><span data-ssl="drivers">Drivers</span></label>
-            <label><input type="checkbox" id="ssfA_customers" /><span data-ssl="customers">Customers</span></label>
-            <label><input type="checkbox" id="ssfEnabled" checked /><span data-ssl="enabled">Enabled</span></label>
-          </div>
-          <div class="ss-tools"><span></span><span><button class="ss-btn" id="ssfCancel" type="button" data-ssl="cancel">Cancel</button> <button class="ss-btn pri" id="ssfSave" type="button" data-ssl="save">Save</button></span></div>
-        </div>
-      </div>
-      <div class="ss-hint" id="ssHint" role="alert"></div>
-    </div>
-  </div>
-
-  <script src="/admin/admin-staff.js?v=20261024"></script>
-  <script src="/admin/admin-promos.js?v=20261025"></script>
-  <script src="/admin/admin-payments.js?v=20261025"></script>
+  <script src="/admin/admin-staff.js?v=20261029"></script>
+  <script src="/admin/admin-promos.js?v=20261029"></script>
+  <script src="/admin/admin-payments.js?v=20261029"></script>
   <script src="/admin/admin-notifications.js"></script>
   <script src="/admin/admin-support.js"></script>
   <script src="/admin/admin-store-support.js?v=1"></script>
-  <script src="/admin/admin-exceptions.js?v=1"></script>
-  <script src="/admin/admin-system.js?v=1"></script>
-  <script src="/admin/admin-feedback.js?v=1"></script>
+  <script src="/admin/admin-exceptions.js?v=20261029"></script>
+  <script src="/admin/admin-system.js?v=20261029"></script>
+  <script src="/admin/admin-feedback.js?v=20261029"></script>
   <script src="/shared/reports-ui.js?v=1"></script>
   <script src="/admin/admin-reports.js?v=1"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
   <script src="/shared/minimap.js?v=2"></script>
   <script src="/admin/admin-dispatch.js"></script>
-  <script src="/admin/admin-nav.js?v=20261026"></script>
+  <script src="/admin/admin-nav.js?v=20261029"></script>
   <script src="/reveal.js"></script>
 </body>
 </html>

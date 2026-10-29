@@ -369,7 +369,9 @@ app.use(
       defaultSrc: ["'self'"],
       baseUri: ["'self'"],
       objectSrc: ["'none'"],
-      frameAncestors: ["'none'"],
+      // These existing, same-origin applications are also shown inside the admin
+      // shell. Keep every other page unframeable, including by this origin.
+      frameAncestors: [(req) => /^\/(?:store|restaurant|admin\/zones)(?:\/|\/index\.html)?$/.test(req.path) ? "'self'" : "'none'"],
       // Google Sign-In (GIS) requires loading scripts/iframes from Google
       scriptSrc: [
         "'self'",

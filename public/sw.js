@@ -1,4 +1,4 @@
-const CACHE = "siymon-cache-v82";
+const CACHE = "siymon-cache-v83";
 const ASSETS = [
   "/",
   "/index.html",
@@ -21,23 +21,24 @@ const ASSETS = [
   "/driver/manifest.webmanifest",
   "/admin/index.html",
   "/admin/admin.css",
-  "/admin/admin-nav.css",
-  "/admin/admin-nav.js",
+  "/admin/admin-nav.css?v=20261029",
+  "/admin/admin-nav.js?v=20261029",
   "/admin/admin-dispatch.js",
   "/admin/admin-dispatch.css",
-  "/admin/admin.js",
+  "/admin/admin.js?v=20261029",
   "/admin/admin-stores.js",
   "/admin/admin-stores.css",
-  "/admin/admin-enter.js",
-  "/admin/admin-staff.js",
-  "/admin/admin-promos.js",
-  "/admin/admin-payments.js",
-  "/admin/admin-perms.js",
+  "/admin/admin-enter.js?v=20261029",
+  "/admin/admin-staff.js?v=20261029",
+  "/admin/admin-promos.js?v=20261029",
+  "/admin/admin-payments.js?v=20261029",
+  "/admin/admin-perms.js?v=20261029",
   "/admin/admin-refresh.js",
-  "/admin/admin-enter.css",
-  "/admin/admin-feedback.js?v=1",
+  "/admin/admin-enter.css?v=20261029",
+  "/admin/admin-feedback.js?v=20261029",
+  "/admin/admin-exceptions.js?v=20261029",
   "/admin/admin-feedback.css?v=1",
-  "/admin/admin-system.js?v=1",
+  "/admin/admin-system.js?v=20261029",
   "/admin/admin-system.css?v=1",
 
   "/siymon-page.js?v=36",
@@ -89,7 +90,7 @@ const ASSETS = [
 
   "/restaurant/index.html",
   "/restaurant/restaurant.css",
-  "/restaurant/restaurant.js?v=20261023",
+  "/restaurant/restaurant.js?v=20261029",
   "/sounds/order.mp3"
 ];
 

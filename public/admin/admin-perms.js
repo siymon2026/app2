@@ -15,7 +15,7 @@
     drivers: "drivers.read", dispatch: "dispatch.manage", customers: "customers.read",
     support: "support.use", topups: "finance.read",
     notifications: "*", payments: "payments.manage", promos: "*", staff: "*", settings: "*", menuManage: "*", subRest: "*", subMeals: "*",
-    portal: "*", enterStore: "*", storeSupport: "support.use", exceptions: "exceptions.read", system: "finance.read", feedback: "complaints.read", reports: "reports.read", zones: "zones.read",
+    portal: "*", storeEnter: "*", audit: "audit.read", storeSupport: "support.use", exceptions: "exceptions.read", system: "finance.read", feedback: "complaints.read", reports: "reports.read", zones: "zones.read",
   };
   // permission -> CSS selectors hidden when the role lacks it
   var ACTIONS = {

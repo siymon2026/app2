@@ -11,6 +11,8 @@ const THEME_KEY = "siymon_theme_v3";
 const LANG_KEY = "siymon_lang_v1";
 const TOKEN_KEY = "siymon_restaurant_token_v1";
 const REST_PROFILE_KEY = "siymon_restaurant_profile_v1";
+// Embedded admin impersonation must not replace a restaurant owner's existing session.
+const authStorage = window.parent !== window && new URLSearchParams(location.search).get("adminEmbed") === "1" ? sessionStorage : localStorage;
 
 const SOUND_KEY = "siymon_rest_sound_v1";
 let soundEnabled = localStorage.getItem(SOUND_KEY) !== "0";
@@ -42,12 +44,12 @@ let lang = localStorage.getItem(LANG_KEY) || "ar";
 try {
   const hp = new URLSearchParams((location.hash || "").replace(/^#/, ""));
   if (hp.get("admintoken")) {
-    localStorage.setItem(TOKEN_KEY, hp.get("admintoken"));
-    localStorage.removeItem(REST_PROFILE_KEY);
+    authStorage.setItem(TOKEN_KEY, hp.get("admintoken"));
+    authStorage.removeItem(REST_PROFILE_KEY);
     history.replaceState(null, "", location.pathname + location.search);
   }
 } catch (_e) {}
-let token = localStorage.getItem(TOKEN_KEY) || null;
+let token = authStorage.getItem(TOKEN_KEY) || null;
 let me = null;
 
 let orders = [];
@@ -1875,8 +1877,8 @@ async function doLogin() {
     });
     token = res.token;
     me = res.restaurant || null;
-    localStorage.setItem(TOKEN_KEY, token);
-    localStorage.setItem(REST_PROFILE_KEY, JSON.stringify(me || {}));
+    authStorage.setItem(TOKEN_KEY, token);
+    authStorage.setItem(REST_PROFILE_KEY, JSON.stringify(me || {}));
     showLoggedIn(true);
     await loadMe();
     await loadOrders();
@@ -1891,8 +1893,8 @@ function doLogout() {
   me = null;
   orders = [];
   selectedId = null;
-  localStorage.removeItem(TOKEN_KEY);
-  localStorage.removeItem(REST_PROFILE_KEY);
+  authStorage.removeItem(TOKEN_KEY);
+  authStorage.removeItem(REST_PROFILE_KEY);
   if (pollTimer) clearInterval(pollTimer);
   pollTimer = null;
   showLoggedIn(false);

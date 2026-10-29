@@ -107,7 +107,7 @@ async def main():
         check("points counter follows the drawing", "Points: 4" in await text(pg, "#znPolyInfo"), await text(pg, "#znPolyInfo"))
         # drag a vertex then remove one
         await pg.evaluate("__stub.dragMarker(0, 33.49, -7.71)")
-        await pg.click("#znSave"); await pg.wait_for_function("document.querySelector('#znToast').textContent.includes('Saved')", timeout=4000)
+        await pg.click("#znSave"); await pg.wait_for_function("document.querySelectorAll('#znList li').length === 2", timeout=4000)
         z = api("GET", "/api/admin/service-zones", None, "tok-system")[1]
         check("second zone saved with the dragged vertex", len(z["zones"]) == 2 and z["zones"][1]["polygon"][0] == [33.49, -7.71] and z["zones"][1]["city"] == "Casablanca", z["zones"][-1].get("polygon"))
         check("list shows both zones", await pg.locator("#znList li").count() == 2)
