@@ -34,7 +34,10 @@ try:
             check(f"[{w}] wallet card inside the screen, no sideways scroll", over <= 0 and box[0] >= 0 and box[1] <= box[2], (over, box))
             pg.click("#pfWalletOpen"); pg.wait_for_selector("#walletFrame[src]", timeout=4000)
             fr = pg.frame_locator("#walletFrame"); fr.locator("#wBal").wait_for(timeout=5000)
-            check(f"[{w}] wallet sheet shows balance + history", "125.50" in fr.locator("#wBal").inner_text() and fr.locator(".w-row").count() >= 2)
+            fr.locator(".w-tx").first.wait_for(timeout=5000)
+            check(f"[{w}] wallet sheet shows balance + history", "125.50" in fr.locator("#wBal").inner_text() and fr.locator(".w-tx").count() >= 2)
+            check(f"[{w}] wallet sheet shows the loyalty card", fr.locator("#wLoyalty .w-points-val").inner_text().strip().startswith("300"), fr.locator("#wLoyalty").inner_text())
+            over = pg.evaluate("(()=>{const f=document.getElementById('walletFrame');return f?0:1})()")
             c.close()
         # logged-out: no wallet card, no crash
         c = ctx_for(b, 360, "dark", token=None); pg = c.new_page(); pg.goto(B + "/"); pg.wait_for_selector("#searchInput"); pg.wait_for_timeout(500)

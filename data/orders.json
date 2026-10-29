@@ -1,0 +1,5099 @@
+{
+  "orders": [
+    {
+      "id": "MVTSUMO0-18C9B2",
+      "createdAt": "2026-10-29T17:10:39.936Z",
+      "status": "canceled",
+      "storeType": "restaurant",
+      "autoAccepted": false,
+      "driverId": null,
+      "assignedAt": null,
+      "acceptedAt": null,
+      "adminAcceptedAt": null,
+      "restaurantReadyAt": null,
+      "deliveredAt": null,
+      "updatedAt": "2026-10-29T17:10:39.947Z",
+      "customerId": "MVTSUM63-E5AA68",
+      "lang": "ar",
+      "currency": "MAD",
+      "restaurantId": "REST-1",
+      "customer": {
+        "name": "E2E Wallet",
+        "phone": "0612345678",
+        "addr": "Berrechid centre",
+        "notes": "",
+        "lat": 33.2655,
+        "lng": -7.5872
+      },
+      "items": [
+        {
+          "id": "m1",
+          "name": "طاجين دجاج",
+          "qty": 2,
+          "price": 40
+        }
+      ],
+      "subtotal": 80,
+      "deliveryFee": 0,
+      "total": 80,
+      "paymentMethod": "cod",
+      "verify": {
+        "salt": "b21c1d04f8f6aaa3f8541eed1fa23c8f",
+        "createdAt": "2026-10-29T17:10:39.936Z",
+        "expiresAt": "2026-10-30T17:10:39.936Z",
+        "pickup": {
+          "attempts": 0
+        },
+        "delivery": {
+          "attempts": 0
+        }
+      },
+      "serviceZone": {
+        "zoneId": "zone_berrechid",
+        "zoneName": "Berrechid",
+        "city": "Berrechid",
+        "maxRoadKm": null,
+        "checkedAt": "2026-10-29T17:10:39.934Z"
+      },
+      "financials": {
+        "status": "void",
+        "paymentMethod": "cod",
+        "commission": {
+          "type": "none",
+          "value": 0
+        },
+        "subtotal": 80,
+        "deliveryFee": 0,
+        "total": 80,
+        "promoDiscount": 0,
+        "commissionAmount": 0,
+        "businessNet": 80,
+        "driverEarning": 0,
+        "platformDeliveryMargin": 0,
+        "snapshotAt": "2026-10-29T17:10:39.936Z",
+        "finalizedAt": "2026-10-29T17:10:39.947Z"
+      },
+      "payment": {
+        "method": "cod",
+        "walletAmount": 80,
+        "amountDueOnDelivery": 0,
+        "status": "wallet_refunded",
+        "reference": "order:MVTSUMO0-18C9B2:wallet",
+        "walletRefundedAt": "2026-10-29T17:10:39.950Z",
+        "at": "2026-10-29T17:10:39.936Z"
+      },
+      "requestKey": "order:MVTSUM63-E5AA68:e2e2-3293839933",
+      "events": [
+        {
+          "at": "2026-10-29T17:10:39.947Z",
+          "from": "new",
+          "to": "canceled",
+          "actorType": "customer",
+          "actorId": "MVTSUM63-E5AA68"
+        }
+      ],
+      "canceledAt": "2026-10-29T17:10:39.947Z",
+      "canceledBy": "customer"
+    },
+    {
+      "id": "MVTSUMA2-FD2C6C",
+      "createdAt": "2026-10-29T17:10:39.434Z",
+      "status": "delivered",
+      "storeType": "restaurant",
+      "autoAccepted": false,
+      "driverId": "MVTSUMG7-EE9862",
+      "assignedAt": "2026-10-29T17:10:39.747Z",
+      "acceptedAt": null,
+      "adminAcceptedAt": "2026-10-29T17:10:39.635Z",
+      "restaurantReadyAt": "2026-10-29T17:10:39.648Z",
+      "deliveredAt": "2026-10-29T17:10:39.862Z",
+      "updatedAt": "2026-10-29T17:10:39.874Z",
+      "customerId": "MVTSUM63-E5AA68",
+      "lang": "ar",
+      "currency": "MAD",
+      "restaurantId": "REST-1",
+      "customer": {
+        "name": "E2E Wallet",
+        "phone": "0612345678",
+        "addr": "Berrechid centre",
+        "notes": "",
+        "lat": 33.2655,
+        "lng": -7.5872
+      },
+      "items": [
+        {
+          "id": "m1",
+          "name": "طاجين دجاج",
+          "qty": 2,
+          "price": 40
+        }
+      ],
+      "subtotal": 80,
+      "deliveryFee": 0,
+      "total": 80,
+      "paymentMethod": "cod",
+      "verify": {
+        "salt": "89b92b79551ce7c3b779d747bab90121",
+        "createdAt": "2026-10-29T17:10:39.434Z",
+        "expiresAt": "2026-10-30T17:10:39.434Z",
+        "pickup": {
+          "attempts": 0,
+          "verifiedAt": "2026-10-29T17:10:39.846Z"
+        },
+        "delivery": {
+          "attempts": 0,
+          "verifiedAt": "2026-10-29T17:10:39.862Z"
+        }
+      },
+      "serviceZone": {
+        "zoneId": "zone_berrechid",
+        "zoneName": "Berrechid",
+        "city": "Berrechid",
+        "maxRoadKm": null,
+        "checkedAt": "2026-10-29T17:10:39.430Z"
+      },
+      "financials": {
+        "status": "final",
+        "paymentMethod": "cod",
+        "commission": {
+          "type": "none",
+          "value": 0
+        },
+        "subtotal": 80,
+        "deliveryFee": 0,
+        "total": 80,
+        "promoDiscount": 0,
+        "commissionAmount": 0,
+        "businessNet": 80,
+        "driverEarning": 0,
+        "platformDeliveryMargin": 0,
+        "snapshotAt": "2026-10-29T17:10:39.434Z",
+        "updatedAt": "2026-10-29T17:10:39.747Z",
+        "finalizedAt": "2026-10-29T17:10:39.862Z"
+      },
+      "payment": {
+        "method": "cod",
+        "walletAmount": 80,
+        "amountDueOnDelivery": 0,
+        "status": "refunded",
+        "reference": "order:MVTSUMA2-FD2C6C:wallet",
+        "walletRefundedAt": "2026-10-29T17:10:39.919Z",
+        "at": "2026-10-29T17:10:39.434Z",
+        "refundReference": "order:MVTSUMA2-FD2C6C:refund"
+      },
+      "requestKey": "order:MVTSUM63-E5AA68:e2e-3293839429",
+      "events": [
+        {
+          "at": "2026-10-29T17:10:39.635Z",
+          "from": "new",
+          "to": "admin_accepted",
+          "actorType": "admin",
+          "actorId": "MVTSSFSK-0AD4AC"
+        },
+        {
+          "at": "2026-10-29T17:10:39.648Z",
+          "from": "admin_accepted",
+          "to": "restaurant_ready",
+          "actorType": "store",
+          "actorId": "REST-1"
+        },
+        {
+          "at": "2026-10-29T17:10:39.833Z",
+          "from": "restaurant_ready",
+          "to": "accepted",
+          "actorType": "driver",
+          "actorId": "MVTSUMG7-EE9862"
+        },
+        {
+          "at": "2026-10-29T17:10:39.846Z",
+          "from": "accepted",
+          "to": "picked_up",
+          "actorType": "driver",
+          "actorId": "MVTSUMG7-EE9862"
+        },
+        {
+          "at": "2026-10-29T17:10:39.852Z",
+          "from": "picked_up",
+          "to": "on_the_way",
+          "actorType": "driver",
+          "actorId": "MVTSUMG7-EE9862"
+        },
+        {
+          "at": "2026-10-29T17:10:39.862Z",
+          "from": "on_the_way",
+          "to": "delivered",
+          "actorType": "driver",
+          "actorId": "MVTSUMG7-EE9862"
+        }
+      ],
+      "storeAcceptedAt": "2026-10-29T17:10:39.643Z",
+      "refundedAt": "2026-10-29T17:10:39.919Z",
+      "refund": {
+        "amount": 80,
+        "walletAmount": 80,
+        "cashAmount": 0,
+        "cashReturned": false,
+        "reason": "E2E delivery problem",
+        "by": "MVTSSFSK-0AD4AC",
+        "at": "2026-10-29T17:10:39.919Z",
+        "reference": "order:MVTSUMA2-FD2C6C:refund"
+      }
+    },
+    {
+      "id": "MVTSULVA-FE6360",
+      "createdAt": "2026-10-29T17:10:38.902Z",
+      "status": "canceled",
+      "storeType": "restaurant",
+      "autoAccepted": false,
+      "driverId": null,
+      "assignedAt": null,
+      "acceptedAt": null,
+      "adminAcceptedAt": null,
+      "restaurantReadyAt": null,
+      "deliveredAt": null,
+      "updatedAt": "2026-10-29T17:10:38.914Z",
+      "customerId": "MVTSULEC-C1C842",
+      "lang": "ar",
+      "currency": "MAD",
+      "restaurantId": "REST-1",
+      "customer": {
+        "name": "E2E Wallet",
+        "phone": "0612345678",
+        "addr": "Berrechid centre",
+        "notes": "",
+        "lat": 33.2655,
+        "lng": -7.5872
+      },
+      "items": [
+        {
+          "id": "m1",
+          "name": "طاجين دجاج",
+          "qty": 2,
+          "price": 40
+        }
+      ],
+      "subtotal": 80,
+      "deliveryFee": 0,
+      "total": 80,
+      "paymentMethod": "cod",
+      "verify": {
+        "salt": "674b1b37a28eb637484235de3883455b",
+        "createdAt": "2026-10-29T17:10:38.902Z",
+        "expiresAt": "2026-10-30T17:10:38.902Z",
+        "pickup": {
+          "attempts": 0
+        },
+        "delivery": {
+          "attempts": 0
+        }
+      },
+      "serviceZone": {
+        "zoneId": "zone_berrechid",
+        "zoneName": "Berrechid",
+        "city": "Berrechid",
+        "maxRoadKm": null,
+        "checkedAt": "2026-10-29T17:10:38.900Z"
+      },
+      "financials": {
+        "status": "void",
+        "paymentMethod": "cod",
+        "commission": {
+          "type": "none",
+          "value": 0
+        },
+        "subtotal": 80,
+        "deliveryFee": 0,
+        "total": 80,
+        "promoDiscount": 0,
+        "commissionAmount": 0,
+        "businessNet": 80,
+        "driverEarning": 0,
+        "platformDeliveryMargin": 0,
+        "snapshotAt": "2026-10-29T17:10:38.902Z",
+        "finalizedAt": "2026-10-29T17:10:38.914Z"
+      },
+      "payment": {
+        "method": "cod",
+        "walletAmount": 80,
+        "amountDueOnDelivery": 0,
+        "status": "wallet_refunded",
+        "reference": "order:MVTSULVA-FE6360:wallet",
+        "walletRefundedAt": "2026-10-29T17:10:38.917Z",
+        "at": "2026-10-29T17:10:38.902Z"
+      },
+      "requestKey": "order:MVTSULEC-C1C842:e2e2-3293838899",
+      "events": [
+        {
+          "at": "2026-10-29T17:10:38.914Z",
+          "from": "new",
+          "to": "canceled",
+          "actorType": "customer",
+          "actorId": "MVTSULEC-C1C842"
+        }
+      ],
+      "canceledAt": "2026-10-29T17:10:38.914Z",
+      "canceledBy": "customer"
+    },
+    {
+      "id": "MVTSULHV-600AA6",
+      "createdAt": "2026-10-29T17:10:38.419Z",
+      "status": "delivered",
+      "storeType": "restaurant",
+      "autoAccepted": false,
+      "driverId": "MVTSULNR-DA1987",
+      "assignedAt": "2026-10-29T17:10:38.716Z",
+      "acceptedAt": null,
+      "adminAcceptedAt": "2026-10-29T17:10:38.615Z",
+      "restaurantReadyAt": "2026-10-29T17:10:38.626Z",
+      "deliveredAt": "2026-10-29T17:10:38.829Z",
+      "updatedAt": "2026-10-29T17:10:38.843Z",
+      "customerId": "MVTSULEC-C1C842",
+      "lang": "ar",
+      "currency": "MAD",
+      "restaurantId": "REST-1",
+      "customer": {
+        "name": "E2E Wallet",
+        "phone": "0612345678",
+        "addr": "Berrechid centre",
+        "notes": "",
+        "lat": 33.2655,
+        "lng": -7.5872
+      },
+      "items": [
+        {
+          "id": "m1",
+          "name": "طاجين دجاج",
+          "qty": 2,
+          "price": 40
+        }
+      ],
+      "subtotal": 80,
+      "deliveryFee": 0,
+      "total": 80,
+      "paymentMethod": "cod",
+      "verify": {
+        "salt": "979627494efed1e092a964c7e421eb33",
+        "createdAt": "2026-10-29T17:10:38.419Z",
+        "expiresAt": "2026-10-30T17:10:38.419Z",
+        "pickup": {
+          "attempts": 0,
+          "verifiedAt": "2026-10-29T17:10:38.814Z"
+        },
+        "delivery": {
+          "attempts": 0,
+          "verifiedAt": "2026-10-29T17:10:38.829Z"
+        }
+      },
+      "serviceZone": {
+        "zoneId": "zone_berrechid",
+        "zoneName": "Berrechid",
+        "city": "Berrechid",
+        "maxRoadKm": null,
+        "checkedAt": "2026-10-29T17:10:38.416Z"
+      },
+      "financials": {
+        "status": "final",
+        "paymentMethod": "cod",
+        "commission": {
+          "type": "none",
+          "value": 0
+        },
+        "subtotal": 80,
+        "deliveryFee": 0,
+        "total": 80,
+        "promoDiscount": 0,
+        "commissionAmount": 0,
+        "businessNet": 80,
+        "driverEarning": 0,
+        "platformDeliveryMargin": 0,
+        "snapshotAt": "2026-10-29T17:10:38.419Z",
+        "updatedAt": "2026-10-29T17:10:38.716Z",
+        "finalizedAt": "2026-10-29T17:10:38.829Z"
+      },
+      "payment": {
+        "method": "cod",
+        "walletAmount": 80,
+        "amountDueOnDelivery": 0,
+        "status": "refunded",
+        "reference": "order:MVTSULHV-600AA6:wallet",
+        "walletRefundedAt": "2026-10-29T17:10:38.884Z",
+        "at": "2026-10-29T17:10:38.419Z",
+        "refundReference": "order:MVTSULHV-600AA6:refund"
+      },
+      "requestKey": "order:MVTSULEC-C1C842:e2e-3293838415",
+      "events": [
+        {
+          "at": "2026-10-29T17:10:38.615Z",
+          "from": "new",
+          "to": "admin_accepted",
+          "actorType": "admin",
+          "actorId": "MVTSSFSK-0AD4AC"
+        },
+        {
+          "at": "2026-10-29T17:10:38.626Z",
+          "from": "admin_accepted",
+          "to": "restaurant_ready",
+          "actorType": "store",
+          "actorId": "REST-1"
+        },
+        {
+          "at": "2026-10-29T17:10:38.803Z",
+          "from": "restaurant_ready",
+          "to": "accepted",
+          "actorType": "driver",
+          "actorId": "MVTSULNR-DA1987"
+        },
+        {
+          "at": "2026-10-29T17:10:38.814Z",
+          "from": "accepted",
+          "to": "picked_up",
+          "actorType": "driver",
+          "actorId": "MVTSULNR-DA1987"
+        },
+        {
+          "at": "2026-10-29T17:10:38.820Z",
+          "from": "picked_up",
+          "to": "on_the_way",
+          "actorType": "driver",
+          "actorId": "MVTSULNR-DA1987"
+        },
+        {
+          "at": "2026-10-29T17:10:38.829Z",
+          "from": "on_the_way",
+          "to": "delivered",
+          "actorType": "driver",
+          "actorId": "MVTSULNR-DA1987"
+        }
+      ],
+      "storeAcceptedAt": "2026-10-29T17:10:38.622Z",
+      "refundedAt": "2026-10-29T17:10:38.884Z",
+      "refund": {
+        "amount": 80,
+        "walletAmount": 80,
+        "cashAmount": 0,
+        "cashReturned": false,
+        "reason": "E2E delivery problem",
+        "by": "MVTSSFSK-0AD4AC",
+        "at": "2026-10-29T17:10:38.884Z",
+        "reference": "order:MVTSULHV-600AA6:refund"
+      }
+    },
+    {
+      "id": "MVTSUFM9-6C045A",
+      "createdAt": "2026-10-29T17:10:30.801Z",
+      "status": "canceled",
+      "storeType": "restaurant",
+      "autoAccepted": false,
+      "driverId": null,
+      "assignedAt": null,
+      "acceptedAt": null,
+      "adminAcceptedAt": null,
+      "restaurantReadyAt": null,
+      "deliveredAt": null,
+      "updatedAt": "2026-10-29T17:10:30.817Z",
+      "customerId": "MVTSUF3J-013618",
+      "lang": "ar",
+      "currency": "MAD",
+      "restaurantId": "REST-1",
+      "customer": {
+        "name": "E2E Wallet",
+        "phone": "0612345678",
+        "addr": "Berrechid centre",
+        "notes": "",
+        "lat": 33.2655,
+        "lng": -7.5872
+      },
+      "items": [
+        {
+          "id": "m1",
+          "name": "طاجين دجاج",
+          "qty": 2,
+          "price": 40
+        }
+      ],
+      "subtotal": 80,
+      "deliveryFee": 0,
+      "total": 80,
+      "paymentMethod": "cod",
+      "verify": {
+        "salt": "f6cb22179fc069f316b881b3ed15c1f6",
+        "createdAt": "2026-10-29T17:10:30.801Z",
+        "expiresAt": "2026-10-30T17:10:30.801Z",
+        "pickup": {
+          "attempts": 0
+        },
+        "delivery": {
+          "attempts": 0
+        }
+      },
+      "serviceZone": {
+        "zoneId": "zone_berrechid",
+        "zoneName": "Berrechid",
+        "city": "Berrechid",
+        "maxRoadKm": null,
+        "checkedAt": "2026-10-29T17:10:30.799Z"
+      },
+      "financials": {
+        "status": "void",
+        "paymentMethod": "cod",
+        "commission": {
+          "type": "none",
+          "value": 0
+        },
+        "subtotal": 80,
+        "deliveryFee": 0,
+        "total": 80,
+        "promoDiscount": 0,
+        "commissionAmount": 0,
+        "businessNet": 80,
+        "driverEarning": 0,
+        "platformDeliveryMargin": 0,
+        "snapshotAt": "2026-10-29T17:10:30.802Z",
+        "finalizedAt": "2026-10-29T17:10:30.817Z"
+      },
+      "payment": {
+        "method": "cod",
+        "walletAmount": 80,
+        "amountDueOnDelivery": 0,
+        "status": "wallet_refunded",
+        "reference": "order:MVTSUFM9-6C045A:wallet",
+        "walletRefundedAt": "2026-10-29T17:10:30.820Z",
+        "at": "2026-10-29T17:10:30.801Z"
+      },
+      "requestKey": "order:MVTSUF3J-013618:e2e2-3293830798",
+      "events": [
+        {
+          "at": "2026-10-29T17:10:30.817Z",
+          "from": "new",
+          "to": "canceled",
+          "actorType": "customer",
+          "actorId": "MVTSUF3J-013618"
+        }
+      ],
+      "canceledAt": "2026-10-29T17:10:30.817Z",
+      "canceledBy": "customer"
+    },
+    {
+      "id": "MVTSUF7L-CE0F48",
+      "createdAt": "2026-10-29T17:10:30.273Z",
+      "status": "delivered",
+      "storeType": "restaurant",
+      "autoAccepted": false,
+      "driverId": "MVTSUFEG-A5B5C5",
+      "assignedAt": "2026-10-29T17:10:30.607Z",
+      "acceptedAt": null,
+      "adminAcceptedAt": "2026-10-29T17:10:30.500Z",
+      "restaurantReadyAt": "2026-10-29T17:10:30.515Z",
+      "deliveredAt": "2026-10-29T17:10:30.728Z",
+      "updatedAt": "2026-10-29T17:10:30.739Z",
+      "customerId": "MVTSUF3J-013618",
+      "lang": "ar",
+      "currency": "MAD",
+      "restaurantId": "REST-1",
+      "customer": {
+        "name": "E2E Wallet",
+        "phone": "0612345678",
+        "addr": "Berrechid centre",
+        "notes": "",
+        "lat": 33.2655,
+        "lng": -7.5872
+      },
+      "items": [
+        {
+          "id": "m1",
+          "name": "طاجين دجاج",
+          "qty": 2,
+          "price": 40
+        }
+      ],
+      "subtotal": 80,
+      "deliveryFee": 0,
+      "total": 80,
+      "paymentMethod": "cod",
+      "verify": {
+        "salt": "94e9298020fc82b02e45ca67463aea11",
+        "createdAt": "2026-10-29T17:10:30.273Z",
+        "expiresAt": "2026-10-30T17:10:30.273Z",
+        "pickup": {
+          "attempts": 0,
+          "verifiedAt": "2026-10-29T17:10:30.708Z"
+        },
+        "delivery": {
+          "attempts": 0,
+          "verifiedAt": "2026-10-29T17:10:30.727Z"
+        }
+      },
+      "serviceZone": {
+        "zoneId": "zone_berrechid",
+        "zoneName": "Berrechid",
+        "city": "Berrechid",
+        "maxRoadKm": null,
+        "checkedAt": "2026-10-29T17:10:30.268Z"
+      },
+      "financials": {
+        "status": "final",
+        "paymentMethod": "cod",
+        "commission": {
+          "type": "none",
+          "value": 0
+        },
+        "subtotal": 80,
+        "deliveryFee": 0,
+        "total": 80,
+        "promoDiscount": 0,
+        "commissionAmount": 0,
+        "businessNet": 80,
+        "driverEarning": 0,
+        "platformDeliveryMargin": 0,
+        "snapshotAt": "2026-10-29T17:10:30.274Z",
+        "updatedAt": "2026-10-29T17:10:30.607Z",
+        "finalizedAt": "2026-10-29T17:10:30.728Z"
+      },
+      "payment": {
+        "method": "cod",
+        "walletAmount": 80,
+        "amountDueOnDelivery": 0,
+        "status": "refunded",
+        "reference": "order:MVTSUF7L-CE0F48:wallet",
+        "walletRefundedAt": "2026-10-29T17:10:30.781Z",
+        "at": "2026-10-29T17:10:30.273Z",
+        "refundReference": "order:MVTSUF7L-CE0F48:refund"
+      },
+      "requestKey": "order:MVTSUF3J-013618:e2e-3293830266",
+      "events": [
+        {
+          "at": "2026-10-29T17:10:30.500Z",
+          "from": "new",
+          "to": "admin_accepted",
+          "actorType": "admin",
+          "actorId": "MVTSSFSK-0AD4AC"
+        },
+        {
+          "at": "2026-10-29T17:10:30.515Z",
+          "from": "admin_accepted",
+          "to": "restaurant_ready",
+          "actorType": "store",
+          "actorId": "REST-1"
+        },
+        {
+          "at": "2026-10-29T17:10:30.695Z",
+          "from": "restaurant_ready",
+          "to": "accepted",
+          "actorType": "driver",
+          "actorId": "MVTSUFEG-A5B5C5"
+        },
+        {
+          "at": "2026-10-29T17:10:30.708Z",
+          "from": "accepted",
+          "to": "picked_up",
+          "actorType": "driver",
+          "actorId": "MVTSUFEG-A5B5C5"
+        },
+        {
+          "at": "2026-10-29T17:10:30.718Z",
+          "from": "picked_up",
+          "to": "on_the_way",
+          "actorType": "driver",
+          "actorId": "MVTSUFEG-A5B5C5"
+        },
+        {
+          "at": "2026-10-29T17:10:30.728Z",
+          "from": "on_the_way",
+          "to": "delivered",
+          "actorType": "driver",
+          "actorId": "MVTSUFEG-A5B5C5"
+        }
+      ],
+      "storeAcceptedAt": "2026-10-29T17:10:30.510Z",
+      "refundedAt": "2026-10-29T17:10:30.781Z",
+      "refund": {
+        "amount": 80,
+        "walletAmount": 80,
+        "cashAmount": 0,
+        "cashReturned": false,
+        "reason": "E2E delivery problem",
+        "by": "MVTSSFSK-0AD4AC",
+        "at": "2026-10-29T17:10:30.781Z",
+        "reference": "order:MVTSUF7L-CE0F48:refund"
+      }
+    },
+    {
+      "id": "MVTSSMHT-280D34",
+      "createdAt": "2026-10-29T17:09:06.401Z",
+      "status": "canceled",
+      "storeType": "restaurant",
+      "autoAccepted": false,
+      "driverId": null,
+      "assignedAt": null,
+      "acceptedAt": null,
+      "adminAcceptedAt": null,
+      "restaurantReadyAt": null,
+      "deliveredAt": null,
+      "updatedAt": "2026-10-29T17:09:06.413Z",
+      "customerId": "MVTSSM01-547C2F",
+      "lang": "ar",
+      "currency": "MAD",
+      "restaurantId": "REST-1",
+      "customer": {
+        "name": "E2E Wallet",
+        "phone": "0612345678",
+        "addr": "Berrechid centre",
+        "notes": "",
+        "lat": 33.2655,
+        "lng": -7.5872
+      },
+      "items": [
+        {
+          "id": "m1",
+          "name": "طاجين دجاج",
+          "qty": 2,
+          "price": 40
+        }
+      ],
+      "subtotal": 80,
+      "deliveryFee": 0,
+      "total": 80,
+      "paymentMethod": "cod",
+      "verify": {
+        "salt": "45320bea886d4a7b085d3fb734707ba4",
+        "createdAt": "2026-10-29T17:09:06.401Z",
+        "expiresAt": "2026-10-30T17:09:06.401Z",
+        "pickup": {
+          "attempts": 0
+        },
+        "delivery": {
+          "attempts": 0
+        }
+      },
+      "serviceZone": {
+        "zoneId": "zone_berrechid",
+        "zoneName": "Berrechid",
+        "city": "Berrechid",
+        "maxRoadKm": null,
+        "checkedAt": "2026-10-29T17:09:06.398Z"
+      },
+      "financials": {
+        "status": "void",
+        "paymentMethod": "cod",
+        "commission": {
+          "type": "none",
+          "value": 0
+        },
+        "subtotal": 80,
+        "deliveryFee": 0,
+        "total": 80,
+        "promoDiscount": 0,
+        "commissionAmount": 0,
+        "businessNet": 80,
+        "driverEarning": 0,
+        "platformDeliveryMargin": 0,
+        "snapshotAt": "2026-10-29T17:09:06.401Z",
+        "finalizedAt": "2026-10-29T17:09:06.413Z"
+      },
+      "payment": {
+        "method": "cod",
+        "walletAmount": 80,
+        "amountDueOnDelivery": 0,
+        "status": "wallet_refunded",
+        "reference": "order:MVTSSMHT-280D34:wallet",
+        "walletRefundedAt": "2026-10-29T17:09:06.416Z",
+        "at": "2026-10-29T17:09:06.401Z"
+      },
+      "requestKey": "order:MVTSSM01-547C2F:e2e2-3293746397",
+      "events": [
+        {
+          "at": "2026-10-29T17:09:06.413Z",
+          "from": "new",
+          "to": "canceled",
+          "actorType": "customer",
+          "actorId": "MVTSSM01-547C2F"
+        }
+      ],
+      "canceledAt": "2026-10-29T17:09:06.413Z",
+      "canceledBy": "customer"
+    },
+    {
+      "id": "MVTSSM44-79587C",
+      "createdAt": "2026-10-29T17:09:05.908Z",
+      "status": "delivered",
+      "storeType": "restaurant",
+      "autoAccepted": false,
+      "driverId": "MVTSSMA4-44E63E",
+      "assignedAt": "2026-10-29T17:09:06.210Z",
+      "acceptedAt": null,
+      "adminAcceptedAt": "2026-10-29T17:09:06.108Z",
+      "restaurantReadyAt": "2026-10-29T17:09:06.119Z",
+      "deliveredAt": "2026-10-29T17:09:06.323Z",
+      "updatedAt": "2026-10-29T17:09:06.338Z",
+      "customerId": "MVTSSM01-547C2F",
+      "lang": "ar",
+      "currency": "MAD",
+      "restaurantId": "REST-1",
+      "customer": {
+        "name": "E2E Wallet",
+        "phone": "0612345678",
+        "addr": "Berrechid centre",
+        "notes": "",
+        "lat": 33.2655,
+        "lng": -7.5872
+      },
+      "items": [
+        {
+          "id": "m1",
+          "name": "طاجين دجاج",
+          "qty": 2,
+          "price": 40
+        }
+      ],
+      "subtotal": 80,
+      "deliveryFee": 0,
+      "total": 80,
+      "paymentMethod": "cod",
+      "verify": {
+        "salt": "c0cd3511656a0e155d88758fde4dfd91",
+        "createdAt": "2026-10-29T17:09:05.908Z",
+        "expiresAt": "2026-10-30T17:09:05.908Z",
+        "pickup": {
+          "attempts": 0,
+          "verifiedAt": "2026-10-29T17:09:06.307Z"
+        },
+        "delivery": {
+          "attempts": 0,
+          "verifiedAt": "2026-10-29T17:09:06.323Z"
+        }
+      },
+      "serviceZone": {
+        "zoneId": "zone_berrechid",
+        "zoneName": "Berrechid",
+        "city": "Berrechid",
+        "maxRoadKm": null,
+        "checkedAt": "2026-10-29T17:09:05.905Z"
+      },
+      "financials": {
+        "status": "final",
+        "paymentMethod": "cod",
+        "commission": {
+          "type": "none",
+          "value": 0
+        },
+        "subtotal": 80,
+        "deliveryFee": 0,
+        "total": 80,
+        "promoDiscount": 0,
+        "commissionAmount": 0,
+        "businessNet": 80,
+        "driverEarning": 0,
+        "platformDeliveryMargin": 0,
+        "snapshotAt": "2026-10-29T17:09:05.908Z",
+        "updatedAt": "2026-10-29T17:09:06.210Z",
+        "finalizedAt": "2026-10-29T17:09:06.324Z"
+      },
+      "payment": {
+        "method": "cod",
+        "walletAmount": 80,
+        "amountDueOnDelivery": 0,
+        "status": "refunded",
+        "reference": "order:MVTSSM44-79587C:wallet",
+        "walletRefundedAt": "2026-10-29T17:09:06.383Z",
+        "at": "2026-10-29T17:09:05.908Z",
+        "refundReference": "order:MVTSSM44-79587C:refund"
+      },
+      "requestKey": "order:MVTSSM01-547C2F:e2e-3293745902",
+      "events": [
+        {
+          "at": "2026-10-29T17:09:06.108Z",
+          "from": "new",
+          "to": "admin_accepted",
+          "actorType": "admin",
+          "actorId": "MVTSSFSK-0AD4AC"
+        },
+        {
+          "at": "2026-10-29T17:09:06.119Z",
+          "from": "admin_accepted",
+          "to": "restaurant_ready",
+          "actorType": "store",
+          "actorId": "REST-1"
+        },
+        {
+          "at": "2026-10-29T17:09:06.297Z",
+          "from": "restaurant_ready",
+          "to": "accepted",
+          "actorType": "driver",
+          "actorId": "MVTSSMA4-44E63E"
+        },
+        {
+          "at": "2026-10-29T17:09:06.308Z",
+          "from": "accepted",
+          "to": "picked_up",
+          "actorType": "driver",
+          "actorId": "MVTSSMA4-44E63E"
+        },
+        {
+          "at": "2026-10-29T17:09:06.313Z",
+          "from": "picked_up",
+          "to": "on_the_way",
+          "actorType": "driver",
+          "actorId": "MVTSSMA4-44E63E"
+        },
+        {
+          "at": "2026-10-29T17:09:06.323Z",
+          "from": "on_the_way",
+          "to": "delivered",
+          "actorType": "driver",
+          "actorId": "MVTSSMA4-44E63E"
+        }
+      ],
+      "storeAcceptedAt": "2026-10-29T17:09:06.115Z",
+      "refundedAt": "2026-10-29T17:09:06.383Z",
+      "refund": {
+        "amount": 80,
+        "walletAmount": 80,
+        "cashAmount": 0,
+        "cashReturned": false,
+        "reason": "E2E delivery problem",
+        "by": "MVTSSFSK-0AD4AC",
+        "at": "2026-10-29T17:09:06.383Z",
+        "reference": "order:MVTSSM44-79587C:refund"
+      }
+    },
+    {
+      "id": "MVTSSJG0-5E131D",
+      "createdAt": "2026-10-29T17:09:02.448Z",
+      "status": "canceled",
+      "storeType": "restaurant",
+      "autoAccepted": false,
+      "driverId": null,
+      "assignedAt": null,
+      "acceptedAt": null,
+      "adminAcceptedAt": null,
+      "restaurantReadyAt": null,
+      "deliveredAt": null,
+      "updatedAt": "2026-10-29T17:09:02.460Z",
+      "customerId": "MVTSSIXW-433159",
+      "lang": "ar",
+      "currency": "MAD",
+      "restaurantId": "REST-1",
+      "customer": {
+        "name": "E2E Wallet",
+        "phone": "0612345678",
+        "addr": "Berrechid centre",
+        "notes": "",
+        "lat": 33.2655,
+        "lng": -7.5872
+      },
+      "items": [
+        {
+          "id": "m1",
+          "name": "طاجين دجاج",
+          "qty": 2,
+          "price": 40
+        }
+      ],
+      "subtotal": 80,
+      "deliveryFee": 0,
+      "total": 80,
+      "paymentMethod": "cod",
+      "verify": {
+        "salt": "3f1e2f63b5fcdafb36f037a103a1f681",
+        "createdAt": "2026-10-29T17:09:02.448Z",
+        "expiresAt": "2026-10-30T17:09:02.448Z",
+        "pickup": {
+          "attempts": 0
+        },
+        "delivery": {
+          "attempts": 0
+        }
+      },
+      "serviceZone": {
+        "zoneId": "zone_berrechid",
+        "zoneName": "Berrechid",
+        "city": "Berrechid",
+        "maxRoadKm": null,
+        "checkedAt": "2026-10-29T17:09:02.446Z"
+      },
+      "financials": {
+        "status": "void",
+        "paymentMethod": "cod",
+        "commission": {
+          "type": "none",
+          "value": 0
+        },
+        "subtotal": 80,
+        "deliveryFee": 0,
+        "total": 80,
+        "promoDiscount": 0,
+        "commissionAmount": 0,
+        "businessNet": 80,
+        "driverEarning": 0,
+        "platformDeliveryMargin": 0,
+        "snapshotAt": "2026-10-29T17:09:02.448Z",
+        "finalizedAt": "2026-10-29T17:09:02.460Z"
+      },
+      "payment": {
+        "method": "cod",
+        "walletAmount": 80,
+        "amountDueOnDelivery": 0,
+        "status": "wallet_refunded",
+        "reference": "order:MVTSSJG0-5E131D:wallet",
+        "walletRefundedAt": "2026-10-29T17:09:02.464Z",
+        "at": "2026-10-29T17:09:02.448Z"
+      },
+      "requestKey": "order:MVTSSIXW-433159:e2e2-3293742444",
+      "events": [
+        {
+          "at": "2026-10-29T17:09:02.460Z",
+          "from": "new",
+          "to": "canceled",
+          "actorType": "customer",
+          "actorId": "MVTSSIXW-433159"
+        }
+      ],
+      "canceledAt": "2026-10-29T17:09:02.460Z",
+      "canceledBy": "customer"
+    },
+    {
+      "id": "MVTSSJ20-95C5AC",
+      "createdAt": "2026-10-29T17:09:01.944Z",
+      "status": "delivered",
+      "storeType": "restaurant",
+      "autoAccepted": false,
+      "driverId": "MVTSSJ7X-3C0939",
+      "assignedAt": "2026-10-29T17:09:02.243Z",
+      "acceptedAt": null,
+      "adminAcceptedAt": "2026-10-29T17:09:02.142Z",
+      "restaurantReadyAt": "2026-10-29T17:09:02.153Z",
+      "deliveredAt": "2026-10-29T17:09:02.357Z",
+      "updatedAt": "2026-10-29T17:09:02.366Z",
+      "customerId": "MVTSSIXW-433159",
+      "lang": "ar",
+      "currency": "MAD",
+      "restaurantId": "REST-1",
+      "customer": {
+        "name": "E2E Wallet",
+        "phone": "0612345678",
+        "addr": "Berrechid centre",
+        "notes": "",
+        "lat": 33.2655,
+        "lng": -7.5872
+      },
+      "items": [
+        {
+          "id": "m1",
+          "name": "طاجين دجاج",
+          "qty": 2,
+          "price": 40
+        }
+      ],
+      "subtotal": 80,
+      "deliveryFee": 0,
+      "total": 80,
+      "paymentMethod": "cod",
+      "verify": {
+        "salt": "2f5f963e5d864077c71c39c6f4e7ef9e",
+        "createdAt": "2026-10-29T17:09:01.944Z",
+        "expiresAt": "2026-10-30T17:09:01.944Z",
+        "pickup": {
+          "attempts": 0,
+          "verifiedAt": "2026-10-29T17:09:02.341Z"
+        },
+        "delivery": {
+          "attempts": 0,
+          "verifiedAt": "2026-10-29T17:09:02.357Z"
+        }
+      },
+      "serviceZone": {
+        "zoneId": "zone_berrechid",
+        "zoneName": "Berrechid",
+        "city": "Berrechid",
+        "maxRoadKm": null,
+        "checkedAt": "2026-10-29T17:09:01.940Z"
+      },
+      "financials": {
+        "status": "final",
+        "paymentMethod": "cod",
+        "commission": {
+          "type": "none",
+          "value": 0
+        },
+        "subtotal": 80,
+        "deliveryFee": 0,
+        "total": 80,
+        "promoDiscount": 0,
+        "commissionAmount": 0,
+        "businessNet": 80,
+        "driverEarning": 0,
+        "platformDeliveryMargin": 0,
+        "snapshotAt": "2026-10-29T17:09:01.944Z",
+        "updatedAt": "2026-10-29T17:09:02.243Z",
+        "finalizedAt": "2026-10-29T17:09:02.357Z"
+      },
+      "payment": {
+        "method": "cod",
+        "walletAmount": 80,
+        "amountDueOnDelivery": 0,
+        "status": "refunded",
+        "reference": "order:MVTSSJ20-95C5AC:wallet",
+        "walletRefundedAt": "2026-10-29T17:09:02.408Z",
+        "at": "2026-10-29T17:09:01.944Z",
+        "refundReference": "order:MVTSSJ20-95C5AC:refund"
+      },
+      "requestKey": "order:MVTSSIXW-433159:e2e-3293741938",
+      "events": [
+        {
+          "at": "2026-10-29T17:09:02.141Z",
+          "from": "new",
+          "to": "admin_accepted",
+          "actorType": "admin",
+          "actorId": "MVTSSFSK-0AD4AC"
+        },
+        {
+          "at": "2026-10-29T17:09:02.153Z",
+          "from": "admin_accepted",
+          "to": "restaurant_ready",
+          "actorType": "store",
+          "actorId": "REST-1"
+        },
+        {
+          "at": "2026-10-29T17:09:02.331Z",
+          "from": "restaurant_ready",
+          "to": "accepted",
+          "actorType": "driver",
+          "actorId": "MVTSSJ7X-3C0939"
+        },
+        {
+          "at": "2026-10-29T17:09:02.341Z",
+          "from": "accepted",
+          "to": "picked_up",
+          "actorType": "driver",
+          "actorId": "MVTSSJ7X-3C0939"
+        },
+        {
+          "at": "2026-10-29T17:09:02.347Z",
+          "from": "picked_up",
+          "to": "on_the_way",
+          "actorType": "driver",
+          "actorId": "MVTSSJ7X-3C0939"
+        },
+        {
+          "at": "2026-10-29T17:09:02.357Z",
+          "from": "on_the_way",
+          "to": "delivered",
+          "actorType": "driver",
+          "actorId": "MVTSSJ7X-3C0939"
+        }
+      ],
+      "storeAcceptedAt": "2026-10-29T17:09:02.148Z",
+      "refundedAt": "2026-10-29T17:09:02.408Z",
+      "refund": {
+        "amount": 80,
+        "walletAmount": 80,
+        "cashAmount": 0,
+        "cashReturned": false,
+        "reason": "E2E delivery problem",
+        "by": "MVTSSFSK-0AD4AC",
+        "at": "2026-10-29T17:09:02.408Z",
+        "reference": "order:MVTSSJ20-95C5AC:refund"
+      }
+    },
+    {
+      "id": "MVTSSGAJ-486D37",
+      "createdAt": "2026-10-29T17:08:58.363Z",
+      "status": "canceled",
+      "storeType": "restaurant",
+      "autoAccepted": false,
+      "driverId": null,
+      "assignedAt": null,
+      "acceptedAt": null,
+      "adminAcceptedAt": null,
+      "restaurantReadyAt": null,
+      "deliveredAt": null,
+      "updatedAt": "2026-10-29T17:08:58.374Z",
+      "customerId": "MVTSSFT0-43A1DE",
+      "lang": "ar",
+      "currency": "MAD",
+      "restaurantId": "REST-1",
+      "customer": {
+        "name": "E2E Wallet",
+        "phone": "0612345678",
+        "addr": "Berrechid centre",
+        "notes": "",
+        "lat": 33.2655,
+        "lng": -7.5872
+      },
+      "items": [
+        {
+          "id": "m1",
+          "name": "طاجين دجاج",
+          "qty": 2,
+          "price": 40
+        }
+      ],
+      "subtotal": 80,
+      "deliveryFee": 0,
+      "total": 80,
+      "paymentMethod": "cod",
+      "verify": {
+        "salt": "cbdfead250ee51aba1b8bc3f99f3efbb",
+        "createdAt": "2026-10-29T17:08:58.363Z",
+        "expiresAt": "2026-10-30T17:08:58.363Z",
+        "pickup": {
+          "attempts": 0
+        },
+        "delivery": {
+          "attempts": 0
+        }
+      },
+      "serviceZone": {
+        "zoneId": "zone_berrechid",
+        "zoneName": "Berrechid",
+        "city": "Berrechid",
+        "maxRoadKm": null,
+        "checkedAt": "2026-10-29T17:08:58.360Z"
+      },
+      "financials": {
+        "status": "void",
+        "paymentMethod": "cod",
+        "commission": {
+          "type": "none",
+          "value": 0
+        },
+        "subtotal": 80,
+        "deliveryFee": 0,
+        "total": 80,
+        "promoDiscount": 0,
+        "commissionAmount": 0,
+        "businessNet": 80,
+        "driverEarning": 0,
+        "platformDeliveryMargin": 0,
+        "snapshotAt": "2026-10-29T17:08:58.363Z",
+        "finalizedAt": "2026-10-29T17:08:58.374Z"
+      },
+      "payment": {
+        "method": "cod",
+        "walletAmount": 80,
+        "amountDueOnDelivery": 0,
+        "status": "wallet_refunded",
+        "reference": "order:MVTSSGAJ-486D37:wallet",
+        "walletRefundedAt": "2026-10-29T17:08:58.378Z",
+        "at": "2026-10-29T17:08:58.363Z"
+      },
+      "requestKey": "order:MVTSSFT0-43A1DE:e2e2-3293738359",
+      "events": [
+        {
+          "at": "2026-10-29T17:08:58.374Z",
+          "from": "new",
+          "to": "canceled",
+          "actorType": "customer",
+          "actorId": "MVTSSFT0-43A1DE"
+        }
+      ],
+      "canceledAt": "2026-10-29T17:08:58.374Z",
+      "canceledBy": "customer"
+    },
+    {
+      "id": "MVTSSFWW-B2D8AA",
+      "createdAt": "2026-10-29T17:08:57.872Z",
+      "status": "delivered",
+      "storeType": "restaurant",
+      "autoAccepted": false,
+      "driverId": "MVTSSG38-9832BB",
+      "assignedAt": "2026-10-29T17:08:58.186Z",
+      "acceptedAt": null,
+      "adminAcceptedAt": "2026-10-29T17:08:58.083Z",
+      "restaurantReadyAt": "2026-10-29T17:08:58.095Z",
+      "deliveredAt": "2026-10-29T17:08:58.298Z",
+      "updatedAt": "2026-10-29T17:08:58.310Z",
+      "customerId": "MVTSSFT0-43A1DE",
+      "lang": "ar",
+      "currency": "MAD",
+      "restaurantId": "REST-1",
+      "customer": {
+        "name": "E2E Wallet",
+        "phone": "0612345678",
+        "addr": "Berrechid centre",
+        "notes": "",
+        "lat": 33.2655,
+        "lng": -7.5872
+      },
+      "items": [
+        {
+          "id": "m1",
+          "name": "طاجين دجاج",
+          "qty": 2,
+          "price": 40
+        }
+      ],
+      "subtotal": 80,
+      "deliveryFee": 0,
+      "total": 80,
+      "paymentMethod": "cod",
+      "verify": {
+        "salt": "7f5582578fd9bd0e08331143339fd2a1",
+        "createdAt": "2026-10-29T17:08:57.872Z",
+        "expiresAt": "2026-10-30T17:08:57.872Z",
+        "pickup": {
+          "attempts": 0,
+          "verifiedAt": "2026-10-29T17:08:58.284Z"
+        },
+        "delivery": {
+          "attempts": 0,
+          "verifiedAt": "2026-10-29T17:08:58.298Z"
+        }
+      },
+      "serviceZone": {
+        "zoneId": "zone_berrechid",
+        "zoneName": "Berrechid",
+        "city": "Berrechid",
+        "maxRoadKm": null,
+        "checkedAt": "2026-10-29T17:08:57.866Z"
+      },
+      "financials": {
+        "status": "final",
+        "paymentMethod": "cod",
+        "commission": {
+          "type": "none",
+          "value": 0
+        },
+        "subtotal": 80,
+        "deliveryFee": 0,
+        "total": 80,
+        "promoDiscount": 0,
+        "commissionAmount": 0,
+        "businessNet": 80,
+        "driverEarning": 0,
+        "platformDeliveryMargin": 0,
+        "snapshotAt": "2026-10-29T17:08:57.872Z",
+        "updatedAt": "2026-10-29T17:08:58.186Z",
+        "finalizedAt": "2026-10-29T17:08:58.298Z"
+      },
+      "payment": {
+        "method": "cod",
+        "walletAmount": 80,
+        "amountDueOnDelivery": 0,
+        "status": "refunded",
+        "reference": "order:MVTSSFWW-B2D8AA:wallet",
+        "walletRefundedAt": "2026-10-29T17:08:58.344Z",
+        "at": "2026-10-29T17:08:57.872Z",
+        "refundReference": "order:MVTSSFWW-B2D8AA:refund"
+      },
+      "requestKey": "order:MVTSSFT0-43A1DE:e2e-3293737864",
+      "events": [
+        {
+          "at": "2026-10-29T17:08:58.083Z",
+          "from": "new",
+          "to": "admin_accepted",
+          "actorType": "admin",
+          "actorId": "legacy"
+        },
+        {
+          "at": "2026-10-29T17:08:58.095Z",
+          "from": "admin_accepted",
+          "to": "restaurant_ready",
+          "actorType": "store",
+          "actorId": "REST-1"
+        },
+        {
+          "at": "2026-10-29T17:08:58.273Z",
+          "from": "restaurant_ready",
+          "to": "accepted",
+          "actorType": "driver",
+          "actorId": "MVTSSG38-9832BB"
+        },
+        {
+          "at": "2026-10-29T17:08:58.284Z",
+          "from": "accepted",
+          "to": "picked_up",
+          "actorType": "driver",
+          "actorId": "MVTSSG38-9832BB"
+        },
+        {
+          "at": "2026-10-29T17:08:58.290Z",
+          "from": "picked_up",
+          "to": "on_the_way",
+          "actorType": "driver",
+          "actorId": "MVTSSG38-9832BB"
+        },
+        {
+          "at": "2026-10-29T17:08:58.298Z",
+          "from": "on_the_way",
+          "to": "delivered",
+          "actorType": "driver",
+          "actorId": "MVTSSG38-9832BB"
+        }
+      ],
+      "storeAcceptedAt": "2026-10-29T17:08:58.091Z",
+      "refundedAt": "2026-10-29T17:08:58.344Z",
+      "refund": {
+        "amount": 80,
+        "walletAmount": 80,
+        "cashAmount": 0,
+        "cashReturned": false,
+        "reason": "E2E delivery problem",
+        "by": "legacy",
+        "at": "2026-10-29T17:08:58.344Z",
+        "reference": "order:MVTSSFWW-B2D8AA:refund"
+      }
+    },
+    {
+      "id": "MVTSRNWX-968CCA",
+      "createdAt": "2026-10-29T17:08:21.585Z",
+      "status": "canceled",
+      "storeType": "restaurant",
+      "autoAccepted": false,
+      "driverId": null,
+      "assignedAt": null,
+      "acceptedAt": null,
+      "adminAcceptedAt": null,
+      "restaurantReadyAt": null,
+      "deliveredAt": null,
+      "updatedAt": "2026-10-29T17:08:21.595Z",
+      "customerId": "MVTSRNGS-074BA4",
+      "lang": "ar",
+      "currency": "MAD",
+      "restaurantId": "REST-1",
+      "customer": {
+        "name": "E2E Wallet",
+        "phone": "0612345678",
+        "addr": "Berrechid centre",
+        "notes": "",
+        "lat": 33.2655,
+        "lng": -7.5872
+      },
+      "items": [
+        {
+          "id": "m1",
+          "name": "طاجين دجاج",
+          "qty": 2,
+          "price": 40
+        }
+      ],
+      "subtotal": 80,
+      "deliveryFee": 0,
+      "total": 80,
+      "paymentMethod": "cod",
+      "verify": {
+        "salt": "9d234687dde16e44e63b34788f5097bc",
+        "createdAt": "2026-10-29T17:08:21.585Z",
+        "expiresAt": "2026-10-30T17:08:21.585Z",
+        "pickup": {
+          "attempts": 0
+        },
+        "delivery": {
+          "attempts": 0
+        }
+      },
+      "serviceZone": {
+        "zoneId": "zone_berrechid",
+        "zoneName": "Berrechid",
+        "city": "Berrechid",
+        "maxRoadKm": null,
+        "checkedAt": "2026-10-29T17:08:21.583Z"
+      },
+      "financials": {
+        "status": "void",
+        "paymentMethod": "cod",
+        "commission": {
+          "type": "none",
+          "value": 0
+        },
+        "subtotal": 80,
+        "deliveryFee": 0,
+        "total": 80,
+        "promoDiscount": 0,
+        "commissionAmount": 0,
+        "businessNet": 80,
+        "driverEarning": 0,
+        "platformDeliveryMargin": 0,
+        "snapshotAt": "2026-10-29T17:08:21.585Z",
+        "finalizedAt": "2026-10-29T17:08:21.595Z"
+      },
+      "payment": {
+        "method": "cod",
+        "walletAmount": 80,
+        "amountDueOnDelivery": 0,
+        "status": "wallet_refunded",
+        "reference": "order:MVTSRNWX-968CCA:wallet",
+        "walletRefundedAt": "2026-10-29T17:08:21.597Z",
+        "at": "2026-10-29T17:08:21.585Z"
+      },
+      "requestKey": "order:MVTSRNGS-074BA4:e2e2-3293701582",
+      "events": [
+        {
+          "at": "2026-10-29T17:08:21.595Z",
+          "from": "new",
+          "to": "canceled",
+          "actorType": "customer",
+          "actorId": "MVTSRNGS-074BA4"
+        }
+      ],
+      "canceledAt": "2026-10-29T17:08:21.595Z",
+      "canceledBy": "customer"
+    },
+    {
+      "id": "MVTSRNKB-9223AC",
+      "createdAt": "2026-10-29T17:08:21.131Z",
+      "status": "accepted",
+      "storeType": "restaurant",
+      "autoAccepted": false,
+      "driverId": "MVTSRNQR-28B29E",
+      "assignedAt": "2026-10-29T17:08:21.450Z",
+      "acceptedAt": null,
+      "adminAcceptedAt": "2026-10-29T17:08:21.346Z",
+      "restaurantReadyAt": "2026-10-29T17:08:21.358Z",
+      "deliveredAt": null,
+      "updatedAt": "2026-10-29T17:08:21.537Z",
+      "customerId": "MVTSRNGS-074BA4",
+      "lang": "ar",
+      "currency": "MAD",
+      "restaurantId": "REST-1",
+      "customer": {
+        "name": "E2E Wallet",
+        "phone": "0612345678",
+        "addr": "Berrechid centre",
+        "notes": "",
+        "lat": 33.2655,
+        "lng": -7.5872
+      },
+      "items": [
+        {
+          "id": "m1",
+          "name": "طاجين دجاج",
+          "qty": 2,
+          "price": 40
+        }
+      ],
+      "subtotal": 80,
+      "deliveryFee": 0,
+      "total": 80,
+      "paymentMethod": "cod",
+      "verify": {
+        "salt": "b45a66f9e888f2a50354cee1c50bf3d7",
+        "createdAt": "2026-10-29T17:08:21.131Z",
+        "expiresAt": "2026-10-30T17:08:21.131Z",
+        "pickup": {
+          "attempts": 0
+        },
+        "delivery": {
+          "attempts": 0
+        }
+      },
+      "serviceZone": {
+        "zoneId": "zone_berrechid",
+        "zoneName": "Berrechid",
+        "city": "Berrechid",
+        "maxRoadKm": null,
+        "checkedAt": "2026-10-29T17:08:21.127Z"
+      },
+      "financials": {
+        "status": "open",
+        "paymentMethod": "cod",
+        "commission": {
+          "type": "none",
+          "value": 0
+        },
+        "subtotal": 80,
+        "deliveryFee": 0,
+        "total": 80,
+        "promoDiscount": 0,
+        "commissionAmount": 0,
+        "businessNet": 80,
+        "driverEarning": 0,
+        "platformDeliveryMargin": 0,
+        "snapshotAt": "2026-10-29T17:08:21.131Z",
+        "updatedAt": "2026-10-29T17:08:21.450Z"
+      },
+      "payment": {
+        "method": "cod",
+        "walletAmount": 80,
+        "amountDueOnDelivery": 0,
+        "status": "partially_paid_wallet",
+        "reference": "order:MVTSRNKB-9223AC:wallet",
+        "walletRefundedAt": null,
+        "at": "2026-10-29T17:08:21.131Z"
+      },
+      "requestKey": "order:MVTSRNGS-074BA4:e2e-3293701125",
+      "events": [
+        {
+          "at": "2026-10-29T17:08:21.346Z",
+          "from": "new",
+          "to": "admin_accepted",
+          "actorType": "admin",
+          "actorId": "legacy"
+        },
+        {
+          "at": "2026-10-29T17:08:21.358Z",
+          "from": "admin_accepted",
+          "to": "restaurant_ready",
+          "actorType": "store",
+          "actorId": "REST-1"
+        },
+        {
+          "at": "2026-10-29T17:08:21.537Z",
+          "from": "restaurant_ready",
+          "to": "accepted",
+          "actorType": "driver",
+          "actorId": "MVTSRNQR-28B29E"
+        }
+      ],
+      "storeAcceptedAt": "2026-10-29T17:08:21.353Z"
+    },
+    {
+      "id": "MVTSPQV5-4A584F",
+      "createdAt": "2026-10-29T17:06:52.097Z",
+      "status": "restaurant_ready",
+      "storeType": "restaurant",
+      "autoAccepted": false,
+      "driverId": null,
+      "assignedAt": null,
+      "acceptedAt": null,
+      "adminAcceptedAt": "2026-10-29T17:06:52.308Z",
+      "restaurantReadyAt": "2026-10-29T17:06:52.320Z",
+      "deliveredAt": null,
+      "updatedAt": "2026-10-29T17:06:52.329Z",
+      "customerId": "MVTSPQQO-025A5E",
+      "lang": "ar",
+      "currency": "MAD",
+      "restaurantId": "REST-1",
+      "customer": {
+        "name": "E2E Wallet",
+        "phone": "0612345678",
+        "addr": "Berrechid centre",
+        "notes": "",
+        "lat": 33.2655,
+        "lng": -7.5872
+      },
+      "items": [
+        {
+          "id": "m1",
+          "name": "طاجين دجاج",
+          "qty": 2,
+          "price": 40
+        }
+      ],
+      "subtotal": 80,
+      "deliveryFee": 0,
+      "total": 80,
+      "paymentMethod": "cod",
+      "verify": {
+        "salt": "9406f004cd8c96f081bd8c792d2fca94",
+        "createdAt": "2026-10-29T17:06:52.097Z",
+        "expiresAt": "2026-10-30T17:06:52.097Z",
+        "pickup": {
+          "attempts": 0
+        },
+        "delivery": {
+          "attempts": 0
+        }
+      },
+      "serviceZone": {
+        "zoneId": "zone_berrechid",
+        "zoneName": "Berrechid",
+        "city": "Berrechid",
+        "maxRoadKm": null,
+        "checkedAt": "2026-10-29T17:06:52.091Z"
+      },
+      "financials": {
+        "status": "open",
+        "paymentMethod": "cod",
+        "commission": {
+          "type": "none",
+          "value": 0
+        },
+        "subtotal": 80,
+        "deliveryFee": 0,
+        "total": 80,
+        "promoDiscount": 0,
+        "commissionAmount": 0,
+        "businessNet": 80,
+        "driverEarning": 0,
+        "platformDeliveryMargin": 0,
+        "snapshotAt": "2026-10-29T17:06:52.097Z",
+        "updatedAt": "2026-10-29T17:06:52.329Z"
+      },
+      "payment": {
+        "method": "cod",
+        "walletAmount": 80,
+        "amountDueOnDelivery": 0,
+        "status": "partially_paid_wallet",
+        "reference": "order:MVTSPQV5-4A584F:wallet",
+        "walletRefundedAt": null,
+        "at": "2026-10-29T17:06:52.097Z"
+      },
+      "requestKey": "order:MVTSPQQO-025A5E:e2e-3293612089",
+      "events": [
+        {
+          "at": "2026-10-29T17:06:52.308Z",
+          "from": "new",
+          "to": "admin_accepted",
+          "actorType": "admin",
+          "actorId": "legacy"
+        },
+        {
+          "at": "2026-10-29T17:06:52.320Z",
+          "from": "admin_accepted",
+          "to": "restaurant_ready",
+          "actorType": "store",
+          "actorId": "REST-1"
+        }
+      ],
+      "storeAcceptedAt": "2026-10-29T17:06:52.316Z"
+    },
+    {
+      "id": "MVTSN3C7-4C5129",
+      "createdAt": "2026-10-29T17:04:48.295Z",
+      "status": "canceled",
+      "storeType": "restaurant",
+      "autoAccepted": false,
+      "driverId": null,
+      "assignedAt": null,
+      "acceptedAt": null,
+      "adminAcceptedAt": null,
+      "restaurantReadyAt": null,
+      "deliveredAt": null,
+      "updatedAt": "2026-10-29T17:04:48.307Z",
+      "customerId": "MVTSN2UT-1E73CA",
+      "lang": "ar",
+      "currency": "MAD",
+      "restaurantId": "REST-1",
+      "customer": {
+        "name": "E2E Wallet",
+        "phone": "0612345678",
+        "addr": "Berrechid centre",
+        "notes": "",
+        "lat": 33.2655,
+        "lng": -7.5872
+      },
+      "items": [
+        {
+          "id": "m1",
+          "name": "طاجين دجاج",
+          "qty": 2,
+          "price": 40
+        }
+      ],
+      "subtotal": 80,
+      "deliveryFee": 0,
+      "total": 80,
+      "paymentMethod": "cod",
+      "verify": {
+        "salt": "8ff26c501bdea9e30185b063e4104bda",
+        "createdAt": "2026-10-29T17:04:48.295Z",
+        "expiresAt": "2026-10-30T17:04:48.295Z",
+        "pickup": {
+          "attempts": 0
+        },
+        "delivery": {
+          "attempts": 0
+        }
+      },
+      "serviceZone": {
+        "zoneId": "zone_berrechid",
+        "zoneName": "Berrechid",
+        "city": "Berrechid",
+        "maxRoadKm": null,
+        "checkedAt": "2026-10-29T17:04:48.293Z"
+      },
+      "financials": {
+        "status": "void",
+        "paymentMethod": "cod",
+        "commission": {
+          "type": "none",
+          "value": 0
+        },
+        "subtotal": 80,
+        "deliveryFee": 0,
+        "total": 80,
+        "promoDiscount": 0,
+        "commissionAmount": 0,
+        "businessNet": 80,
+        "driverEarning": 0,
+        "platformDeliveryMargin": 0,
+        "snapshotAt": "2026-10-29T17:04:48.295Z",
+        "finalizedAt": "2026-10-29T17:04:48.307Z"
+      },
+      "payment": {
+        "method": "cod",
+        "walletAmount": 80,
+        "amountDueOnDelivery": 0,
+        "status": "wallet_refunded",
+        "reference": "order:MVTSN3C7-4C5129:wallet",
+        "walletRefundedAt": "2026-10-29T17:04:48.310Z",
+        "at": "2026-10-29T17:04:48.295Z"
+      },
+      "requestKey": "order:MVTSN2UT-1E73CA:e2e-cancel-3293488292",
+      "events": [
+        {
+          "at": "2026-10-29T17:04:48.307Z",
+          "from": "new",
+          "to": "canceled",
+          "actorType": "customer",
+          "actorId": "MVTSN2UT-1E73CA"
+        }
+      ],
+      "canceledAt": "2026-10-29T17:04:48.307Z",
+      "canceledBy": "customer"
+    },
+    {
+      "id": "MVTSN2YV-49D5B4",
+      "createdAt": "2026-10-29T17:04:47.815Z",
+      "status": "delivered",
+      "storeType": "restaurant",
+      "autoAccepted": false,
+      "driverId": "MVTSN350-05C341",
+      "assignedAt": "2026-10-29T17:04:48.202Z",
+      "acceptedAt": null,
+      "adminAcceptedAt": "2026-10-29T17:04:48.019Z",
+      "restaurantReadyAt": "2026-10-29T17:04:48.031Z",
+      "deliveredAt": "2026-10-29T17:04:48.229Z",
+      "updatedAt": "2026-10-29T17:04:48.243Z",
+      "customerId": "MVTSN2UT-1E73CA",
+      "lang": "ar",
+      "currency": "MAD",
+      "restaurantId": "REST-1",
+      "customer": {
+        "name": "E2E Wallet",
+        "phone": "0612345678",
+        "addr": "Berrechid centre",
+        "notes": "",
+        "lat": 33.2655,
+        "lng": -7.5872
+      },
+      "items": [
+        {
+          "id": "m1",
+          "name": "طاجين دجاج",
+          "qty": 2,
+          "price": 40
+        }
+      ],
+      "subtotal": 80,
+      "deliveryFee": 0,
+      "total": 80,
+      "paymentMethod": "cod",
+      "verify": {
+        "salt": "97d0507ed8e5e8ed0462327de255cd28",
+        "createdAt": "2026-10-29T17:04:47.815Z",
+        "expiresAt": "2026-10-30T17:04:48.225Z",
+        "pickup": {
+          "attempts": 0,
+          "exception": {
+            "by": "legacy",
+            "reason": "e2e test",
+            "at": "2026-10-29T17:04:48.212Z"
+          }
+        },
+        "delivery": {
+          "attempts": 0,
+          "exception": {
+            "by": "legacy",
+            "reason": "e2e test",
+            "at": "2026-10-29T17:04:48.225Z"
+          }
+        }
+      },
+      "serviceZone": {
+        "zoneId": "zone_berrechid",
+        "zoneName": "Berrechid",
+        "city": "Berrechid",
+        "maxRoadKm": null,
+        "checkedAt": "2026-10-29T17:04:47.808Z"
+      },
+      "financials": {
+        "status": "final",
+        "paymentMethod": "cod",
+        "commission": {
+          "type": "none",
+          "value": 0
+        },
+        "subtotal": 80,
+        "deliveryFee": 0,
+        "total": 80,
+        "promoDiscount": 0,
+        "commissionAmount": 0,
+        "businessNet": 80,
+        "driverEarning": 0,
+        "platformDeliveryMargin": 0,
+        "snapshotAt": "2026-10-29T17:04:47.815Z",
+        "updatedAt": "2026-10-29T17:04:48.202Z",
+        "finalizedAt": "2026-10-29T17:04:48.230Z"
+      },
+      "payment": {
+        "method": "cod",
+        "walletAmount": 80,
+        "amountDueOnDelivery": 0,
+        "status": "partially_paid_wallet",
+        "reference": "order:MVTSN2YV-49D5B4:wallet",
+        "walletRefundedAt": null,
+        "at": "2026-10-29T17:04:47.815Z"
+      },
+      "requestKey": "order:MVTSN2UT-1E73CA:e2e-3293487806",
+      "events": [
+        {
+          "at": "2026-10-29T17:04:48.019Z",
+          "from": "new",
+          "to": "admin_accepted",
+          "actorType": "admin",
+          "actorId": "legacy"
+        },
+        {
+          "at": "2026-10-29T17:04:48.031Z",
+          "from": "admin_accepted",
+          "to": "restaurant_ready",
+          "actorType": "store",
+          "actorId": "REST-1"
+        },
+        {
+          "at": "2026-10-29T17:04:48.207Z",
+          "from": "restaurant_ready",
+          "to": "accepted",
+          "actorType": "driver",
+          "actorId": "MVTSN350-05C341"
+        },
+        {
+          "at": "2026-10-29T17:04:48.216Z",
+          "from": "accepted",
+          "to": "picked_up",
+          "actorType": "driver",
+          "actorId": "MVTSN350-05C341"
+        },
+        {
+          "at": "2026-10-29T17:04:48.220Z",
+          "from": "picked_up",
+          "to": "on_the_way",
+          "actorType": "driver",
+          "actorId": "MVTSN350-05C341"
+        },
+        {
+          "at": "2026-10-29T17:04:48.229Z",
+          "from": "on_the_way",
+          "to": "delivered",
+          "actorType": "driver",
+          "actorId": "MVTSN350-05C341"
+        }
+      ],
+      "storeAcceptedAt": "2026-10-29T17:04:48.027Z"
+    },
+    {
+      "id": "MVTSMTBE-83F031",
+      "createdAt": "2026-10-29T17:04:35.306Z",
+      "status": "canceled",
+      "storeType": "restaurant",
+      "autoAccepted": false,
+      "driverId": null,
+      "assignedAt": null,
+      "acceptedAt": null,
+      "adminAcceptedAt": null,
+      "restaurantReadyAt": null,
+      "deliveredAt": null,
+      "updatedAt": "2026-10-29T17:04:35.320Z",
+      "customerId": "MVTSMSTL-E842EE",
+      "lang": "ar",
+      "currency": "MAD",
+      "restaurantId": "REST-1",
+      "customer": {
+        "name": "E2E Wallet",
+        "phone": "0612345678",
+        "addr": "Berrechid centre",
+        "notes": "",
+        "lat": 33.2655,
+        "lng": -7.5872
+      },
+      "items": [
+        {
+          "id": "m1",
+          "name": "طاجين دجاج",
+          "qty": 2,
+          "price": 40
+        }
+      ],
+      "subtotal": 80,
+      "deliveryFee": 0,
+      "total": 80,
+      "paymentMethod": "cod",
+      "verify": {
+        "salt": "3b27de16a2e0c20fbabd293bdf2b78f6",
+        "createdAt": "2026-10-29T17:04:35.306Z",
+        "expiresAt": "2026-10-30T17:04:35.306Z",
+        "pickup": {
+          "attempts": 0
+        },
+        "delivery": {
+          "attempts": 0
+        }
+      },
+      "serviceZone": {
+        "zoneId": "zone_berrechid",
+        "zoneName": "Berrechid",
+        "city": "Berrechid",
+        "maxRoadKm": null,
+        "checkedAt": "2026-10-29T17:04:35.302Z"
+      },
+      "financials": {
+        "status": "void",
+        "paymentMethod": "cod",
+        "commission": {
+          "type": "none",
+          "value": 0
+        },
+        "subtotal": 80,
+        "deliveryFee": 0,
+        "total": 80,
+        "promoDiscount": 0,
+        "commissionAmount": 0,
+        "businessNet": 80,
+        "driverEarning": 0,
+        "platformDeliveryMargin": 0,
+        "snapshotAt": "2026-10-29T17:04:35.306Z",
+        "finalizedAt": "2026-10-29T17:04:35.320Z"
+      },
+      "payment": {
+        "method": "cod",
+        "walletAmount": 80,
+        "amountDueOnDelivery": 0,
+        "status": "wallet_refunded",
+        "reference": "order:MVTSMTBE-83F031:wallet",
+        "walletRefundedAt": "2026-10-29T17:04:35.323Z",
+        "at": "2026-10-29T17:04:35.306Z"
+      },
+      "requestKey": "order:MVTSMSTL-E842EE:e2e-cancel-3293475300",
+      "events": [
+        {
+          "at": "2026-10-29T17:04:35.320Z",
+          "from": "new",
+          "to": "canceled",
+          "actorType": "customer",
+          "actorId": "MVTSMSTL-E842EE"
+        }
+      ],
+      "canceledAt": "2026-10-29T17:04:35.320Z",
+      "canceledBy": "customer"
+    },
+    {
+      "id": "MVTSMSWT-C70880",
+      "createdAt": "2026-10-29T17:04:34.781Z",
+      "status": "delivered",
+      "storeType": "restaurant",
+      "autoAccepted": false,
+      "driverId": "MVTSMT3A-85CD52",
+      "assignedAt": "2026-10-29T17:04:35.195Z",
+      "acceptedAt": null,
+      "adminAcceptedAt": "2026-10-29T17:04:34.995Z",
+      "restaurantReadyAt": "2026-10-29T17:04:35.008Z",
+      "deliveredAt": "2026-10-29T17:04:35.249Z",
+      "updatedAt": "2026-10-29T17:04:35.258Z",
+      "customerId": "MVTSMSTL-E842EE",
+      "lang": "ar",
+      "currency": "MAD",
+      "restaurantId": "REST-1",
+      "customer": {
+        "name": "E2E Wallet",
+        "phone": "0612345678",
+        "addr": "Berrechid centre",
+        "notes": "",
+        "lat": 33.2655,
+        "lng": -7.5872
+      },
+      "items": [
+        {
+          "id": "m1",
+          "name": "طاجين دجاج",
+          "qty": 2,
+          "price": 40
+        }
+      ],
+      "subtotal": 80,
+      "deliveryFee": 0,
+      "total": 80,
+      "paymentMethod": "cod",
+      "verify": {
+        "salt": "7f067b046946c3cd349f83ac6e7923e8",
+        "createdAt": "2026-10-29T17:04:34.781Z",
+        "expiresAt": "2026-10-30T17:04:35.221Z",
+        "pickup": {
+          "attempts": 0,
+          "exception": {
+            "by": "legacy",
+            "reason": "e2e test",
+            "at": "2026-10-29T17:04:35.206Z"
+          }
+        },
+        "delivery": {
+          "attempts": 0,
+          "exception": {
+            "by": "legacy",
+            "reason": "e2e test",
+            "at": "2026-10-29T17:04:35.221Z"
+          }
+        }
+      },
+      "serviceZone": {
+        "zoneId": "zone_berrechid",
+        "zoneName": "Berrechid",
+        "city": "Berrechid",
+        "maxRoadKm": null,
+        "checkedAt": "2026-10-29T17:04:34.778Z"
+      },
+      "financials": {
+        "status": "final",
+        "paymentMethod": "cod",
+        "commission": {
+          "type": "none",
+          "value": 0
+        },
+        "subtotal": 80,
+        "deliveryFee": 0,
+        "total": 80,
+        "promoDiscount": 0,
+        "commissionAmount": 0,
+        "businessNet": 80,
+        "driverEarning": 0,
+        "platformDeliveryMargin": 0,
+        "snapshotAt": "2026-10-29T17:04:34.781Z",
+        "updatedAt": "2026-10-29T17:04:35.195Z",
+        "finalizedAt": "2026-10-29T17:04:35.249Z"
+      },
+      "payment": {
+        "method": "cod",
+        "walletAmount": 80,
+        "amountDueOnDelivery": 0,
+        "status": "partially_paid_wallet",
+        "reference": "order:MVTSMSWT-C70880:wallet",
+        "walletRefundedAt": null,
+        "at": "2026-10-29T17:04:34.781Z"
+      },
+      "requestKey": "order:MVTSMSTL-E842EE:e2e-3293474777",
+      "events": [
+        {
+          "at": "2026-10-29T17:04:34.995Z",
+          "from": "new",
+          "to": "admin_accepted",
+          "actorType": "admin",
+          "actorId": "legacy"
+        },
+        {
+          "at": "2026-10-29T17:04:35.008Z",
+          "from": "admin_accepted",
+          "to": "restaurant_ready",
+          "actorType": "store",
+          "actorId": "REST-1"
+        },
+        {
+          "at": "2026-10-29T17:04:35.201Z",
+          "from": "restaurant_ready",
+          "to": "accepted",
+          "actorType": "driver",
+          "actorId": "MVTSMT3A-85CD52"
+        },
+        {
+          "at": "2026-10-29T17:04:35.210Z",
+          "from": "accepted",
+          "to": "picked_up",
+          "actorType": "driver",
+          "actorId": "MVTSMT3A-85CD52"
+        },
+        {
+          "at": "2026-10-29T17:04:35.215Z",
+          "from": "picked_up",
+          "to": "on_the_way",
+          "actorType": "driver",
+          "actorId": "MVTSMT3A-85CD52"
+        },
+        {
+          "at": "2026-10-29T17:04:35.249Z",
+          "from": "on_the_way",
+          "to": "delivered",
+          "actorType": "driver",
+          "actorId": "MVTSMT3A-85CD52"
+        }
+      ],
+      "storeAcceptedAt": "2026-10-29T17:04:35.002Z"
+    },
+    {
+      "id": "MVTSJK16-F3AA9A",
+      "createdAt": "2026-10-29T17:02:03.306Z",
+      "status": "canceled",
+      "storeType": "restaurant",
+      "autoAccepted": false,
+      "driverId": null,
+      "assignedAt": null,
+      "acceptedAt": null,
+      "adminAcceptedAt": null,
+      "restaurantReadyAt": null,
+      "deliveredAt": null,
+      "updatedAt": "2026-10-29T17:02:03.314Z",
+      "customerId": "MVTSJJKI-FD3F65",
+      "lang": "ar",
+      "currency": "MAD",
+      "restaurantId": "REST-1",
+      "customer": {
+        "name": "E2E Wallet",
+        "phone": "0612345678",
+        "addr": "Berrechid centre",
+        "notes": "",
+        "lat": 33.2655,
+        "lng": -7.5872
+      },
+      "items": [
+        {
+          "id": "m1",
+          "name": "طاجين دجاج",
+          "qty": 2,
+          "price": 40
+        }
+      ],
+      "subtotal": 80,
+      "deliveryFee": 0,
+      "total": 80,
+      "paymentMethod": "cod",
+      "verify": {
+        "salt": "ee8f9867431f6fbbe58644312daead2f",
+        "createdAt": "2026-10-29T17:02:03.306Z",
+        "expiresAt": "2026-10-30T17:02:03.306Z",
+        "pickup": {
+          "attempts": 0
+        },
+        "delivery": {
+          "attempts": 0
+        }
+      },
+      "serviceZone": {
+        "zoneId": "zone_berrechid",
+        "zoneName": "Berrechid",
+        "city": "Berrechid",
+        "maxRoadKm": null,
+        "checkedAt": "2026-10-29T17:02:03.304Z"
+      },
+      "financials": {
+        "status": "void",
+        "paymentMethod": "cod",
+        "commission": {
+          "type": "none",
+          "value": 0
+        },
+        "subtotal": 80,
+        "deliveryFee": 0,
+        "total": 80,
+        "promoDiscount": 0,
+        "commissionAmount": 0,
+        "businessNet": 80,
+        "driverEarning": 0,
+        "platformDeliveryMargin": 0,
+        "snapshotAt": "2026-10-29T17:02:03.306Z",
+        "finalizedAt": "2026-10-29T17:02:03.314Z"
+      },
+      "payment": {
+        "method": "cod",
+        "walletAmount": 80,
+        "amountDueOnDelivery": 0,
+        "status": "wallet_refunded",
+        "reference": "order:MVTSJK16-F3AA9A:wallet",
+        "walletRefundedAt": "2026-10-29T17:02:03.316Z",
+        "at": "2026-10-29T17:02:03.306Z"
+      },
+      "requestKey": "order:MVTSJJKI-FD3F65:e2e-cancel-3293323303",
+      "events": [
+        {
+          "at": "2026-10-29T17:02:03.314Z",
+          "from": "new",
+          "to": "canceled",
+          "actorType": "customer",
+          "actorId": "MVTSJJKI-FD3F65"
+        }
+      ],
+      "canceledAt": "2026-10-29T17:02:03.314Z",
+      "canceledBy": "customer"
+    },
+    {
+      "id": "MVTSJJOE-66E470",
+      "createdAt": "2026-10-29T17:02:02.845Z",
+      "status": "delivered",
+      "storeType": "restaurant",
+      "autoAccepted": false,
+      "driverId": "MVTSJJUG-6F33FB",
+      "assignedAt": "2026-10-29T17:02:03.236Z",
+      "acceptedAt": null,
+      "adminAcceptedAt": "2026-10-29T17:02:03.047Z",
+      "restaurantReadyAt": "2026-10-29T17:02:03.059Z",
+      "deliveredAt": "2026-10-29T17:02:03.261Z",
+      "updatedAt": "2026-10-29T17:02:03.269Z",
+      "customerId": "MVTSJJKI-FD3F65",
+      "lang": "ar",
+      "currency": "MAD",
+      "restaurantId": "REST-1",
+      "customer": {
+        "name": "E2E Wallet",
+        "phone": "0612345678",
+        "addr": "Berrechid centre",
+        "notes": "",
+        "lat": 33.2655,
+        "lng": -7.5872
+      },
+      "items": [
+        {
+          "id": "m1",
+          "name": "طاجين دجاج",
+          "qty": 2,
+          "price": 40
+        }
+      ],
+      "subtotal": 80,
+      "deliveryFee": 0,
+      "total": 80,
+      "paymentMethod": "cod",
+      "verify": {
+        "salt": "64f645f63d69472347c9d45bd9a8414e",
+        "createdAt": "2026-10-29T17:02:02.846Z",
+        "expiresAt": "2026-10-30T17:02:03.258Z",
+        "pickup": {
+          "attempts": 0,
+          "exception": {
+            "by": "legacy",
+            "reason": "e2e test",
+            "at": "2026-10-29T17:02:03.246Z"
+          }
+        },
+        "delivery": {
+          "attempts": 0,
+          "exception": {
+            "by": "legacy",
+            "reason": "e2e test",
+            "at": "2026-10-29T17:02:03.258Z"
+          }
+        }
+      },
+      "serviceZone": {
+        "zoneId": "zone_berrechid",
+        "zoneName": "Berrechid",
+        "city": "Berrechid",
+        "maxRoadKm": null,
+        "checkedAt": "2026-10-29T17:02:02.840Z"
+      },
+      "financials": {
+        "status": "final",
+        "paymentMethod": "cod",
+        "commission": {
+          "type": "none",
+          "value": 0
+        },
+        "subtotal": 80,
+        "deliveryFee": 0,
+        "total": 80,
+        "promoDiscount": 0,
+        "commissionAmount": 0,
+        "businessNet": 80,
+        "driverEarning": 0,
+        "platformDeliveryMargin": 0,
+        "snapshotAt": "2026-10-29T17:02:02.846Z",
+        "updatedAt": "2026-10-29T17:02:03.236Z",
+        "finalizedAt": "2026-10-29T17:02:03.261Z"
+      },
+      "payment": {
+        "method": "cod",
+        "walletAmount": 80,
+        "amountDueOnDelivery": 0,
+        "status": "partially_paid_wallet",
+        "reference": "order:MVTSJJOE-66E470:wallet",
+        "walletRefundedAt": null,
+        "at": "2026-10-29T17:02:02.845Z"
+      },
+      "requestKey": "order:MVTSJJKI-FD3F65:e2e-3293322839",
+      "events": [
+        {
+          "at": "2026-10-29T17:02:03.047Z",
+          "from": "new",
+          "to": "admin_accepted",
+          "actorType": "admin",
+          "actorId": "legacy"
+        },
+        {
+          "at": "2026-10-29T17:02:03.059Z",
+          "from": "admin_accepted",
+          "to": "restaurant_ready",
+          "actorType": "store",
+          "actorId": "REST-1"
+        },
+        {
+          "at": "2026-10-29T17:02:03.241Z",
+          "from": "restaurant_ready",
+          "to": "accepted",
+          "actorType": "driver",
+          "actorId": "MVTSJJUG-6F33FB"
+        },
+        {
+          "at": "2026-10-29T17:02:03.249Z",
+          "from": "accepted",
+          "to": "picked_up",
+          "actorType": "driver",
+          "actorId": "MVTSJJUG-6F33FB"
+        },
+        {
+          "at": "2026-10-29T17:02:03.253Z",
+          "from": "picked_up",
+          "to": "on_the_way",
+          "actorType": "driver",
+          "actorId": "MVTSJJUG-6F33FB"
+        },
+        {
+          "at": "2026-10-29T17:02:03.261Z",
+          "from": "on_the_way",
+          "to": "delivered",
+          "actorType": "driver",
+          "actorId": "MVTSJJUG-6F33FB"
+        }
+      ],
+      "storeAcceptedAt": "2026-10-29T17:02:03.055Z"
+    },
+    {
+      "id": "MVTSDMAO-6C54D5",
+      "createdAt": "2026-10-29T16:57:26.304Z",
+      "status": "canceled",
+      "storeType": "restaurant",
+      "autoAccepted": false,
+      "driverId": null,
+      "assignedAt": null,
+      "acceptedAt": null,
+      "adminAcceptedAt": null,
+      "restaurantReadyAt": null,
+      "deliveredAt": null,
+      "updatedAt": "2026-10-29T16:57:26.311Z",
+      "customerId": "MVTSDLVK-ED9058",
+      "lang": "ar",
+      "currency": "MAD",
+      "restaurantId": "REST-1",
+      "customer": {
+        "name": "E2E Wallet",
+        "phone": "0612345678",
+        "addr": "Berrechid centre",
+        "notes": "",
+        "lat": 33.2655,
+        "lng": -7.5872
+      },
+      "items": [
+        {
+          "id": "m1",
+          "name": "طاجين دجاج",
+          "qty": 2,
+          "price": 40
+        }
+      ],
+      "subtotal": 80,
+      "deliveryFee": 0,
+      "total": 80,
+      "paymentMethod": "cod",
+      "verify": {
+        "salt": "7394d81cab9826955a2e626529766689",
+        "createdAt": "2026-10-29T16:57:26.304Z",
+        "expiresAt": "2026-10-30T16:57:26.304Z",
+        "pickup": {
+          "attempts": 0
+        },
+        "delivery": {
+          "attempts": 0
+        }
+      },
+      "serviceZone": {
+        "zoneId": "zone_berrechid",
+        "zoneName": "Berrechid",
+        "city": "Berrechid",
+        "maxRoadKm": null,
+        "checkedAt": "2026-10-29T16:57:26.302Z"
+      },
+      "financials": {
+        "status": "void",
+        "paymentMethod": "cod",
+        "commission": {
+          "type": "none",
+          "value": 0
+        },
+        "subtotal": 80,
+        "deliveryFee": 0,
+        "total": 80,
+        "promoDiscount": 0,
+        "commissionAmount": 0,
+        "businessNet": 80,
+        "driverEarning": 0,
+        "platformDeliveryMargin": 0,
+        "snapshotAt": "2026-10-29T16:57:26.304Z",
+        "finalizedAt": "2026-10-29T16:57:26.311Z"
+      },
+      "payment": {
+        "method": "cod",
+        "walletAmount": 80,
+        "amountDueOnDelivery": 0,
+        "status": "wallet_refunded",
+        "reference": "order:MVTSDMAO-6C54D5:wallet",
+        "walletRefundedAt": "2026-10-29T16:57:26.313Z",
+        "at": "2026-10-29T16:57:26.304Z"
+      },
+      "requestKey": "order:MVTSDLVK-ED9058:e2e-cancel-3293046301",
+      "events": [
+        {
+          "at": "2026-10-29T16:57:26.311Z",
+          "from": "new",
+          "to": "canceled",
+          "actorType": "customer",
+          "actorId": "MVTSDLVK-ED9058"
+        }
+      ],
+      "canceledAt": "2026-10-29T16:57:26.311Z",
+      "canceledBy": "customer"
+    },
+    {
+      "id": "MVTSDLYR-CFD6C7",
+      "createdAt": "2026-10-29T16:57:25.875Z",
+      "status": "delivered",
+      "storeType": "restaurant",
+      "autoAccepted": false,
+      "driverId": "MVTSDM48-0AF1B0",
+      "assignedAt": "2026-10-29T16:57:26.238Z",
+      "acceptedAt": null,
+      "adminAcceptedAt": "2026-10-29T16:57:26.060Z",
+      "restaurantReadyAt": "2026-10-29T16:57:26.068Z",
+      "deliveredAt": "2026-10-29T16:57:26.264Z",
+      "updatedAt": "2026-10-29T16:57:26.272Z",
+      "customerId": "MVTSDLVK-ED9058",
+      "lang": "ar",
+      "currency": "MAD",
+      "restaurantId": "REST-1",
+      "customer": {
+        "name": "E2E Wallet",
+        "phone": "0612345678",
+        "addr": "Berrechid centre",
+        "notes": "",
+        "lat": 33.2655,
+        "lng": -7.5872
+      },
+      "items": [
+        {
+          "id": "m1",
+          "name": "طاجين دجاج",
+          "qty": 2,
+          "price": 40
+        }
+      ],
+      "subtotal": 80,
+      "deliveryFee": 0,
+      "total": 80,
+      "paymentMethod": "cod",
+      "verify": {
+        "salt": "a47993e3417d4bf6157e6126e20d8bf5",
+        "createdAt": "2026-10-29T16:57:25.875Z",
+        "expiresAt": "2026-10-30T16:57:26.260Z",
+        "pickup": {
+          "attempts": 0,
+          "exception": {
+            "by": "legacy",
+            "reason": "e2e test",
+            "at": "2026-10-29T16:57:26.247Z"
+          }
+        },
+        "delivery": {
+          "attempts": 0,
+          "exception": {
+            "by": "legacy",
+            "reason": "e2e test",
+            "at": "2026-10-29T16:57:26.260Z"
+          }
+        }
+      },
+      "serviceZone": {
+        "zoneId": "zone_berrechid",
+        "zoneName": "Berrechid",
+        "city": "Berrechid",
+        "maxRoadKm": null,
+        "checkedAt": "2026-10-29T16:57:25.873Z"
+      },
+      "financials": {
+        "status": "final",
+        "paymentMethod": "cod",
+        "commission": {
+          "type": "none",
+          "value": 0
+        },
+        "subtotal": 80,
+        "deliveryFee": 0,
+        "total": 80,
+        "promoDiscount": 0,
+        "commissionAmount": 0,
+        "businessNet": 80,
+        "driverEarning": 0,
+        "platformDeliveryMargin": 0,
+        "snapshotAt": "2026-10-29T16:57:25.875Z",
+        "updatedAt": "2026-10-29T16:57:26.238Z",
+        "finalizedAt": "2026-10-29T16:57:26.264Z"
+      },
+      "payment": {
+        "method": "cod",
+        "walletAmount": 80,
+        "amountDueOnDelivery": 0,
+        "status": "partially_paid_wallet",
+        "reference": "order:MVTSDLYR-CFD6C7:wallet",
+        "walletRefundedAt": null,
+        "at": "2026-10-29T16:57:25.875Z"
+      },
+      "requestKey": "order:MVTSDLVK-ED9058:e2e-3293045872",
+      "events": [
+        {
+          "at": "2026-10-29T16:57:26.060Z",
+          "from": "new",
+          "to": "admin_accepted",
+          "actorType": "admin",
+          "actorId": "legacy"
+        },
+        {
+          "at": "2026-10-29T16:57:26.068Z",
+          "from": "admin_accepted",
+          "to": "restaurant_ready",
+          "actorType": "store",
+          "actorId": "REST-1"
+        },
+        {
+          "at": "2026-10-29T16:57:26.243Z",
+          "from": "restaurant_ready",
+          "to": "accepted",
+          "actorType": "driver",
+          "actorId": "MVTSDM48-0AF1B0"
+        },
+        {
+          "at": "2026-10-29T16:57:26.250Z",
+          "from": "accepted",
+          "to": "picked_up",
+          "actorType": "driver",
+          "actorId": "MVTSDM48-0AF1B0"
+        },
+        {
+          "at": "2026-10-29T16:57:26.254Z",
+          "from": "picked_up",
+          "to": "on_the_way",
+          "actorType": "driver",
+          "actorId": "MVTSDM48-0AF1B0"
+        },
+        {
+          "at": "2026-10-29T16:57:26.264Z",
+          "from": "on_the_way",
+          "to": "delivered",
+          "actorType": "driver",
+          "actorId": "MVTSDM48-0AF1B0"
+        }
+      ],
+      "storeAcceptedAt": "2026-10-29T16:57:26.065Z"
+    },
+    {
+      "id": "MVTSDJLJ-27D649",
+      "createdAt": "2026-10-29T16:57:22.807Z",
+      "status": "canceled",
+      "storeType": "restaurant",
+      "autoAccepted": false,
+      "driverId": null,
+      "assignedAt": null,
+      "acceptedAt": null,
+      "adminAcceptedAt": null,
+      "restaurantReadyAt": null,
+      "deliveredAt": null,
+      "updatedAt": "2026-10-29T16:57:22.813Z",
+      "customerId": "MVTSDJ5Z-7FEA08",
+      "lang": "ar",
+      "currency": "MAD",
+      "restaurantId": "REST-1",
+      "customer": {
+        "name": "E2E Wallet",
+        "phone": "0612345678",
+        "addr": "Berrechid centre",
+        "notes": "",
+        "lat": 33.2655,
+        "lng": -7.5872
+      },
+      "items": [
+        {
+          "id": "m1",
+          "name": "طاجين دجاج",
+          "qty": 2,
+          "price": 40
+        }
+      ],
+      "subtotal": 80,
+      "deliveryFee": 0,
+      "total": 80,
+      "paymentMethod": "cod",
+      "verify": {
+        "salt": "ec39b7df8ea93e5c673cf620f8f3179b",
+        "createdAt": "2026-10-29T16:57:22.807Z",
+        "expiresAt": "2026-10-30T16:57:22.807Z",
+        "pickup": {
+          "attempts": 0
+        },
+        "delivery": {
+          "attempts": 0
+        }
+      },
+      "serviceZone": {
+        "zoneId": "zone_berrechid",
+        "zoneName": "Berrechid",
+        "city": "Berrechid",
+        "maxRoadKm": null,
+        "checkedAt": "2026-10-29T16:57:22.805Z"
+      },
+      "financials": {
+        "status": "void",
+        "paymentMethod": "cod",
+        "commission": {
+          "type": "none",
+          "value": 0
+        },
+        "subtotal": 80,
+        "deliveryFee": 0,
+        "total": 80,
+        "promoDiscount": 0,
+        "commissionAmount": 0,
+        "businessNet": 80,
+        "driverEarning": 0,
+        "platformDeliveryMargin": 0,
+        "snapshotAt": "2026-10-29T16:57:22.807Z",
+        "finalizedAt": "2026-10-29T16:57:22.813Z"
+      },
+      "payment": {
+        "method": "cod",
+        "walletAmount": 80,
+        "amountDueOnDelivery": 0,
+        "status": "wallet_refunded",
+        "reference": "order:MVTSDJLJ-27D649:wallet",
+        "walletRefundedAt": "2026-10-29T16:57:22.815Z",
+        "at": "2026-10-29T16:57:22.807Z"
+      },
+      "requestKey": "order:MVTSDJ5Z-7FEA08:e2e-cancel-3293042803",
+      "events": [
+        {
+          "at": "2026-10-29T16:57:22.813Z",
+          "from": "new",
+          "to": "canceled",
+          "actorType": "customer",
+          "actorId": "MVTSDJ5Z-7FEA08"
+        }
+      ],
+      "canceledAt": "2026-10-29T16:57:22.813Z",
+      "canceledBy": "customer"
+    },
+    {
+      "id": "MVTSDJ99-B291B1",
+      "createdAt": "2026-10-29T16:57:22.365Z",
+      "status": "delivered",
+      "storeType": "restaurant",
+      "autoAccepted": false,
+      "driverId": "MVTSDJEQ-F6F1C9",
+      "assignedAt": "2026-10-29T16:57:22.733Z",
+      "acceptedAt": null,
+      "adminAcceptedAt": "2026-10-29T16:57:22.550Z",
+      "restaurantReadyAt": "2026-10-29T16:57:22.559Z",
+      "deliveredAt": "2026-10-29T16:57:22.762Z",
+      "updatedAt": "2026-10-29T16:57:22.775Z",
+      "customerId": "MVTSDJ5Z-7FEA08",
+      "lang": "ar",
+      "currency": "MAD",
+      "restaurantId": "REST-1",
+      "customer": {
+        "name": "E2E Wallet",
+        "phone": "0612345678",
+        "addr": "Berrechid centre",
+        "notes": "",
+        "lat": 33.2655,
+        "lng": -7.5872
+      },
+      "items": [
+        {
+          "id": "m1",
+          "name": "طاجين دجاج",
+          "qty": 2,
+          "price": 40
+        }
+      ],
+      "subtotal": 80,
+      "deliveryFee": 0,
+      "total": 80,
+      "paymentMethod": "cod",
+      "verify": {
+        "salt": "6cd42a955ffa21aa254c784cf135a149",
+        "createdAt": "2026-10-29T16:57:22.365Z",
+        "expiresAt": "2026-10-30T16:57:22.757Z",
+        "pickup": {
+          "attempts": 0,
+          "exception": {
+            "by": "legacy",
+            "reason": "e2e test",
+            "at": "2026-10-29T16:57:22.740Z"
+          }
+        },
+        "delivery": {
+          "attempts": 0,
+          "exception": {
+            "by": "legacy",
+            "reason": "e2e test",
+            "at": "2026-10-29T16:57:22.757Z"
+          }
+        }
+      },
+      "serviceZone": {
+        "zoneId": "zone_berrechid",
+        "zoneName": "Berrechid",
+        "city": "Berrechid",
+        "maxRoadKm": null,
+        "checkedAt": "2026-10-29T16:57:22.362Z"
+      },
+      "financials": {
+        "status": "final",
+        "paymentMethod": "cod",
+        "commission": {
+          "type": "none",
+          "value": 0
+        },
+        "subtotal": 80,
+        "deliveryFee": 0,
+        "total": 80,
+        "promoDiscount": 0,
+        "commissionAmount": 0,
+        "businessNet": 80,
+        "driverEarning": 0,
+        "platformDeliveryMargin": 0,
+        "snapshotAt": "2026-10-29T16:57:22.365Z",
+        "updatedAt": "2026-10-29T16:57:22.733Z",
+        "finalizedAt": "2026-10-29T16:57:22.762Z"
+      },
+      "payment": {
+        "method": "cod",
+        "walletAmount": 80,
+        "amountDueOnDelivery": 0,
+        "status": "partially_paid_wallet",
+        "reference": "order:MVTSDJ99-B291B1:wallet",
+        "walletRefundedAt": null,
+        "at": "2026-10-29T16:57:22.365Z"
+      },
+      "requestKey": "order:MVTSDJ5Z-7FEA08:e2e-3293042361",
+      "events": [
+        {
+          "at": "2026-10-29T16:57:22.550Z",
+          "from": "new",
+          "to": "admin_accepted",
+          "actorType": "admin",
+          "actorId": "legacy"
+        },
+        {
+          "at": "2026-10-29T16:57:22.559Z",
+          "from": "admin_accepted",
+          "to": "restaurant_ready",
+          "actorType": "store",
+          "actorId": "REST-1"
+        },
+        {
+          "at": "2026-10-29T16:57:22.737Z",
+          "from": "restaurant_ready",
+          "to": "accepted",
+          "actorType": "driver",
+          "actorId": "MVTSDJEQ-F6F1C9"
+        },
+        {
+          "at": "2026-10-29T16:57:22.746Z",
+          "from": "accepted",
+          "to": "picked_up",
+          "actorType": "driver",
+          "actorId": "MVTSDJEQ-F6F1C9"
+        },
+        {
+          "at": "2026-10-29T16:57:22.751Z",
+          "from": "picked_up",
+          "to": "on_the_way",
+          "actorType": "driver",
+          "actorId": "MVTSDJEQ-F6F1C9"
+        },
+        {
+          "at": "2026-10-29T16:57:22.762Z",
+          "from": "on_the_way",
+          "to": "delivered",
+          "actorType": "driver",
+          "actorId": "MVTSDJEQ-F6F1C9"
+        }
+      ],
+      "storeAcceptedAt": "2026-10-29T16:57:22.555Z"
+    },
+    {
+      "id": "MVTSDG08-6BCE8C",
+      "createdAt": "2026-10-29T16:57:18.152Z",
+      "status": "canceled",
+      "storeType": "restaurant",
+      "autoAccepted": false,
+      "driverId": null,
+      "assignedAt": null,
+      "acceptedAt": null,
+      "adminAcceptedAt": null,
+      "restaurantReadyAt": null,
+      "deliveredAt": null,
+      "updatedAt": "2026-10-29T16:57:18.158Z",
+      "customerId": "MVTSDFLG-126F25",
+      "lang": "ar",
+      "currency": "MAD",
+      "restaurantId": "REST-1",
+      "customer": {
+        "name": "E2E Wallet",
+        "phone": "0612345678",
+        "addr": "Berrechid centre",
+        "notes": "",
+        "lat": 33.2655,
+        "lng": -7.5872
+      },
+      "items": [
+        {
+          "id": "m1",
+          "name": "طاجين دجاج",
+          "qty": 2,
+          "price": 40
+        }
+      ],
+      "subtotal": 80,
+      "deliveryFee": 0,
+      "total": 80,
+      "paymentMethod": "cod",
+      "verify": {
+        "salt": "d814fb969a49c43e02e463c1f93c1ffe",
+        "createdAt": "2026-10-29T16:57:18.152Z",
+        "expiresAt": "2026-10-30T16:57:18.152Z",
+        "pickup": {
+          "attempts": 0
+        },
+        "delivery": {
+          "attempts": 0
+        }
+      },
+      "serviceZone": {
+        "zoneId": "zone_berrechid",
+        "zoneName": "Berrechid",
+        "city": "Berrechid",
+        "maxRoadKm": null,
+        "checkedAt": "2026-10-29T16:57:18.150Z"
+      },
+      "financials": {
+        "status": "void",
+        "paymentMethod": "cod",
+        "commission": {
+          "type": "none",
+          "value": 0
+        },
+        "subtotal": 80,
+        "deliveryFee": 0,
+        "total": 80,
+        "promoDiscount": 0,
+        "commissionAmount": 0,
+        "businessNet": 80,
+        "driverEarning": 0,
+        "platformDeliveryMargin": 0,
+        "snapshotAt": "2026-10-29T16:57:18.152Z",
+        "finalizedAt": "2026-10-29T16:57:18.158Z"
+      },
+      "payment": {
+        "method": "cod",
+        "walletAmount": 80,
+        "amountDueOnDelivery": 0,
+        "status": "wallet_refunded",
+        "reference": "order:MVTSDG08-6BCE8C:wallet",
+        "walletRefundedAt": "2026-10-29T16:57:18.159Z",
+        "at": "2026-10-29T16:57:18.152Z"
+      },
+      "requestKey": "order:MVTSDFLG-126F25:e2e-cancel-3293038149",
+      "events": [
+        {
+          "at": "2026-10-29T16:57:18.158Z",
+          "from": "new",
+          "to": "canceled",
+          "actorType": "customer",
+          "actorId": "MVTSDFLG-126F25"
+        }
+      ],
+      "canceledAt": "2026-10-29T16:57:18.158Z",
+      "canceledBy": "customer"
+    },
+    {
+      "id": "MVTSDFON-6F4DA4",
+      "createdAt": "2026-10-29T16:57:17.735Z",
+      "status": "delivered",
+      "storeType": "restaurant",
+      "autoAccepted": false,
+      "driverId": "MVTSDFU5-9CB8B4",
+      "assignedAt": "2026-10-29T16:57:18.097Z",
+      "acceptedAt": null,
+      "adminAcceptedAt": "2026-10-29T16:57:17.918Z",
+      "restaurantReadyAt": "2026-10-29T16:57:17.929Z",
+      "deliveredAt": "2026-10-29T16:57:18.118Z",
+      "updatedAt": "2026-10-29T16:57:18.126Z",
+      "customerId": "MVTSDFLG-126F25",
+      "lang": "ar",
+      "currency": "MAD",
+      "restaurantId": "REST-1",
+      "customer": {
+        "name": "E2E Wallet",
+        "phone": "0612345678",
+        "addr": "Berrechid centre",
+        "notes": "",
+        "lat": 33.2655,
+        "lng": -7.5872
+      },
+      "items": [
+        {
+          "id": "m1",
+          "name": "طاجين دجاج",
+          "qty": 2,
+          "price": 40
+        }
+      ],
+      "subtotal": 80,
+      "deliveryFee": 0,
+      "total": 80,
+      "paymentMethod": "cod",
+      "verify": {
+        "salt": "df416b6b9e1e9954870e18320665d665",
+        "createdAt": "2026-10-29T16:57:17.735Z",
+        "expiresAt": "2026-10-30T16:57:18.115Z",
+        "pickup": {
+          "attempts": 0,
+          "exception": {
+            "by": "legacy",
+            "reason": "e2e test",
+            "at": "2026-10-29T16:57:18.104Z"
+          }
+        },
+        "delivery": {
+          "attempts": 0,
+          "exception": {
+            "by": "legacy",
+            "reason": "e2e test",
+            "at": "2026-10-29T16:57:18.115Z"
+          }
+        }
+      },
+      "serviceZone": {
+        "zoneId": "zone_berrechid",
+        "zoneName": "Berrechid",
+        "city": "Berrechid",
+        "maxRoadKm": null,
+        "checkedAt": "2026-10-29T16:57:17.733Z"
+      },
+      "financials": {
+        "status": "final",
+        "paymentMethod": "cod",
+        "commission": {
+          "type": "none",
+          "value": 0
+        },
+        "subtotal": 80,
+        "deliveryFee": 0,
+        "total": 80,
+        "promoDiscount": 0,
+        "commissionAmount": 0,
+        "businessNet": 80,
+        "driverEarning": 0,
+        "platformDeliveryMargin": 0,
+        "snapshotAt": "2026-10-29T16:57:17.735Z",
+        "updatedAt": "2026-10-29T16:57:18.097Z",
+        "finalizedAt": "2026-10-29T16:57:18.118Z"
+      },
+      "payment": {
+        "method": "cod",
+        "walletAmount": 80,
+        "amountDueOnDelivery": 0,
+        "status": "partially_paid_wallet",
+        "reference": "order:MVTSDFON-6F4DA4:wallet",
+        "walletRefundedAt": null,
+        "at": "2026-10-29T16:57:17.735Z"
+      },
+      "requestKey": "order:MVTSDFLG-126F25:e2e-3293037732",
+      "events": [
+        {
+          "at": "2026-10-29T16:57:17.918Z",
+          "from": "new",
+          "to": "admin_accepted",
+          "actorType": "admin",
+          "actorId": "legacy"
+        },
+        {
+          "at": "2026-10-29T16:57:17.929Z",
+          "from": "admin_accepted",
+          "to": "restaurant_ready",
+          "actorType": "store",
+          "actorId": "REST-1"
+        },
+        {
+          "at": "2026-10-29T16:57:18.101Z",
+          "from": "restaurant_ready",
+          "to": "accepted",
+          "actorType": "driver",
+          "actorId": "MVTSDFU5-9CB8B4"
+        },
+        {
+          "at": "2026-10-29T16:57:18.107Z",
+          "from": "accepted",
+          "to": "picked_up",
+          "actorType": "driver",
+          "actorId": "MVTSDFU5-9CB8B4"
+        },
+        {
+          "at": "2026-10-29T16:57:18.110Z",
+          "from": "picked_up",
+          "to": "on_the_way",
+          "actorType": "driver",
+          "actorId": "MVTSDFU5-9CB8B4"
+        },
+        {
+          "at": "2026-10-29T16:57:18.118Z",
+          "from": "on_the_way",
+          "to": "delivered",
+          "actorType": "driver",
+          "actorId": "MVTSDFU5-9CB8B4"
+        }
+      ],
+      "storeAcceptedAt": "2026-10-29T16:57:17.925Z"
+    },
+    {
+      "id": "MVTSDCYD-5E61B3",
+      "createdAt": "2026-10-29T16:57:14.197Z",
+      "status": "canceled",
+      "storeType": "restaurant",
+      "autoAccepted": false,
+      "driverId": null,
+      "assignedAt": null,
+      "acceptedAt": null,
+      "adminAcceptedAt": null,
+      "restaurantReadyAt": null,
+      "deliveredAt": null,
+      "updatedAt": "2026-10-29T16:57:14.205Z",
+      "customerId": "MVTSDCIP-47FCA0",
+      "lang": "ar",
+      "currency": "MAD",
+      "restaurantId": "REST-1",
+      "customer": {
+        "name": "E2E Wallet",
+        "phone": "0612345678",
+        "addr": "Berrechid centre",
+        "notes": "",
+        "lat": 33.2655,
+        "lng": -7.5872
+      },
+      "items": [
+        {
+          "id": "m1",
+          "name": "طاجين دجاج",
+          "qty": 2,
+          "price": 40
+        }
+      ],
+      "subtotal": 80,
+      "deliveryFee": 0,
+      "total": 80,
+      "paymentMethod": "cod",
+      "verify": {
+        "salt": "cb3294811212ecd77c06a95088451272",
+        "createdAt": "2026-10-29T16:57:14.197Z",
+        "expiresAt": "2026-10-30T16:57:14.197Z",
+        "pickup": {
+          "attempts": 0
+        },
+        "delivery": {
+          "attempts": 0
+        }
+      },
+      "serviceZone": {
+        "zoneId": "zone_berrechid",
+        "zoneName": "Berrechid",
+        "city": "Berrechid",
+        "maxRoadKm": null,
+        "checkedAt": "2026-10-29T16:57:14.195Z"
+      },
+      "financials": {
+        "status": "void",
+        "paymentMethod": "cod",
+        "commission": {
+          "type": "none",
+          "value": 0
+        },
+        "subtotal": 80,
+        "deliveryFee": 0,
+        "total": 80,
+        "promoDiscount": 0,
+        "commissionAmount": 0,
+        "businessNet": 80,
+        "driverEarning": 0,
+        "platformDeliveryMargin": 0,
+        "snapshotAt": "2026-10-29T16:57:14.197Z",
+        "finalizedAt": "2026-10-29T16:57:14.205Z"
+      },
+      "payment": {
+        "method": "cod",
+        "walletAmount": 80,
+        "amountDueOnDelivery": 0,
+        "status": "wallet_refunded",
+        "reference": "order:MVTSDCYD-5E61B3:wallet",
+        "walletRefundedAt": "2026-10-29T16:57:14.207Z",
+        "at": "2026-10-29T16:57:14.197Z"
+      },
+      "requestKey": "order:MVTSDCIP-47FCA0:e2e-cancel-3293034193",
+      "events": [
+        {
+          "at": "2026-10-29T16:57:14.205Z",
+          "from": "new",
+          "to": "canceled",
+          "actorType": "customer",
+          "actorId": "MVTSDCIP-47FCA0"
+        }
+      ],
+      "canceledAt": "2026-10-29T16:57:14.205Z",
+      "canceledBy": "customer"
+    },
+    {
+      "id": "MVTSDCLY-6A7C6A",
+      "createdAt": "2026-10-29T16:57:13.750Z",
+      "status": "delivered",
+      "storeType": "restaurant",
+      "autoAccepted": false,
+      "driverId": "MVTSDCRF-C393F1",
+      "assignedAt": "2026-10-29T16:57:14.112Z",
+      "acceptedAt": null,
+      "adminAcceptedAt": "2026-10-29T16:57:13.936Z",
+      "restaurantReadyAt": "2026-10-29T16:57:13.943Z",
+      "deliveredAt": "2026-10-29T16:57:14.147Z",
+      "updatedAt": "2026-10-29T16:57:14.162Z",
+      "customerId": "MVTSDCIP-47FCA0",
+      "lang": "ar",
+      "currency": "MAD",
+      "restaurantId": "REST-1",
+      "customer": {
+        "name": "E2E Wallet",
+        "phone": "0612345678",
+        "addr": "Berrechid centre",
+        "notes": "",
+        "lat": 33.2655,
+        "lng": -7.5872
+      },
+      "items": [
+        {
+          "id": "m1",
+          "name": "طاجين دجاج",
+          "qty": 2,
+          "price": 40
+        }
+      ],
+      "subtotal": 80,
+      "deliveryFee": 0,
+      "total": 80,
+      "paymentMethod": "cod",
+      "verify": {
+        "salt": "f7c28a29fe7025394d5d978b7164d068",
+        "createdAt": "2026-10-29T16:57:13.750Z",
+        "expiresAt": "2026-10-30T16:57:14.142Z",
+        "pickup": {
+          "attempts": 0,
+          "exception": {
+            "by": "legacy",
+            "reason": "e2e test",
+            "at": "2026-10-29T16:57:14.127Z"
+          }
+        },
+        "delivery": {
+          "attempts": 0,
+          "exception": {
+            "by": "legacy",
+            "reason": "e2e test",
+            "at": "2026-10-29T16:57:14.142Z"
+          }
+        }
+      },
+      "serviceZone": {
+        "zoneId": "zone_berrechid",
+        "zoneName": "Berrechid",
+        "city": "Berrechid",
+        "maxRoadKm": null,
+        "checkedAt": "2026-10-29T16:57:13.747Z"
+      },
+      "financials": {
+        "status": "final",
+        "paymentMethod": "cod",
+        "commission": {
+          "type": "none",
+          "value": 0
+        },
+        "subtotal": 80,
+        "deliveryFee": 0,
+        "total": 80,
+        "promoDiscount": 0,
+        "commissionAmount": 0,
+        "businessNet": 80,
+        "driverEarning": 0,
+        "platformDeliveryMargin": 0,
+        "snapshotAt": "2026-10-29T16:57:13.750Z",
+        "updatedAt": "2026-10-29T16:57:14.112Z",
+        "finalizedAt": "2026-10-29T16:57:14.147Z"
+      },
+      "payment": {
+        "method": "cod",
+        "walletAmount": 80,
+        "amountDueOnDelivery": 0,
+        "status": "partially_paid_wallet",
+        "reference": "order:MVTSDCLY-6A7C6A:wallet",
+        "walletRefundedAt": null,
+        "at": "2026-10-29T16:57:13.750Z"
+      },
+      "requestKey": "order:MVTSDCIP-47FCA0:e2e-3293033746",
+      "events": [
+        {
+          "at": "2026-10-29T16:57:13.936Z",
+          "from": "new",
+          "to": "admin_accepted",
+          "actorType": "admin",
+          "actorId": "legacy"
+        },
+        {
+          "at": "2026-10-29T16:57:13.943Z",
+          "from": "admin_accepted",
+          "to": "restaurant_ready",
+          "actorType": "store",
+          "actorId": "REST-1"
+        },
+        {
+          "at": "2026-10-29T16:57:14.121Z",
+          "from": "restaurant_ready",
+          "to": "accepted",
+          "actorType": "driver",
+          "actorId": "MVTSDCRF-C393F1"
+        },
+        {
+          "at": "2026-10-29T16:57:14.131Z",
+          "from": "accepted",
+          "to": "picked_up",
+          "actorType": "driver",
+          "actorId": "MVTSDCRF-C393F1"
+        },
+        {
+          "at": "2026-10-29T16:57:14.137Z",
+          "from": "picked_up",
+          "to": "on_the_way",
+          "actorType": "driver",
+          "actorId": "MVTSDCRF-C393F1"
+        },
+        {
+          "at": "2026-10-29T16:57:14.147Z",
+          "from": "on_the_way",
+          "to": "delivered",
+          "actorType": "driver",
+          "actorId": "MVTSDCRF-C393F1"
+        }
+      ],
+      "storeAcceptedAt": "2026-10-29T16:57:13.940Z"
+    },
+    {
+      "id": "MVTSD8T9-0DE95B",
+      "createdAt": "2026-10-29T16:57:08.829Z",
+      "status": "canceled",
+      "storeType": "restaurant",
+      "autoAccepted": false,
+      "driverId": null,
+      "assignedAt": null,
+      "acceptedAt": null,
+      "adminAcceptedAt": null,
+      "restaurantReadyAt": null,
+      "deliveredAt": null,
+      "updatedAt": "2026-10-29T16:57:08.836Z",
+      "customerId": "MVTSD8DJ-D4ADD6",
+      "lang": "ar",
+      "currency": "MAD",
+      "restaurantId": "REST-1",
+      "customer": {
+        "name": "E2E Wallet",
+        "phone": "0612345678",
+        "addr": "Berrechid centre",
+        "notes": "",
+        "lat": 33.2655,
+        "lng": -7.5872
+      },
+      "items": [
+        {
+          "id": "m1",
+          "name": "طاجين دجاج",
+          "qty": 2,
+          "price": 40
+        }
+      ],
+      "subtotal": 80,
+      "deliveryFee": 0,
+      "total": 80,
+      "paymentMethod": "cod",
+      "verify": {
+        "salt": "60eb0c6c6224dd369eadffcd4f03ba38",
+        "createdAt": "2026-10-29T16:57:08.829Z",
+        "expiresAt": "2026-10-30T16:57:08.829Z",
+        "pickup": {
+          "attempts": 0
+        },
+        "delivery": {
+          "attempts": 0
+        }
+      },
+      "serviceZone": {
+        "zoneId": "zone_berrechid",
+        "zoneName": "Berrechid",
+        "city": "Berrechid",
+        "maxRoadKm": null,
+        "checkedAt": "2026-10-29T16:57:08.827Z"
+      },
+      "financials": {
+        "status": "void",
+        "paymentMethod": "cod",
+        "commission": {
+          "type": "none",
+          "value": 0
+        },
+        "subtotal": 80,
+        "deliveryFee": 0,
+        "total": 80,
+        "promoDiscount": 0,
+        "commissionAmount": 0,
+        "businessNet": 80,
+        "driverEarning": 0,
+        "platformDeliveryMargin": 0,
+        "snapshotAt": "2026-10-29T16:57:08.830Z",
+        "finalizedAt": "2026-10-29T16:57:08.836Z"
+      },
+      "payment": {
+        "method": "cod",
+        "walletAmount": 80,
+        "amountDueOnDelivery": 0,
+        "status": "wallet_refunded",
+        "reference": "order:MVTSD8T9-0DE95B:wallet",
+        "walletRefundedAt": "2026-10-29T16:57:08.837Z",
+        "at": "2026-10-29T16:57:08.829Z"
+      },
+      "requestKey": "order:MVTSD8DJ-D4ADD6:e2e-cancel-3293028826",
+      "events": [
+        {
+          "at": "2026-10-29T16:57:08.836Z",
+          "from": "new",
+          "to": "canceled",
+          "actorType": "customer",
+          "actorId": "MVTSD8DJ-D4ADD6"
+        }
+      ],
+      "canceledAt": "2026-10-29T16:57:08.836Z",
+      "canceledBy": "customer"
+    },
+    {
+      "id": "MVTSD8GV-6EF04F",
+      "createdAt": "2026-10-29T16:57:08.383Z",
+      "status": "delivered",
+      "storeType": "restaurant",
+      "autoAccepted": false,
+      "driverId": "MVTSD8MI-A3CCC7",
+      "assignedAt": "2026-10-29T16:57:08.757Z",
+      "acceptedAt": null,
+      "adminAcceptedAt": "2026-10-29T16:57:08.573Z",
+      "restaurantReadyAt": "2026-10-29T16:57:08.582Z",
+      "deliveredAt": "2026-10-29T16:57:08.796Z",
+      "updatedAt": "2026-10-29T16:57:08.803Z",
+      "customerId": "MVTSD8DJ-D4ADD6",
+      "lang": "ar",
+      "currency": "MAD",
+      "restaurantId": "REST-1",
+      "customer": {
+        "name": "E2E Wallet",
+        "phone": "0612345678",
+        "addr": "Berrechid centre",
+        "notes": "",
+        "lat": 33.2655,
+        "lng": -7.5872
+      },
+      "items": [
+        {
+          "id": "m1",
+          "name": "طاجين دجاج",
+          "qty": 2,
+          "price": 40
+        }
+      ],
+      "subtotal": 80,
+      "deliveryFee": 0,
+      "total": 80,
+      "paymentMethod": "cod",
+      "verify": {
+        "salt": "7b4697ceb7086ad05735194edd26da08",
+        "createdAt": "2026-10-29T16:57:08.383Z",
+        "expiresAt": "2026-10-30T16:57:08.793Z",
+        "pickup": {
+          "attempts": 0,
+          "exception": {
+            "by": "legacy",
+            "reason": "e2e test",
+            "at": "2026-10-29T16:57:08.783Z"
+          }
+        },
+        "delivery": {
+          "attempts": 0,
+          "exception": {
+            "by": "legacy",
+            "reason": "e2e test",
+            "at": "2026-10-29T16:57:08.793Z"
+          }
+        }
+      },
+      "serviceZone": {
+        "zoneId": "zone_berrechid",
+        "zoneName": "Berrechid",
+        "city": "Berrechid",
+        "maxRoadKm": null,
+        "checkedAt": "2026-10-29T16:57:08.380Z"
+      },
+      "financials": {
+        "status": "final",
+        "paymentMethod": "cod",
+        "commission": {
+          "type": "none",
+          "value": 0
+        },
+        "subtotal": 80,
+        "deliveryFee": 0,
+        "total": 80,
+        "promoDiscount": 0,
+        "commissionAmount": 0,
+        "businessNet": 80,
+        "driverEarning": 0,
+        "platformDeliveryMargin": 0,
+        "snapshotAt": "2026-10-29T16:57:08.383Z",
+        "updatedAt": "2026-10-29T16:57:08.757Z",
+        "finalizedAt": "2026-10-29T16:57:08.796Z"
+      },
+      "payment": {
+        "method": "cod",
+        "walletAmount": 80,
+        "amountDueOnDelivery": 0,
+        "status": "partially_paid_wallet",
+        "reference": "order:MVTSD8GV-6EF04F:wallet",
+        "walletRefundedAt": null,
+        "at": "2026-10-29T16:57:08.383Z"
+      },
+      "requestKey": "order:MVTSD8DJ-D4ADD6:e2e-3293028379",
+      "events": [
+        {
+          "at": "2026-10-29T16:57:08.573Z",
+          "from": "new",
+          "to": "admin_accepted",
+          "actorType": "admin",
+          "actorId": "legacy"
+        },
+        {
+          "at": "2026-10-29T16:57:08.582Z",
+          "from": "admin_accepted",
+          "to": "restaurant_ready",
+          "actorType": "store",
+          "actorId": "REST-1"
+        },
+        {
+          "at": "2026-10-29T16:57:08.779Z",
+          "from": "restaurant_ready",
+          "to": "accepted",
+          "actorType": "driver",
+          "actorId": "MVTSD8MI-A3CCC7"
+        },
+        {
+          "at": "2026-10-29T16:57:08.786Z",
+          "from": "accepted",
+          "to": "picked_up",
+          "actorType": "driver",
+          "actorId": "MVTSD8MI-A3CCC7"
+        },
+        {
+          "at": "2026-10-29T16:57:08.790Z",
+          "from": "picked_up",
+          "to": "on_the_way",
+          "actorType": "driver",
+          "actorId": "MVTSD8MI-A3CCC7"
+        },
+        {
+          "at": "2026-10-29T16:57:08.796Z",
+          "from": "on_the_way",
+          "to": "delivered",
+          "actorType": "driver",
+          "actorId": "MVTSD8MI-A3CCC7"
+        }
+      ],
+      "storeAcceptedAt": "2026-10-29T16:57:08.578Z"
+    },
+    {
+      "id": "MVTSD5CJ-5EC076",
+      "createdAt": "2026-10-29T16:57:04.339Z",
+      "status": "canceled",
+      "storeType": "restaurant",
+      "autoAccepted": false,
+      "driverId": null,
+      "assignedAt": null,
+      "acceptedAt": null,
+      "adminAcceptedAt": null,
+      "restaurantReadyAt": null,
+      "deliveredAt": null,
+      "updatedAt": "2026-10-29T16:57:04.348Z",
+      "customerId": "MVTSD4VR-51C8C8",
+      "lang": "ar",
+      "currency": "MAD",
+      "restaurantId": "REST-1",
+      "customer": {
+        "name": "E2E Wallet",
+        "phone": "0612345678",
+        "addr": "Berrechid centre",
+        "notes": "",
+        "lat": 33.2655,
+        "lng": -7.5872
+      },
+      "items": [
+        {
+          "id": "m1",
+          "name": "طاجين دجاج",
+          "qty": 2,
+          "price": 40
+        }
+      ],
+      "subtotal": 80,
+      "deliveryFee": 0,
+      "total": 80,
+      "paymentMethod": "cod",
+      "verify": {
+        "salt": "f8862275d313b61137c2d774c226ce00",
+        "createdAt": "2026-10-29T16:57:04.339Z",
+        "expiresAt": "2026-10-30T16:57:04.339Z",
+        "pickup": {
+          "attempts": 0
+        },
+        "delivery": {
+          "attempts": 0
+        }
+      },
+      "serviceZone": {
+        "zoneId": "zone_berrechid",
+        "zoneName": "Berrechid",
+        "city": "Berrechid",
+        "maxRoadKm": null,
+        "checkedAt": "2026-10-29T16:57:04.337Z"
+      },
+      "financials": {
+        "status": "void",
+        "paymentMethod": "cod",
+        "commission": {
+          "type": "none",
+          "value": 0
+        },
+        "subtotal": 80,
+        "deliveryFee": 0,
+        "total": 80,
+        "promoDiscount": 0,
+        "commissionAmount": 0,
+        "businessNet": 80,
+        "driverEarning": 0,
+        "platformDeliveryMargin": 0,
+        "snapshotAt": "2026-10-29T16:57:04.339Z",
+        "finalizedAt": "2026-10-29T16:57:04.348Z"
+      },
+      "payment": {
+        "method": "cod",
+        "walletAmount": 80,
+        "amountDueOnDelivery": 0,
+        "status": "wallet_refunded",
+        "reference": "order:MVTSD5CJ-5EC076:wallet",
+        "walletRefundedAt": "2026-10-29T16:57:04.349Z",
+        "at": "2026-10-29T16:57:04.339Z"
+      },
+      "requestKey": "order:MVTSD4VR-51C8C8:e2e-cancel-3293024334",
+      "events": [
+        {
+          "at": "2026-10-29T16:57:04.348Z",
+          "from": "new",
+          "to": "canceled",
+          "actorType": "customer",
+          "actorId": "MVTSD4VR-51C8C8"
+        }
+      ],
+      "canceledAt": "2026-10-29T16:57:04.348Z",
+      "canceledBy": "customer"
+    },
+    {
+      "id": "MVTSD4ZR-8B464D",
+      "createdAt": "2026-10-29T16:57:03.878Z",
+      "status": "delivered",
+      "storeType": "restaurant",
+      "autoAccepted": false,
+      "driverId": "MVTSD55P-716226",
+      "assignedAt": "2026-10-29T16:57:04.262Z",
+      "acceptedAt": null,
+      "adminAcceptedAt": "2026-10-29T16:57:04.079Z",
+      "restaurantReadyAt": "2026-10-29T16:57:04.089Z",
+      "deliveredAt": "2026-10-29T16:57:04.292Z",
+      "updatedAt": "2026-10-29T16:57:04.303Z",
+      "customerId": "MVTSD4VR-51C8C8",
+      "lang": "ar",
+      "currency": "MAD",
+      "restaurantId": "REST-1",
+      "customer": {
+        "name": "E2E Wallet",
+        "phone": "0612345678",
+        "addr": "Berrechid centre",
+        "notes": "",
+        "lat": 33.2655,
+        "lng": -7.5872
+      },
+      "items": [
+        {
+          "id": "m1",
+          "name": "طاجين دجاج",
+          "qty": 2,
+          "price": 40
+        }
+      ],
+      "subtotal": 80,
+      "deliveryFee": 0,
+      "total": 80,
+      "paymentMethod": "cod",
+      "verify": {
+        "salt": "f172161ba832ea767df7008339c2fcf8",
+        "createdAt": "2026-10-29T16:57:03.879Z",
+        "expiresAt": "2026-10-30T16:57:04.288Z",
+        "pickup": {
+          "attempts": 0,
+          "exception": {
+            "by": "legacy",
+            "reason": "e2e test",
+            "at": "2026-10-29T16:57:04.273Z"
+          }
+        },
+        "delivery": {
+          "attempts": 0,
+          "exception": {
+            "by": "legacy",
+            "reason": "e2e test",
+            "at": "2026-10-29T16:57:04.288Z"
+          }
+        }
+      },
+      "serviceZone": {
+        "zoneId": "zone_berrechid",
+        "zoneName": "Berrechid",
+        "city": "Berrechid",
+        "maxRoadKm": null,
+        "checkedAt": "2026-10-29T16:57:03.873Z"
+      },
+      "financials": {
+        "status": "final",
+        "paymentMethod": "cod",
+        "commission": {
+          "type": "none",
+          "value": 0
+        },
+        "subtotal": 80,
+        "deliveryFee": 0,
+        "total": 80,
+        "promoDiscount": 0,
+        "commissionAmount": 0,
+        "businessNet": 80,
+        "driverEarning": 0,
+        "platformDeliveryMargin": 0,
+        "snapshotAt": "2026-10-29T16:57:03.879Z",
+        "updatedAt": "2026-10-29T16:57:04.262Z",
+        "finalizedAt": "2026-10-29T16:57:04.292Z"
+      },
+      "payment": {
+        "method": "cod",
+        "walletAmount": 80,
+        "amountDueOnDelivery": 0,
+        "status": "partially_paid_wallet",
+        "reference": "order:MVTSD4ZR-8B464D:wallet",
+        "walletRefundedAt": null,
+        "at": "2026-10-29T16:57:03.878Z"
+      },
+      "requestKey": "order:MVTSD4VR-51C8C8:e2e-3293023870",
+      "events": [
+        {
+          "at": "2026-10-29T16:57:04.079Z",
+          "from": "new",
+          "to": "admin_accepted",
+          "actorType": "admin",
+          "actorId": "legacy"
+        },
+        {
+          "at": "2026-10-29T16:57:04.089Z",
+          "from": "admin_accepted",
+          "to": "restaurant_ready",
+          "actorType": "store",
+          "actorId": "REST-1"
+        },
+        {
+          "at": "2026-10-29T16:57:04.268Z",
+          "from": "restaurant_ready",
+          "to": "accepted",
+          "actorType": "driver",
+          "actorId": "MVTSD55P-716226"
+        },
+        {
+          "at": "2026-10-29T16:57:04.278Z",
+          "from": "accepted",
+          "to": "picked_up",
+          "actorType": "driver",
+          "actorId": "MVTSD55P-716226"
+        },
+        {
+          "at": "2026-10-29T16:57:04.283Z",
+          "from": "picked_up",
+          "to": "on_the_way",
+          "actorType": "driver",
+          "actorId": "MVTSD55P-716226"
+        },
+        {
+          "at": "2026-10-29T16:57:04.292Z",
+          "from": "on_the_way",
+          "to": "delivered",
+          "actorType": "driver",
+          "actorId": "MVTSD55P-716226"
+        }
+      ],
+      "storeAcceptedAt": "2026-10-29T16:57:04.085Z"
+    },
+    {
+      "id": "MVTSCEJY-604A2A",
+      "createdAt": "2026-10-29T16:56:29.614Z",
+      "status": "new",
+      "storeType": "restaurant",
+      "autoAccepted": false,
+      "driverId": null,
+      "assignedAt": null,
+      "acceptedAt": null,
+      "adminAcceptedAt": null,
+      "restaurantReadyAt": null,
+      "deliveredAt": null,
+      "updatedAt": "2026-10-29T16:56:29.614Z",
+      "customerId": "MVTSCE34-96BF15",
+      "lang": "ar",
+      "currency": "MAD",
+      "restaurantId": "REST-1",
+      "customer": {
+        "name": "E2E Wallet",
+        "phone": "0612345678",
+        "addr": "Berrechid centre",
+        "notes": "",
+        "lat": 33.2655,
+        "lng": -7.5872
+      },
+      "items": [
+        {
+          "id": "m1",
+          "name": "طاجين دجاج",
+          "qty": 40,
+          "price": 40
+        }
+      ],
+      "subtotal": 1600,
+      "deliveryFee": 0,
+      "total": 1600,
+      "paymentMethod": "cod",
+      "verify": {
+        "salt": "e0dd498fff74cb1a48c836e46c078cda",
+        "createdAt": "2026-10-29T16:56:29.614Z",
+        "expiresAt": "2026-10-30T16:56:29.614Z",
+        "pickup": {
+          "attempts": 0
+        },
+        "delivery": {
+          "attempts": 0
+        }
+      },
+      "serviceZone": {
+        "zoneId": "zone_berrechid",
+        "zoneName": "Berrechid",
+        "city": "Berrechid",
+        "maxRoadKm": null,
+        "checkedAt": "2026-10-29T16:56:29.612Z"
+      },
+      "financials": {
+        "status": "open",
+        "paymentMethod": "cod",
+        "commission": {
+          "type": "none",
+          "value": 0
+        },
+        "subtotal": 1600,
+        "deliveryFee": 0,
+        "total": 1600,
+        "promoDiscount": 0,
+        "commissionAmount": 0,
+        "businessNet": 1600,
+        "driverEarning": 0,
+        "platformDeliveryMargin": 0,
+        "snapshotAt": "2026-10-29T16:56:29.614Z"
+      },
+      "payment": {
+        "method": "cod",
+        "walletAmount": 1220,
+        "amountDueOnDelivery": 380,
+        "status": "partially_paid_wallet",
+        "reference": "order:MVTSCEJY-604A2A:wallet",
+        "walletRefundedAt": null,
+        "at": "2026-10-29T16:56:29.614Z"
+      },
+      "requestKey": "order:MVTSCE34-96BF15:conc-0-3292989611"
+    },
+    {
+      "id": "MVTSCEJ6-7C7036",
+      "createdAt": "2026-10-29T16:56:29.586Z",
+      "status": "canceled",
+      "storeType": "restaurant",
+      "autoAccepted": false,
+      "driverId": null,
+      "assignedAt": null,
+      "acceptedAt": null,
+      "adminAcceptedAt": null,
+      "restaurantReadyAt": null,
+      "deliveredAt": null,
+      "updatedAt": "2026-10-29T16:56:29.592Z",
+      "customerId": "MVTSCE34-96BF15",
+      "lang": "ar",
+      "currency": "MAD",
+      "restaurantId": "REST-1",
+      "customer": {
+        "name": "E2E Wallet",
+        "phone": "0612345678",
+        "addr": "Berrechid centre",
+        "notes": "",
+        "lat": 33.2655,
+        "lng": -7.5872
+      },
+      "items": [
+        {
+          "id": "m1",
+          "name": "طاجين دجاج",
+          "qty": 2,
+          "price": 40
+        }
+      ],
+      "subtotal": 80,
+      "deliveryFee": 0,
+      "total": 80,
+      "paymentMethod": "cod",
+      "verify": {
+        "salt": "4a4ca2f56c99d497c5991e214f7e93d6",
+        "createdAt": "2026-10-29T16:56:29.586Z",
+        "expiresAt": "2026-10-30T16:56:29.586Z",
+        "pickup": {
+          "attempts": 0
+        },
+        "delivery": {
+          "attempts": 0
+        }
+      },
+      "serviceZone": {
+        "zoneId": "zone_berrechid",
+        "zoneName": "Berrechid",
+        "city": "Berrechid",
+        "maxRoadKm": null,
+        "checkedAt": "2026-10-29T16:56:29.584Z"
+      },
+      "financials": {
+        "status": "void",
+        "paymentMethod": "cod",
+        "commission": {
+          "type": "none",
+          "value": 0
+        },
+        "subtotal": 80,
+        "deliveryFee": 0,
+        "total": 80,
+        "promoDiscount": 0,
+        "commissionAmount": 0,
+        "businessNet": 80,
+        "driverEarning": 0,
+        "platformDeliveryMargin": 0,
+        "snapshotAt": "2026-10-29T16:56:29.586Z",
+        "finalizedAt": "2026-10-29T16:56:29.592Z"
+      },
+      "payment": {
+        "method": "cod",
+        "walletAmount": 80,
+        "amountDueOnDelivery": 0,
+        "status": "wallet_refunded",
+        "reference": "order:MVTSCEJ6-7C7036:wallet",
+        "walletRefundedAt": "2026-10-29T16:56:29.594Z",
+        "at": "2026-10-29T16:56:29.586Z"
+      },
+      "requestKey": "order:MVTSCE34-96BF15:e2e-cancel-3292989583",
+      "events": [
+        {
+          "at": "2026-10-29T16:56:29.592Z",
+          "from": "new",
+          "to": "canceled",
+          "actorType": "customer",
+          "actorId": "MVTSCE34-96BF15"
+        }
+      ],
+      "canceledAt": "2026-10-29T16:56:29.592Z",
+      "canceledBy": "customer"
+    },
+    {
+      "id": "MVTSCE7H-3A8A3A",
+      "createdAt": "2026-10-29T16:56:29.165Z",
+      "status": "restaurant_ready",
+      "storeType": "restaurant",
+      "autoAccepted": false,
+      "driverId": "MVTSCEDC-2812F8",
+      "assignedAt": "2026-10-29T16:56:29.542Z",
+      "acceptedAt": null,
+      "adminAcceptedAt": "2026-10-29T16:56:29.365Z",
+      "restaurantReadyAt": "2026-10-29T16:56:29.372Z",
+      "deliveredAt": null,
+      "updatedAt": "2026-10-29T16:56:29.557Z",
+      "customerId": "MVTSCE34-96BF15",
+      "lang": "ar",
+      "currency": "MAD",
+      "restaurantId": "REST-1",
+      "customer": {
+        "name": "E2E Wallet",
+        "phone": "0612345678",
+        "addr": "Berrechid centre",
+        "notes": "",
+        "lat": 33.2655,
+        "lng": -7.5872
+      },
+      "items": [
+        {
+          "id": "m1",
+          "name": "طاجين دجاج",
+          "qty": 2,
+          "price": 40
+        }
+      ],
+      "subtotal": 80,
+      "deliveryFee": 0,
+      "total": 80,
+      "paymentMethod": "cod",
+      "verify": {
+        "salt": "e9d77263aa1f75f3917585370f2cb505",
+        "createdAt": "2026-10-29T16:56:29.165Z",
+        "expiresAt": "2026-10-30T16:56:29.557Z",
+        "pickup": {
+          "attempts": 0,
+          "exception": {
+            "by": "legacy",
+            "reason": "e2e test",
+            "at": "2026-10-29T16:56:29.548Z"
+          }
+        },
+        "delivery": {
+          "attempts": 0,
+          "exception": {
+            "by": "legacy",
+            "reason": "e2e test",
+            "at": "2026-10-29T16:56:29.557Z"
+          }
+        }
+      },
+      "serviceZone": {
+        "zoneId": "zone_berrechid",
+        "zoneName": "Berrechid",
+        "city": "Berrechid",
+        "maxRoadKm": null,
+        "checkedAt": "2026-10-29T16:56:29.162Z"
+      },
+      "financials": {
+        "status": "open",
+        "paymentMethod": "cod",
+        "commission": {
+          "type": "none",
+          "value": 0
+        },
+        "subtotal": 80,
+        "deliveryFee": 0,
+        "total": 80,
+        "promoDiscount": 0,
+        "commissionAmount": 0,
+        "businessNet": 80,
+        "driverEarning": 0,
+        "platformDeliveryMargin": 0,
+        "snapshotAt": "2026-10-29T16:56:29.165Z",
+        "updatedAt": "2026-10-29T16:56:29.542Z"
+      },
+      "payment": {
+        "method": "cod",
+        "walletAmount": 80,
+        "amountDueOnDelivery": 0,
+        "status": "partially_paid_wallet",
+        "reference": "order:MVTSCE7H-3A8A3A:wallet",
+        "walletRefundedAt": null,
+        "at": "2026-10-29T16:56:29.165Z"
+      },
+      "requestKey": "order:MVTSCE34-96BF15:e2e-3292989161",
+      "events": [
+        {
+          "at": "2026-10-29T16:56:29.365Z",
+          "from": "new",
+          "to": "admin_accepted",
+          "actorType": "admin",
+          "actorId": "legacy"
+        },
+        {
+          "at": "2026-10-29T16:56:29.372Z",
+          "from": "admin_accepted",
+          "to": "restaurant_ready",
+          "actorType": "store",
+          "actorId": "REST-1"
+        }
+      ],
+      "storeAcceptedAt": "2026-10-29T16:56:29.369Z"
+    },
+    {
+      "id": "MVTSCCO8-1DB910",
+      "createdAt": "2026-10-29T16:56:27.176Z",
+      "status": "new",
+      "storeType": "restaurant",
+      "autoAccepted": false,
+      "driverId": null,
+      "assignedAt": null,
+      "acceptedAt": null,
+      "adminAcceptedAt": null,
+      "restaurantReadyAt": null,
+      "deliveredAt": null,
+      "updatedAt": "2026-10-29T16:56:27.176Z",
+      "customerId": "MVTSCC7O-B27B04",
+      "lang": "ar",
+      "currency": "MAD",
+      "restaurantId": "REST-1",
+      "customer": {
+        "name": "E2E Wallet",
+        "phone": "0612345678",
+        "addr": "Berrechid centre",
+        "notes": "",
+        "lat": 33.2655,
+        "lng": -7.5872
+      },
+      "items": [
+        {
+          "id": "m1",
+          "name": "طاجين دجاج",
+          "qty": 40,
+          "price": 40
+        }
+      ],
+      "subtotal": 1600,
+      "deliveryFee": 0,
+      "total": 1600,
+      "paymentMethod": "cod",
+      "verify": {
+        "salt": "d57b5c62fa8fb88ae04fc504a6ab4744",
+        "createdAt": "2026-10-29T16:56:27.176Z",
+        "expiresAt": "2026-10-30T16:56:27.176Z",
+        "pickup": {
+          "attempts": 0
+        },
+        "delivery": {
+          "attempts": 0
+        }
+      },
+      "serviceZone": {
+        "zoneId": "zone_berrechid",
+        "zoneName": "Berrechid",
+        "city": "Berrechid",
+        "maxRoadKm": null,
+        "checkedAt": "2026-10-29T16:56:27.175Z"
+      },
+      "financials": {
+        "status": "open",
+        "paymentMethod": "cod",
+        "commission": {
+          "type": "none",
+          "value": 0
+        },
+        "subtotal": 1600,
+        "deliveryFee": 0,
+        "total": 1600,
+        "promoDiscount": 0,
+        "commissionAmount": 0,
+        "businessNet": 1600,
+        "driverEarning": 0,
+        "platformDeliveryMargin": 0,
+        "snapshotAt": "2026-10-29T16:56:27.176Z"
+      },
+      "payment": {
+        "method": "cod",
+        "walletAmount": 1220,
+        "amountDueOnDelivery": 380,
+        "status": "partially_paid_wallet",
+        "reference": "order:MVTSCCO8-1DB910:wallet",
+        "walletRefundedAt": null,
+        "at": "2026-10-29T16:56:27.176Z"
+      },
+      "requestKey": "order:MVTSCC7O-B27B04:conc-0-3292987173"
+    },
+    {
+      "id": "MVTSCCND-3519AF",
+      "createdAt": "2026-10-29T16:56:27.145Z",
+      "status": "canceled",
+      "storeType": "restaurant",
+      "autoAccepted": false,
+      "driverId": null,
+      "assignedAt": null,
+      "acceptedAt": null,
+      "adminAcceptedAt": null,
+      "restaurantReadyAt": null,
+      "deliveredAt": null,
+      "updatedAt": "2026-10-29T16:56:27.152Z",
+      "customerId": "MVTSCC7O-B27B04",
+      "lang": "ar",
+      "currency": "MAD",
+      "restaurantId": "REST-1",
+      "customer": {
+        "name": "E2E Wallet",
+        "phone": "0612345678",
+        "addr": "Berrechid centre",
+        "notes": "",
+        "lat": 33.2655,
+        "lng": -7.5872
+      },
+      "items": [
+        {
+          "id": "m1",
+          "name": "طاجين دجاج",
+          "qty": 2,
+          "price": 40
+        }
+      ],
+      "subtotal": 80,
+      "deliveryFee": 0,
+      "total": 80,
+      "paymentMethod": "cod",
+      "verify": {
+        "salt": "6757ac22f2f0133b5ae150e89417195d",
+        "createdAt": "2026-10-29T16:56:27.145Z",
+        "expiresAt": "2026-10-30T16:56:27.145Z",
+        "pickup": {
+          "attempts": 0
+        },
+        "delivery": {
+          "attempts": 0
+        }
+      },
+      "serviceZone": {
+        "zoneId": "zone_berrechid",
+        "zoneName": "Berrechid",
+        "city": "Berrechid",
+        "maxRoadKm": null,
+        "checkedAt": "2026-10-29T16:56:27.143Z"
+      },
+      "financials": {
+        "status": "void",
+        "paymentMethod": "cod",
+        "commission": {
+          "type": "none",
+          "value": 0
+        },
+        "subtotal": 80,
+        "deliveryFee": 0,
+        "total": 80,
+        "promoDiscount": 0,
+        "commissionAmount": 0,
+        "businessNet": 80,
+        "driverEarning": 0,
+        "platformDeliveryMargin": 0,
+        "snapshotAt": "2026-10-29T16:56:27.145Z",
+        "finalizedAt": "2026-10-29T16:56:27.152Z"
+      },
+      "payment": {
+        "method": "cod",
+        "walletAmount": 80,
+        "amountDueOnDelivery": 0,
+        "status": "wallet_refunded",
+        "reference": "order:MVTSCCND-3519AF:wallet",
+        "walletRefundedAt": "2026-10-29T16:56:27.153Z",
+        "at": "2026-10-29T16:56:27.145Z"
+      },
+      "requestKey": "order:MVTSCC7O-B27B04:e2e-cancel-3292987141",
+      "events": [
+        {
+          "at": "2026-10-29T16:56:27.152Z",
+          "from": "new",
+          "to": "canceled",
+          "actorType": "customer",
+          "actorId": "MVTSCC7O-B27B04"
+        }
+      ],
+      "canceledAt": "2026-10-29T16:56:27.152Z",
+      "canceledBy": "customer"
+    },
+    {
+      "id": "MVTSCCB8-D9B853",
+      "createdAt": "2026-10-29T16:56:26.708Z",
+      "status": "restaurant_ready",
+      "storeType": "restaurant",
+      "autoAccepted": false,
+      "driverId": "MVTSCCH7-8BE12B",
+      "assignedAt": "2026-10-29T16:56:27.095Z",
+      "acceptedAt": null,
+      "adminAcceptedAt": "2026-10-29T16:56:26.907Z",
+      "restaurantReadyAt": "2026-10-29T16:56:26.918Z",
+      "deliveredAt": null,
+      "updatedAt": "2026-10-29T16:56:27.109Z",
+      "customerId": "MVTSCC7O-B27B04",
+      "lang": "ar",
+      "currency": "MAD",
+      "restaurantId": "REST-1",
+      "customer": {
+        "name": "E2E Wallet",
+        "phone": "0612345678",
+        "addr": "Berrechid centre",
+        "notes": "",
+        "lat": 33.2655,
+        "lng": -7.5872
+      },
+      "items": [
+        {
+          "id": "m1",
+          "name": "طاجين دجاج",
+          "qty": 2,
+          "price": 40
+        }
+      ],
+      "subtotal": 80,
+      "deliveryFee": 0,
+      "total": 80,
+      "paymentMethod": "cod",
+      "verify": {
+        "salt": "414028355a06fa0e0b30ef1d797e1c5a",
+        "createdAt": "2026-10-29T16:56:26.709Z",
+        "expiresAt": "2026-10-30T16:56:27.109Z",
+        "pickup": {
+          "attempts": 0,
+          "exception": {
+            "by": "legacy",
+            "reason": "e2e test",
+            "at": "2026-10-29T16:56:27.102Z"
+          }
+        },
+        "delivery": {
+          "attempts": 0,
+          "exception": {
+            "by": "legacy",
+            "reason": "e2e test",
+            "at": "2026-10-29T16:56:27.109Z"
+          }
+        }
+      },
+      "serviceZone": {
+        "zoneId": "zone_berrechid",
+        "zoneName": "Berrechid",
+        "city": "Berrechid",
+        "maxRoadKm": null,
+        "checkedAt": "2026-10-29T16:56:26.705Z"
+      },
+      "financials": {
+        "status": "open",
+        "paymentMethod": "cod",
+        "commission": {
+          "type": "none",
+          "value": 0
+        },
+        "subtotal": 80,
+        "deliveryFee": 0,
+        "total": 80,
+        "promoDiscount": 0,
+        "commissionAmount": 0,
+        "businessNet": 80,
+        "driverEarning": 0,
+        "platformDeliveryMargin": 0,
+        "snapshotAt": "2026-10-29T16:56:26.709Z",
+        "updatedAt": "2026-10-29T16:56:27.095Z"
+      },
+      "payment": {
+        "method": "cod",
+        "walletAmount": 80,
+        "amountDueOnDelivery": 0,
+        "status": "partially_paid_wallet",
+        "reference": "order:MVTSCCB8-D9B853:wallet",
+        "walletRefundedAt": null,
+        "at": "2026-10-29T16:56:26.708Z"
+      },
+      "requestKey": "order:MVTSCC7O-B27B04:e2e-3292986703",
+      "events": [
+        {
+          "at": "2026-10-29T16:56:26.907Z",
+          "from": "new",
+          "to": "admin_accepted",
+          "actorType": "admin",
+          "actorId": "legacy"
+        },
+        {
+          "at": "2026-10-29T16:56:26.918Z",
+          "from": "admin_accepted",
+          "to": "restaurant_ready",
+          "actorType": "store",
+          "actorId": "REST-1"
+        }
+      ],
+      "storeAcceptedAt": "2026-10-29T16:56:26.914Z"
+    },
+    {
+      "id": "MVTSBNKW-87E70D",
+      "createdAt": "2026-10-29T16:55:54.655Z",
+      "status": "new",
+      "storeType": "restaurant",
+      "autoAccepted": false,
+      "driverId": null,
+      "assignedAt": null,
+      "acceptedAt": null,
+      "adminAcceptedAt": null,
+      "restaurantReadyAt": null,
+      "deliveredAt": null,
+      "updatedAt": "2026-10-29T16:55:54.655Z",
+      "customerId": "MVTSBNHC-1E7FAD",
+      "lang": "ar",
+      "currency": "MAD",
+      "restaurantId": "REST-1",
+      "customer": {
+        "name": "E2E Wallet",
+        "phone": "0612345678",
+        "addr": "Berrechid centre",
+        "notes": "",
+        "lat": 33.2655,
+        "lng": -7.5872
+      },
+      "items": [
+        {
+          "id": "m1",
+          "name": "طاجين دجاج",
+          "qty": 40,
+          "price": 40
+        }
+      ],
+      "subtotal": 1600,
+      "deliveryFee": 0,
+      "total": 1600,
+      "paymentMethod": "cod",
+      "verify": {
+        "salt": "f716c864b63c8a973cb0ee17d3ae0cf0",
+        "createdAt": "2026-10-29T16:55:54.656Z",
+        "expiresAt": "2026-10-30T16:55:54.656Z",
+        "pickup": {
+          "attempts": 0
+        },
+        "delivery": {
+          "attempts": 0
+        }
+      },
+      "serviceZone": {
+        "zoneId": "zone_berrechid",
+        "zoneName": "Berrechid",
+        "city": "Berrechid",
+        "maxRoadKm": null,
+        "checkedAt": "2026-10-29T16:55:54.654Z"
+      },
+      "financials": {
+        "status": "open",
+        "paymentMethod": "cod",
+        "commission": {
+          "type": "none",
+          "value": 0
+        },
+        "subtotal": 1600,
+        "deliveryFee": 0,
+        "total": 1600,
+        "promoDiscount": 0,
+        "commissionAmount": 0,
+        "businessNet": 1600,
+        "driverEarning": 0,
+        "platformDeliveryMargin": 0,
+        "snapshotAt": "2026-10-29T16:55:54.656Z"
+      },
+      "payment": {
+        "method": "cod",
+        "walletAmount": 220,
+        "amountDueOnDelivery": 1380,
+        "status": "partially_paid_wallet",
+        "reference": "order:MVTSBNKW-87E70D:wallet",
+        "walletRefundedAt": null,
+        "at": "2026-10-29T16:55:54.655Z"
+      },
+      "requestKey": "order:MVTSBNHC-1E7FAD:e2e-big-3292954652"
+    },
+    {
+      "id": "MVTSBNKI-E5DE4C",
+      "createdAt": "2026-10-29T16:55:54.642Z",
+      "status": "new",
+      "storeType": "restaurant",
+      "autoAccepted": false,
+      "driverId": null,
+      "assignedAt": null,
+      "acceptedAt": null,
+      "adminAcceptedAt": null,
+      "restaurantReadyAt": null,
+      "deliveredAt": null,
+      "updatedAt": "2026-10-29T16:55:54.642Z",
+      "customerId": "MVTSBNHC-1E7FAD",
+      "lang": "ar",
+      "currency": "MAD",
+      "restaurantId": "REST-1",
+      "customer": {
+        "name": "E2E Wallet",
+        "phone": "0612345678",
+        "addr": "Berrechid centre",
+        "notes": "",
+        "lat": 33.2655,
+        "lng": -7.5872
+      },
+      "items": [
+        {
+          "id": "m1",
+          "name": "طاجين دجاج",
+          "qty": 2,
+          "price": 40
+        }
+      ],
+      "subtotal": 80,
+      "deliveryFee": 0,
+      "total": 80,
+      "paymentMethod": "cod",
+      "verify": {
+        "salt": "91b589e00a6b96aecb98f31ef3e9bfae",
+        "createdAt": "2026-10-29T16:55:54.642Z",
+        "expiresAt": "2026-10-30T16:55:54.642Z",
+        "pickup": {
+          "attempts": 0
+        },
+        "delivery": {
+          "attempts": 0
+        }
+      },
+      "serviceZone": {
+        "zoneId": "zone_berrechid",
+        "zoneName": "Berrechid",
+        "city": "Berrechid",
+        "maxRoadKm": null,
+        "checkedAt": "2026-10-29T16:55:54.640Z"
+      },
+      "financials": {
+        "status": "open",
+        "paymentMethod": "cod",
+        "commission": {
+          "type": "none",
+          "value": 0
+        },
+        "subtotal": 80,
+        "deliveryFee": 0,
+        "total": 80,
+        "promoDiscount": 0,
+        "commissionAmount": 0,
+        "businessNet": 80,
+        "driverEarning": 0,
+        "platformDeliveryMargin": 0,
+        "snapshotAt": "2026-10-29T16:55:54.642Z"
+      },
+      "payment": {
+        "method": "cod",
+        "walletAmount": 80,
+        "amountDueOnDelivery": 0,
+        "status": "partially_paid_wallet",
+        "reference": "order:MVTSBNKI-E5DE4C:wallet",
+        "walletRefundedAt": null,
+        "at": "2026-10-29T16:55:54.642Z"
+      },
+      "requestKey": "order:MVTSBNHC-1E7FAD:e2e-3292954639"
+    },
+    {
+      "id": "MVTS84CA-638225",
+      "createdAt": "2026-10-29T16:53:09.754Z",
+      "status": "new",
+      "storeType": "restaurant",
+      "autoAccepted": false,
+      "driverId": null,
+      "assignedAt": null,
+      "acceptedAt": null,
+      "adminAcceptedAt": null,
+      "restaurantReadyAt": null,
+      "deliveredAt": null,
+      "updatedAt": "2026-10-29T16:53:09.754Z",
+      "customerId": "MVTS8495-2A3094",
+      "lang": "ar",
+      "currency": "MAD",
+      "restaurantId": "REST-1",
+      "customer": {
+        "name": "A B",
+        "phone": "0612345678",
+        "addr": "Casablanca, Maarif",
+        "notes": "",
+        "lat": 33.2655,
+        "lng": -7.5872
+      },
+      "items": [
+        {
+          "id": "m1",
+          "name": "طاجين دجاج",
+          "qty": 2,
+          "price": 40
+        }
+      ],
+      "subtotal": 80,
+      "deliveryFee": 0,
+      "total": 80,
+      "paymentMethod": "cod",
+      "verify": {
+        "salt": "5896c09f3697e300d68fae1ef5bffd4c",
+        "createdAt": "2026-10-29T16:53:09.754Z",
+        "expiresAt": "2026-10-30T16:53:09.754Z",
+        "pickup": {
+          "attempts": 0
+        },
+        "delivery": {
+          "attempts": 0
+        }
+      },
+      "serviceZone": {
+        "zoneId": "zone_berrechid",
+        "zoneName": "Berrechid",
+        "city": "Berrechid",
+        "maxRoadKm": null,
+        "checkedAt": "2026-10-29T16:53:09.752Z"
+      },
+      "financials": {
+        "status": "open",
+        "paymentMethod": "cod",
+        "commission": {
+          "type": "none",
+          "value": 0
+        },
+        "subtotal": 80,
+        "deliveryFee": 0,
+        "total": 80,
+        "promoDiscount": 0,
+        "commissionAmount": 0,
+        "businessNet": 80,
+        "driverEarning": 0,
+        "platformDeliveryMargin": 0,
+        "snapshotAt": "2026-10-29T16:53:09.754Z"
+      },
+      "payment": {
+        "method": "cod",
+        "walletAmount": 80,
+        "amountDueOnDelivery": 0,
+        "status": "partially_paid_wallet",
+        "reference": "order:MVTS84CA-638225:wallet",
+        "walletRefundedAt": null,
+        "at": "2026-10-29T16:53:09.754Z"
+      },
+      "requestKey": "order:MVTS8495-2A3094:order-key-1"
+    },
+    {
+      "id": "MVTS82XG-9B1BCA",
+      "createdAt": "2026-10-29T16:53:07.924Z",
+      "status": "new",
+      "storeType": "restaurant",
+      "autoAccepted": false,
+      "driverId": null,
+      "assignedAt": null,
+      "acceptedAt": null,
+      "adminAcceptedAt": null,
+      "restaurantReadyAt": null,
+      "deliveredAt": null,
+      "updatedAt": "2026-10-29T16:53:07.924Z",
+      "customerId": "MVTS82TJ-802C74",
+      "lang": "ar",
+      "currency": "MAD",
+      "restaurantId": "REST-1",
+      "customer": {
+        "name": "A B",
+        "phone": "0612345678",
+        "addr": "Casablanca, Maarif",
+        "notes": "",
+        "lat": 33.2655,
+        "lng": -7.5872
+      },
+      "items": [
+        {
+          "id": "m1",
+          "name": "طاجين دجاج",
+          "qty": 2,
+          "price": 40
+        }
+      ],
+      "subtotal": 80,
+      "deliveryFee": 0,
+      "total": 80,
+      "paymentMethod": "cod",
+      "verify": {
+        "salt": "9fe04491f866569ec92db9ce4c7bbbbb",
+        "createdAt": "2026-10-29T16:53:07.925Z",
+        "expiresAt": "2026-10-30T16:53:07.925Z",
+        "pickup": {
+          "attempts": 0
+        },
+        "delivery": {
+          "attempts": 0
+        }
+      },
+      "serviceZone": {
+        "zoneId": "zone_berrechid",
+        "zoneName": "Berrechid",
+        "city": "Berrechid",
+        "maxRoadKm": null,
+        "checkedAt": "2026-10-29T16:53:07.920Z"
+      },
+      "financials": {
+        "status": "open",
+        "paymentMethod": "cod",
+        "commission": {
+          "type": "none",
+          "value": 0
+        },
+        "subtotal": 80,
+        "deliveryFee": 0,
+        "total": 80,
+        "promoDiscount": 0,
+        "commissionAmount": 0,
+        "businessNet": 80,
+        "driverEarning": 0,
+        "platformDeliveryMargin": 0,
+        "snapshotAt": "2026-10-29T16:53:07.925Z"
+      },
+      "payment": {
+        "method": "cod",
+        "walletAmount": 80,
+        "amountDueOnDelivery": 0,
+        "status": "partially_paid_wallet",
+        "reference": "order:MVTS82XG-9B1BCA:wallet",
+        "walletRefundedAt": null,
+        "at": "2026-10-29T16:53:07.924Z"
+      },
+      "requestKey": "order:MVTS82TJ-802C74:order-key-1"
+    },
+    {
+      "id": "MVTS7KYR-E7D6C4",
+      "createdAt": "2026-10-29T16:52:44.643Z",
+      "status": "new",
+      "storeType": "restaurant",
+      "autoAccepted": false,
+      "driverId": null,
+      "assignedAt": null,
+      "acceptedAt": null,
+      "adminAcceptedAt": null,
+      "restaurantReadyAt": null,
+      "deliveredAt": null,
+      "updatedAt": "2026-10-29T16:52:44.643Z",
+      "customerId": "MVTS7KW6-C504D3",
+      "lang": "ar",
+      "currency": "MAD",
+      "restaurantId": "REST-1",
+      "customer": {
+        "name": "D G",
+        "phone": "0612345678",
+        "addr": "Berrechid",
+        "notes": "",
+        "lat": 33.2655,
+        "lng": -7.5872
+      },
+      "items": [
+        {
+          "id": "m1",
+          "name": "طاجين دجاج",
+          "qty": 1,
+          "price": 40
+        }
+      ],
+      "subtotal": 40,
+      "deliveryFee": 0,
+      "total": 40,
+      "paymentMethod": "cod",
+      "verify": {
+        "salt": "c8865c58d694eb5be96ef6214a527f43",
+        "createdAt": "2026-10-29T16:52:44.643Z",
+        "expiresAt": "2026-10-30T16:52:44.643Z",
+        "pickup": {
+          "attempts": 0
+        },
+        "delivery": {
+          "attempts": 0
+        }
+      },
+      "serviceZone": {
+        "zoneId": "zone_berrechid",
+        "zoneName": "Berrechid",
+        "city": "Berrechid",
+        "maxRoadKm": null,
+        "checkedAt": "2026-10-29T16:52:44.641Z"
+      },
+      "financials": {
+        "status": "open",
+        "paymentMethod": "cod",
+        "commission": {
+          "type": "none",
+          "value": 0
+        },
+        "subtotal": 40,
+        "deliveryFee": 0,
+        "total": 40,
+        "promoDiscount": 0,
+        "commissionAmount": 0,
+        "businessNet": 40,
+        "driverEarning": 0,
+        "platformDeliveryMargin": 0,
+        "snapshotAt": "2026-10-29T16:52:44.643Z"
+      },
+      "payment": {
+        "method": "cod",
+        "walletAmount": 40,
+        "amountDueOnDelivery": 0,
+        "status": "partially_paid_wallet",
+        "reference": "order:MVTS7KYR-E7D6C4:wallet",
+        "walletRefundedAt": null,
+        "at": "2026-10-29T16:52:44.643Z"
+      },
+      "requestKey": "order:MVTS7KW6-C504D3:abc12345"
+    },
+    {
+      "id": "MVTS7DKM-F5F764",
+      "createdAt": "2026-10-29T16:52:35.062Z",
+      "status": "new",
+      "storeType": "restaurant",
+      "autoAccepted": false,
+      "driverId": null,
+      "assignedAt": null,
+      "acceptedAt": null,
+      "adminAcceptedAt": null,
+      "restaurantReadyAt": null,
+      "deliveredAt": null,
+      "updatedAt": "2026-10-29T16:52:35.062Z",
+      "customerId": "MVTS7DHP-BF60A7",
+      "lang": "ar",
+      "currency": "MAD",
+      "restaurantId": "REST-1",
+      "customer": {
+        "name": "A B",
+        "phone": "0612345678",
+        "addr": "Casablanca, Maarif",
+        "notes": "",
+        "lat": 33.2655,
+        "lng": -7.5872
+      },
+      "items": [
+        {
+          "id": "m1",
+          "name": "طاجين دجاج",
+          "qty": 2,
+          "price": 40
+        }
+      ],
+      "subtotal": 80,
+      "deliveryFee": 0,
+      "total": 80,
+      "paymentMethod": "cod",
+      "verify": {
+        "salt": "031cd3b1e7c9e433bbdae6d4ad80f850",
+        "createdAt": "2026-10-29T16:52:35.062Z",
+        "expiresAt": "2026-10-30T16:52:35.062Z",
+        "pickup": {
+          "attempts": 0
+        },
+        "delivery": {
+          "attempts": 0
+        }
+      },
+      "serviceZone": {
+        "zoneId": "zone_berrechid",
+        "zoneName": "Berrechid",
+        "city": "Berrechid",
+        "maxRoadKm": null,
+        "checkedAt": "2026-10-29T16:52:35.061Z"
+      },
+      "financials": {
+        "status": "open",
+        "paymentMethod": "cod",
+        "commission": {
+          "type": "none",
+          "value": 0
+        },
+        "subtotal": 80,
+        "deliveryFee": 0,
+        "total": 80,
+        "promoDiscount": 0,
+        "commissionAmount": 0,
+        "businessNet": 80,
+        "driverEarning": 0,
+        "platformDeliveryMargin": 0,
+        "snapshotAt": "2026-10-29T16:52:35.062Z"
+      },
+      "payment": {
+        "method": "cod",
+        "walletAmount": 80,
+        "amountDueOnDelivery": 0,
+        "status": "partially_paid_wallet",
+        "reference": "order:MVTS7DKM-F5F764:wallet",
+        "walletRefundedAt": null,
+        "at": "2026-10-29T16:52:35.062Z"
+      },
+      "requestKey": "order:MVTS7DHP-BF60A7:order-key-1"
+    },
+    {
+      "id": "MVTS7A76-251762",
+      "createdAt": "2026-10-29T16:52:30.690Z",
+      "status": "new",
+      "storeType": "restaurant",
+      "autoAccepted": false,
+      "driverId": null,
+      "assignedAt": null,
+      "acceptedAt": null,
+      "adminAcceptedAt": null,
+      "restaurantReadyAt": null,
+      "deliveredAt": null,
+      "updatedAt": "2026-10-29T16:52:30.690Z",
+      "customerId": "MVTS7A41-923B6E",
+      "lang": "ar",
+      "currency": "MAD",
+      "restaurantId": "REST-1",
+      "customer": {
+        "name": "A B",
+        "phone": "0612345678",
+        "addr": "Casablanca, Maarif",
+        "notes": "",
+        "lat": 33.2655,
+        "lng": -7.5872
+      },
+      "items": [
+        {
+          "id": "m1",
+          "name": "طاجين دجاج",
+          "qty": 2,
+          "price": 40
+        }
+      ],
+      "subtotal": 80,
+      "deliveryFee": 0,
+      "total": 80,
+      "paymentMethod": "cod",
+      "verify": {
+        "salt": "e983470306c93f428a988aa260a7e630",
+        "createdAt": "2026-10-29T16:52:30.690Z",
+        "expiresAt": "2026-10-30T16:52:30.690Z",
+        "pickup": {
+          "attempts": 0
+        },
+        "delivery": {
+          "attempts": 0
+        }
+      },
+      "serviceZone": {
+        "zoneId": "zone_berrechid",
+        "zoneName": "Berrechid",
+        "city": "Berrechid",
+        "maxRoadKm": null,
+        "checkedAt": "2026-10-29T16:52:30.689Z"
+      },
+      "financials": {
+        "status": "open",
+        "paymentMethod": "cod",
+        "commission": {
+          "type": "none",
+          "value": 0
+        },
+        "subtotal": 80,
+        "deliveryFee": 0,
+        "total": 80,
+        "promoDiscount": 0,
+        "commissionAmount": 0,
+        "businessNet": 80,
+        "driverEarning": 0,
+        "platformDeliveryMargin": 0,
+        "snapshotAt": "2026-10-29T16:52:30.690Z"
+      },
+      "payment": {
+        "method": "cod",
+        "walletAmount": 80,
+        "amountDueOnDelivery": 0,
+        "status": "partially_paid_wallet",
+        "reference": "order:MVTS7A76-251762:wallet",
+        "walletRefundedAt": null,
+        "at": "2026-10-29T16:52:30.690Z"
+      },
+      "requestKey": "order:MVTS7A41-923B6E:order-key-1"
+    },
+    {
+      "id": "MVTS727C-7931E6",
+      "createdAt": "2026-10-29T16:52:20.328Z",
+      "status": "new",
+      "storeType": "restaurant",
+      "autoAccepted": false,
+      "driverId": null,
+      "assignedAt": null,
+      "acceptedAt": null,
+      "adminAcceptedAt": null,
+      "restaurantReadyAt": null,
+      "deliveredAt": null,
+      "updatedAt": "2026-10-29T16:52:20.328Z",
+      "customerId": "MVTS724B-FEEBDA",
+      "lang": "ar",
+      "currency": "MAD",
+      "restaurantId": "REST-1",
+      "customer": {
+        "name": "A B",
+        "phone": "0612345678",
+        "addr": "Casablanca, Maarif",
+        "notes": "",
+        "lat": 33.2655,
+        "lng": -7.5872
+      },
+      "items": [
+        {
+          "id": "m1",
+          "name": "طاجين دجاج",
+          "qty": 2,
+          "price": 40
+        }
+      ],
+      "subtotal": 80,
+      "deliveryFee": 0,
+      "total": 80,
+      "paymentMethod": "cod",
+      "verify": {
+        "salt": "ad5e1cdfef87fa14a984a119079699a8",
+        "createdAt": "2026-10-29T16:52:20.328Z",
+        "expiresAt": "2026-10-30T16:52:20.328Z",
+        "pickup": {
+          "attempts": 0
+        },
+        "delivery": {
+          "attempts": 0
+        }
+      },
+      "serviceZone": {
+        "zoneId": "zone_berrechid",
+        "zoneName": "Berrechid",
+        "city": "Berrechid",
+        "maxRoadKm": null,
+        "checkedAt": "2026-10-29T16:52:20.324Z"
+      },
+      "financials": {
+        "status": "open",
+        "paymentMethod": "cod",
+        "commission": {
+          "type": "none",
+          "value": 0
+        },
+        "subtotal": 80,
+        "deliveryFee": 0,
+        "total": 80,
+        "promoDiscount": 0,
+        "commissionAmount": 0,
+        "businessNet": 80,
+        "driverEarning": 0,
+        "platformDeliveryMargin": 0,
+        "snapshotAt": "2026-10-29T16:52:20.329Z"
+      },
+      "payment": {
+        "method": "cod",
+        "walletAmount": 80,
+        "amountDueOnDelivery": 0,
+        "status": "partially_paid_wallet",
+        "reference": "order:MVTS727C-7931E6:wallet",
+        "walletRefundedAt": null,
+        "at": "2026-10-29T16:52:20.328Z"
+      },
+      "requestKey": "order:MVTS724B-FEEBDA:order-key-1"
+    }
+  ]
+}

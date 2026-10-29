@@ -609,8 +609,21 @@
     const explicitDisc = Number(o.discount) || 0, explicitExtra = Number(o.extraFees != null ? o.extraFees : o.serviceFee) || 0;
     const rest = Math.round((Number(o.total) - sub - fee + explicitDisc - explicitExtra) * 100) / 100; // unexplained remainder
     const disc = explicitDisc + (rest < 0 ? -rest : 0), extra = explicitExtra + (rest > 0 ? rest : 0);
-    const pm = !o.paymentMethod || String(o.paymentMethod).toLowerCase() === "cod" ? L.cod : escH(o.paymentMethod);
-    const payTxt = pm + (o.paymentStatus ? " — " + escH(o.paymentStatus) : "");
+    // Payment as recorded by the server: never re-derived from the items.
+    const methodKey = String(o.paymentMethod || (o.payment && o.payment.method) || "cod").toLowerCase();
+    const methodNames = {
+      cod: L.cod,
+      wallet: ar ? "محفظة SIYMON" : "Portefeuille SIYMON",
+      tpe: ar ? "بطاقة TPE" : "Carte TPE",
+    };
+    const pm = escH(methodNames[methodKey] || methodKey);
+    const walletPaid = Number(o.payment && o.payment.walletAmount) || 0;
+    const dueOnDelivery = o.payment && o.payment.amountDueOnDelivery != null ? Number(o.payment.amountDueOnDelivery) : null;
+    const payTxt = pm
+      + (walletPaid > 0 ? ` — ${ar ? "مدفوع من المحفظة" : "payé par portefeuille"}: ${walletPaid.toFixed(2)}` : "")
+      + (dueOnDelivery != null && walletPaid > 0 ? ` · ${ar ? "عند التسليم" : "à la livraison"}: ${dueOnDelivery.toFixed(2)}` : "")
+      + (o.payment && o.payment.walletRefundedAt ? ` — ${ar ? "مُسترجع" : "remboursé"}` : "")
+      + (o.paymentStatus ? " — " + escH(o.paymentStatus) : "");
     const stage = o.stage && t("st_" + o.stage) !== "st_" + o.stage ? t("st_" + o.stage) : "";
     const place = [c.city, c.area].filter(Boolean).join(" / ");
     const map = mapsUrl(c);

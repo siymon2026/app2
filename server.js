@@ -65,6 +65,8 @@ const promoLib = require("./lib/promo");
 const paymentMethods = require("./lib/payment-methods");
 const orderPayment = require("./lib/order-payment");
 const topupsLib = require("./lib/topups");
+const loyaltyLib = require("./lib/loyalty");
+const walletService = require("./lib/wallet-service");
 const addressesLib = require("./lib/addresses");
 const customerAccount = require("./lib/customer-account");
 const geocodeLib = require("./lib/geocode");
@@ -842,6 +844,9 @@ const PUSH_SUBSCRIPTIONS_FILE = path.join(DATA_DIR, "push_subscriptions.json");
 const PUSH_RETRY_FILE = path.join(DATA_DIR, "push_retry.json");
 const PROMOS_FILE = path.join(DATA_DIR, "promos.json");
 const PAYMENT_METHODS_FILE = path.join(DATA_DIR, "payment_methods.json");
+const LOYALTY_FILE = path.join(DATA_DIR, "loyalty.json"); // loyalty programme: settings + per-customer points ledgers
+const WALLET_SETTINGS_FILE = path.join(DATA_DIR, "wallet_settings.json"); // supervisor top-up policy (limits, fees)
+const FINANCE_LOCK_FILE = path.join(DATA_DIR, "finance.lock"); // serialises every money/points transaction
 
 // SaaS / security add-ons (kept as JSON for backward compatibility; can be migrated to DB later)
 const REFRESH_TOKENS_FILE = path.join(DATA_DIR, "refresh_tokens.json");
@@ -1168,6 +1173,396 @@ function saveTopups(data) {
   writeJson(TOPUPS_FILE, data);
 }
 
+/* =====================================================================
+ * Financial core (customer wallet + loyalty points)
+ *
+ * The JSON stores are still authoritative, so every money/points operation
+ * runs inside financeTx(): one exclusive lock for ALL financial files, fresh
+ * reads from disk (the read cache is bypassed), and a commit only when the
+ * operation reports success. Consequences:
+ *   - two simultaneous requests can never read the same balance twice;
+ *   - a failure half-way writes NOTHING (all-or-nothing);
+ *   - every change is an append-only ledger entry with a unique ref, so
+ *     retries / duplicate notifications are idempotent even after a crash;
+ *   - the balance is always the sum of the ledger (see wallet-service.reconcile).
+ * ===================================================================== */
+
+/** Read straight from disk (bypasses the TTL cache) — the transaction baseline. */
+function readJsonDisk(file, fallback) {
+  try {
+    return JSON.parse(fs.readFileSync(file, "utf-8"));
+  } catch (_e) {
+    return cloneJson(fallback);
+  }
+}
+
+const EMPTY_LOYALTY = () => ({ settings: null, accounts: [], updatedAt: null });
+const EMPTY_WALLET_SETTINGS = () => ({ policy: null });
+
+function loadLoyalty() {
+  const data = readJson(LOYALTY_FILE, EMPTY_LOYALTY());
+  if (!Array.isArray(data.accounts)) data.accounts = [];
+  return data;
+}
+function saveLoyalty(data) {
+  writeJson(LOYALTY_FILE, data);
+}
+function loadWalletSettings() {
+  const data = readJson(WALLET_SETTINGS_FILE, EMPTY_WALLET_SETTINGS());
+  return walletService.policyOf(data.policy);
+}
+function saveWalletSettings(policy) {
+  writeJson(WALLET_SETTINGS_FILE, { policy });
+}
+function loyaltySettings() {
+  return loyaltyLib.settingsOf(loadLoyalty().settings);
+}
+
+/**
+ * Run `fn(store)` under the financial lock. `store` exposes the four financial
+ * stores plus helpers; callbacks must mark what they changed with
+ * `store.touch("customers" | "orders" | "topups" | "loyalty")`.
+ * Returns `fn`'s value; files are written only when `result.ok === true`.
+ */
+function financeTx(fn) {
+  return withFileLock(FINANCE_LOCK_FILE.replace(/\.lock$/, ""), () => {
+    const store = {
+      customers: readJsonDisk(CUSTOMERS_FILE, { customers: [] }),
+      orders: readJsonDisk(ORDERS_FILE, { orders: [] }),
+      topups: readJsonDisk(TOPUPS_FILE, { topups: [] }),
+      drivers: readJsonDisk(DRIVERS_FILE, { drivers: [] }),
+      loyalty: readJsonDisk(LOYALTY_FILE, EMPTY_LOYALTY()),
+      wallet: readJsonDisk(WALLET_SETTINGS_FILE, EMPTY_WALLET_SETTINGS()),
+      dirty: new Set(),
+      touch(name) {
+        this.dirty.add(String(name));
+      },
+      customer(id) {
+        return (this.customers.customers || []).find((c) => String(c.id) === String(id)) || null;
+      },
+      order(id) {
+        return (this.orders.orders || []).find((o) => String(o.id) === String(id)) || null;
+      },
+      driver(id) {
+        return (this.drivers.drivers || []).find((d) => String(d.id) === String(id)) || null;
+      },
+      loyaltyAccount(customerId, create) {
+        this.loyalty.accounts = Array.isArray(this.loyalty.accounts) ? this.loyalty.accounts : [];
+        let a = this.loyalty.accounts.find((x) => String(x.customerId) === String(customerId)) || null;
+        if (!a && create) {
+          a = { customerId: String(customerId), entries: [], createdAt: new Date().toISOString() };
+          this.loyalty.accounts.push(a);
+        }
+        return a;
+      },
+      settings() {
+        return loyaltyLib.settingsOf(this.loyalty.settings);
+      },
+      policy() {
+        return walletService.policyOf(this.wallet.policy);
+      },
+      commit() {
+        if (this.dirty.has("customers")) writeJson(CUSTOMERS_FILE, this.customers);
+        if (this.dirty.has("orders")) writeJson(ORDERS_FILE, this.orders);
+        if (this.dirty.has("topups")) writeJson(TOPUPS_FILE, this.topups);
+        if (this.dirty.has("drivers")) writeJson(DRIVERS_FILE, this.drivers);
+        if (this.dirty.has("loyalty")) {
+          this.loyalty.updatedAt = new Date().toISOString();
+          writeJson(LOYALTY_FILE, this.loyalty);
+        }
+      },
+    };
+    store.customers.customers = Array.isArray(store.customers.customers) ? store.customers.customers : [];
+    store.orders.orders = Array.isArray(store.orders.orders) ? store.orders.orders : [];
+    store.topups.topups = Array.isArray(store.topups.topups) ? store.topups.topups : [];
+    store.drivers.drivers = Array.isArray(store.drivers.drivers) ? store.drivers.drivers : [];
+    store.loyalty.accounts = Array.isArray(store.loyalty.accounts) ? store.loyalty.accounts : [];
+    const out = fn(store);
+    if (out && out.ok === true) store.commit();
+    return out;
+  });
+}
+
+/** financeTx for route handlers: lock/timeout/IO errors become a clean 503, never a partial write. */
+function financeTxSafe(res, fn) {
+  try {
+    return financeTx(fn);
+  } catch (e) {
+    try {
+      logger.error("finance transaction failed", { error: String(e && e.message ? e.message : e) });
+    } catch (_e) {}
+    res.status(503).json({ ok: false, error: "The financial service is busy, please retry", code: "FINANCE_BUSY" });
+    return null;
+  }
+}
+
+/**
+ * Give the wallet part of a canceled order back (idempotent by ledger ref), inside
+ * an open transaction. Returns { amount, changed, duplicate, payment }.
+ */
+function refundWalletInTx(store, order, meta = {}) {
+  const out = { amount: 0, changed: false, duplicate: false, payment: order && order.payment ? order.payment : null };
+  if (!order || !orderPayment.needsRefund(order)) return out;
+  const customer = store.customer(order.customerId);
+  if (!customer) return out;
+  const amount = Number(order.payment.walletAmount) || 0;
+  if (!(amount > 0)) return out;
+  const e = walletLedger.applyEntry(customer, {
+    ref: orderPayment.walletRefundRef(order.id),
+    type: "order_refund",
+    amount,
+    orderId: order.id,
+    note: "Wallet refund for a canceled order",
+    actorType: meta.actorType || "system",
+    actorId: meta.actorId || null,
+    status: "succeeded",
+  });
+  if (!e.ok) return out;
+  out.amount = amount;
+  out.duplicate = !!e.duplicate;
+  if (!e.duplicate) {
+    store.touch("customers");
+    out.changed = true;
+  }
+  order.payment.walletRefundedAt = e.entry.createdAt;
+  order.payment.status = "wallet_refunded";
+  out.payment = order.payment;
+  store.touch("orders");
+  return out;
+}
+
+/**
+ * Award / reverse loyalty points for one order, inside an open transaction.
+ * Never awards on order creation, never twice for the same order, never for a
+ * canceled/rejected/refunded order. Returns a summary or null.
+ */
+function syncLoyaltyInTx(store, order, meta = {}) {
+  if (!order || !order.customerId) return null;
+  const settings = store.settings();
+  const status = String(order.status || "").toLowerCase();
+  const dead = loyaltyLib.DEAD_STATUSES.includes(status) || !!order.refundedAt;
+  const account = store.loyaltyAccount(order.customerId, false);
+
+  if (dead) {
+    if (!account) return null;
+    const earn = account.entries.find((e) => e.ref === loyaltyLib.earnRef(order.id));
+    if (!earn) return null;
+    if (account.entries.some((e) => e.ref === loyaltyLib.reverseRef(order.id))) return null;
+    // Pending points are simply withdrawn; already-available points are debited
+    // FIFO and any shortfall becomes a documented debt (never a fake balance).
+    const pending = earn.status === "pending";
+    const r = loyaltyLib.debit(account, {
+      ref: loyaltyLib.reverseRef(order.id),
+      kind: "reverse",
+      points: Number(earn.points) || 0,
+      reason: "Order canceled or refunded",
+      orderId: order.id,
+      at: new Date().toISOString(),
+      actorType: meta.actorType || "system",
+      actorId: meta.actorId || null,
+      markOnly: pending,
+      allowPartial: !pending,
+      voidCreditRef: pending ? loyaltyLib.earnRef(order.id) : undefined,
+    });
+    if (!r.ok || r.duplicate) return null;
+    store.touch("loyalty");
+    return { reversed: Number(earn.points) || 0, at: r.entry.at, orderId: order.id };
+  }
+
+  const calc = loyaltyLib.earnForOrder(order, settings);
+  if (!calc.eligible) return null;
+  const acct = store.loyaltyAccount(order.customerId, true);
+  if (acct.entries.some((e) => e.ref === loyaltyLib.earnRef(order.id))) return null;
+
+  let points = calc.points;
+  if (settings.earn.maxPointsPerDay != null) {
+    const today = new Date().toISOString().slice(0, 10);
+    const earnedToday = acct.entries
+      .filter((e) => e.direction === "credit" && e.kind === "earn" && String(e.at || "").slice(0, 10) === today)
+      .reduce((s, e) => s + (Number(e.points) || 0), 0);
+    points = Math.min(points, Math.max(0, settings.earn.maxPointsPerDay - earnedToday));
+  }
+  if (!(points > 0)) return null;
+  const r = loyaltyLib.credit(acct, {
+    ref: loyaltyLib.earnRef(order.id),
+    kind: "earn",
+    points,
+    reason: `Order #${order.id}`,
+    orderId: order.id,
+    holdDays: settings.earn.pendingDays,
+    expiresDays: settings.expiry.enabled ? settings.expiry.days : 0,
+    at: order.deliveredAt || new Date().toISOString(),
+    actorType: "system",
+    meta: { base: calc.base, status },
+  });
+  if (!r.ok || r.duplicate) return null;
+  store.touch("loyalty");
+  return { earned: points, base: calc.base, orderId: order.id, pending: settings.earn.pendingDays > 0 };
+}
+
+/**
+ * Settle every financial side effect of an order whose status was just saved:
+ * wallet refund on cancel + loyalty earn/reversal. Idempotent; safe to call twice.
+ */
+function settleOrderEffects(orderId, meta = {}) {
+  let result = null;
+  try {
+    result = financeTx((store) => {
+      const order = store.order(orderId);
+      if (!order) return { ok: false, status: 404, error: "Not found", code: "ORDER_NOT_FOUND" };
+      const refund = refundWalletInTx(store, order, meta);
+      const points = syncLoyaltyInTx(store, order, meta);
+      return { ok: true, order, refund, points };
+    });
+  } catch (e) {
+    try {
+      logger.error("settleOrderEffects failed", { orderId, error: String(e && e.message ? e.message : e) });
+    } catch (_e) {}
+    return null;
+  }
+  if (!result || !result.ok) return result;
+  // Notifications only AFTER the transaction committed (never announce a failure as success).
+  try {
+    if (result.refund && result.refund.changed && result.refund.amount > 0) {
+      notifyCustomerSimple({
+        customerId: result.order.customerId,
+        orderId: result.order.id,
+        type: "wallet_refund",
+        title: "المحفظة",
+        message: `تم استرجاع ${result.refund.amount} إلى محفظتك بعد إلغاء الطلب #${result.order.id}`,
+      });
+    }
+  } catch (_e) {}
+  try {
+    if (result.points && result.points.earned > 0) {
+      notifyCustomerSimple({
+        customerId: result.order.customerId,
+        orderId: result.order.id,
+        type: "loyalty_earn",
+        title: "نقاط الوفاء",
+        message: result.points.pending
+          ? `ستُضاف ${result.points.earned} نقطة إلى نقاطك بعد تأكيد الطلب #${result.order.id}`
+          : `حصلت على ${result.points.earned} نقطة من الطلب #${result.order.id}`,
+      });
+    } else if (result.points && result.points.reversed > 0) {
+      notifyCustomerSimple({
+        customerId: result.order.customerId,
+        orderId: result.order.id,
+        type: "loyalty_reverse",
+        title: "نقاط الوفاء",
+        message: `تم سحب ${result.points.reversed} نقطة مرتبطة بالطلب #${result.order.id} بسبب الإلغاء أو الاسترجاع`,
+      });
+    }
+  } catch (_e) {}
+  return result;
+}
+
+/**
+ * Refund an already-delivered order (support case). One transaction:
+ *   - the wallet part goes back to the SAME wallet (idempotent ledger ref);
+ *   - the cash part is recorded as a manual refund (the platform cannot move cash);
+ *   - the points earned by that order are reversed;
+ *   - the order keeps its history and gains a `refund` block.
+ * Never refunds twice: `order.refundedAt` and the ledger ref both refuse replays.
+ */
+app.post("/api/admin/orders/:id/refund", requireAdmin, requireAdminPerm("finance.write"), (req, res) => {
+  const id = String(req.params.id || "");
+  const reason = String(req.body?.reason || "").trim();
+  if (reason.length < 3) {
+    return res.status(400).json({ ok: false, error: "A reason is required", code: "REASON_REQUIRED" });
+  }
+  const meta = { actorType: "admin", actorId: req.adminId || "admin" };
+  const tx = financeTx((store) => {
+    const order = store.order(id);
+    if (!order) return { ok: false, status: 404, error: "Not found", code: "ORDER_NOT_FOUND" };
+    if (order.refundedAt) return { ok: false, status: 409, error: "Order already refunded", code: "ALREADY_REFUNDED" };
+    const st = String(order.status || "").toLowerCase();
+    if (!["delivered", "done"].includes(st)) {
+      return { ok: false, status: 409, error: "Only a delivered order can be refunded here; cancel it instead", code: "NOT_DELIVERED" };
+    }
+    const total = walletLedger.round2(Number(order.total) || 0);
+    const wanted = req.body?.amount == null ? total : walletLedger.round2(req.body.amount);
+    if (!(wanted > 0) || wanted > total) return { ok: false, status: 400, error: "Invalid refund amount", code: "BAD_AMOUNT" };
+
+    const walletPart = walletLedger.round2(Math.min(wanted, Number(order.payment && order.payment.walletAmount) || 0));
+    let credited = 0;
+    if (walletPart > 0) {
+      const customer = store.customer(order.customerId);
+      if (!customer) return { ok: false, status: 409, error: "Wallet owner not found", code: "OWNER_MISSING" };
+      const e = walletLedger.applyEntry(customer, {
+        ref: orderPayment.refundRef(order.id),
+        type: "order_refund",
+        amount: walletPart,
+        orderId: order.id,
+        note: `Refund: ${reason}`,
+        actorType: "admin",
+        actorId: meta.actorId,
+        status: "succeeded",
+      });
+      if (!e.ok) return { ok: false, status: 409, error: e.error, code: e.code };
+      if (!e.duplicate) { credited = walletPart; store.touch("customers"); }
+      order.payment = Object.assign({}, order.payment, {
+        walletRefundedAt: e.entry.createdAt,
+        status: "refunded",
+        refundReference: orderPayment.refundRef(order.id),
+      });
+    }
+    order.refundedAt = new Date().toISOString();
+    order.refund = {
+      amount: wanted,
+      walletAmount: walletPart,
+      cashAmount: walletLedger.round2(Math.max(0, wanted - walletPart)),
+      cashReturned: req.body?.cashReturned === true,
+      reason,
+      by: String(req.adminId || ""),
+      at: order.refundedAt,
+      reference: orderPayment.refundRef(order.id),
+    };
+    store.touch("orders");
+    const points = syncLoyaltyInTx(store, order, meta);
+    return { ok: true, order, walletRefunded: credited, points };
+  });
+
+  if (!tx || tx.ok !== true) {
+    const r = tx || { status: 503, error: "Busy", code: "FINANCE_BUSY" };
+    return res.status(r.status || 400).json({ ok: false, error: r.error, code: r.code });
+  }
+  appendAuditLog({
+    actorType: "admin",
+    actorId: String(req.adminId || ""),
+    action: "order.refund",
+    orderId: id,
+    amount: tx.order.refund.amount,
+    walletAmount: tx.order.refund.walletAmount,
+    cashAmount: tx.order.refund.cashAmount,
+    reason,
+    pointsReversed: tx.points && tx.points.reversed ? tx.points.reversed : 0,
+  });
+  if (tx.walletRefunded > 0) {
+    try {
+      notifyCustomerSimple({
+        customerId: tx.order.customerId,
+        orderId: tx.order.id,
+        type: "wallet_refund",
+        title: "المحفظة",
+        message: `تم استرجاع ${tx.walletRefunded} إلى محفظتك عن الطلب #${tx.order.id}`,
+      });
+    } catch (_e) {}
+  }
+  if (tx.points && tx.points.reversed > 0) {
+    try {
+      notifyCustomerSimple({
+        customerId: tx.order.customerId,
+        orderId: tx.order.id,
+        type: "loyalty_reverse",
+        title: "نقاط الوفاء",
+        message: `تم سحب ${tx.points.reversed} نقطة بعد استرجاع الطلب #${tx.order.id}`,
+      });
+    } catch (_e) {}
+  }
+  res.json({ ok: true, order: { id: tx.order.id, refund: tx.order.refund, status: tx.order.status }, walletRefunded: tx.walletRefunded, points: tx.points });
+});
+
 function loadSupportChats() {
   const data = readJson(SUPPORT_CHATS_FILE, { conversations: [] });
   data.conversations = Array.isArray(data.conversations)
@@ -1430,28 +1825,15 @@ async function sendWebPushToCustomer(customerId, rec) {
   return { ok: true, sent, failed, removed };
 }
 
-// Give the wallet part of a canceled order back to the customer (idempotent by ledger ref).
-function refundOrderWallet(order) {
-  try {
-    if (!orderPayment.needsRefund(order)) return;
-    const cd = loadCustomers();
-    const crec = customerById(cd, order.customerId);
-    if (!crec) return;
-    const amt = Number(order.payment.walletAmount);
-    const e = walletLedger.applyEntry(crec, {
-      ref: orderPayment.walletRefundRef(order.id),
-      type: "order_refund",
-      amount: amt,
-      orderId: order.id,
-      note: "Wallet refund for canceled order",
-      actorType: "system",
-    });
-    if (!e.ok) return;
-    if (!e.duplicate) saveCustomers(cd);
-    order.payment.walletRefundedAt = e.entry.createdAt;
-    order.payment.status = "wallet_refunded";
-    notifyCustomerSimple({ customerId: order.customerId, orderId: order.id, type: "wallet_refund", title: "المحفظة", message: `تم استرجاع ${amt} إلى محفظتك بعد إلغاء الطلب #${order.id}` });
-  } catch (_e) {}
+/**
+ * Financial side effects of an order status change (legacy entry point).
+ * Kept as a thin wrapper: the real work is transactional and idempotent in
+ * settleOrderEffects() (wallet refund + loyalty earn/reversal).
+ * Call it AFTER the order was saved, so the transaction reads the new status.
+ */
+function refundOrderWallet(order, meta) {
+  if (!order || !order.id) return null;
+  return settleOrderEffects(order.id, meta || { actorType: "system" });
 }
 
 function notifyCustomerSimple({ customerId, type, title, message, orderId = "" }) {
@@ -3376,9 +3758,14 @@ app.post(
       return res.status(400).json({ error: "Empty items" });
     }
 
-    // Payment policy: only Cash on Delivery is enabled (see lib/payments.js).
-    // Online methods (card/visa/mastercard/paypal) are rejected server-side.
-    const pay = paymentsLib.resolveOrderPayment(body.paymentMethod, loadPaymentMethods());
+    // Payment policy: the registry decides (see lib/payment-methods.js).
+    // "wallet" is not a provider: it means "pay the goods part from the wallet", and the
+    // server still verifies the balance inside the transaction.
+    const requestedMethod = String(body.paymentMethod || "").trim().toLowerCase();
+    const pay =
+      requestedMethod === "wallet"
+        ? { ok: true, method: "wallet", kind: "wallet" }
+        : paymentsLib.resolveOrderPayment(body.paymentMethod, loadPaymentMethods());
     if (!pay.ok) {
       return res
         .status(400)
@@ -3547,53 +3934,169 @@ app.post(
       });
     }
 
-    // Customer wallet contribution (goods part only; the ledger entry is idempotent per order).
-    let walletPaid = 0;
-    const walletReq = body.useWallet === true || body.useWallet === "true" || body.useWallet === 1 ? true : typeof body.useWallet === "number" ? body.useWallet : false;
-    if (walletReq) {
-      if (!customerId) return res.status(401).json({ error: "Login required to use the wallet", code: "LOGIN_REQUIRED" });
-      const cd = loadCustomers();
-      const crec = customerById(cd, customerId);
-      if (!crec) return res.status(401).json({ error: "Unauthorized" });
-      const share = orderPayment.walletShare({
-        balance: crec.walletBalance,
-        subtotal,
-        discount: promoSnap ? promoSnap.amount : 0,
-        requested: walletReq,
-      });
-      if (!share.ok) return res.status(share.status).json({ error: share.error, code: share.code });
-      if (share.amount > 0) {
-        const e = walletLedger.applyEntry(crec, {
-          ref: orderPayment.walletPayRef(order.id),
-          type: "order_payment",
-          amount: -share.amount,
-          orderId: order.id,
-          note: "Order paid from wallet",
-          actorType: "customer",
-          actorId: customerId,
-          at: nowIso,
-        });
-        if (!e.ok) return res.status(409).json({ error: e.error, code: e.code });
-        saveCustomers(cd);
-        walletPaid = share.amount;
-      }
+    /* ------------------------------------------------------------------
+     * Money + order row in ONE transaction.
+     *  - the wallet balance is read fresh under the financial lock (never
+     *    from the browser, never from a cached value);
+     *  - a retried request (same idempotency key) returns the FIRST order and
+     *    never pays twice;
+     *  - an insufficient balance writes nothing: no order, no partial debit.
+     * ------------------------------------------------------------------ */
+    // Two ways to use the wallet:
+    //   paymentMethod="wallet"  -> the wallet must cover the WHOLE goods part (no partial
+    //                              silent payment: too little balance is refused);
+    //   useWallet=true|<amount> -> explicit partial contribution (legacy behaviour),
+    //                              capped by the server at the goods part and the balance.
+    const walletFull = requestedMethod === "wallet" || body.useWallet === "full";
+    const walletReq =
+      walletFull ||
+      body.useWallet === true ||
+      body.useWallet === "true" ||
+      body.useWallet === 1
+        ? true
+        : typeof body.useWallet === "number"
+          ? body.useWallet
+          : false;
+    if (walletReq && !customerId) {
+      return res.status(401).json({ ok: false, error: "Login required to use the wallet", code: "LOGIN_REQUIRED" });
     }
-    order.payment = orderPayment.snapshot({
-      total,
-      deliveryFee,
-      walletAmount: walletPaid,
-      method: pay.method,
-      ledgerRef: orderPayment.walletPayRef(order.id),
-      at: nowIso,
+
+    // Goods part payable from the wallet (server-computed: never the client's number).
+    const goodsPayable = walletLedger.round2(Math.max(0, subtotal - (promoSnap ? promoSnap.amount : 0)));
+
+    const idemKey = walletService.idempotencyKey({ headers: req.headers, body });
+    const requestKey = idemKey && customerId ? walletService.scopedKey("order", customerId, idemKey) : null;
+    const currency = cfg.currency || "MAD";
+
+    const tx = financeTx((store) => {
+      if (requestKey) {
+        const prior = (store.orders.orders || []).find((o) => o.requestKey === requestKey);
+        if (prior) return { ok: true, duplicate: true, orderId: prior.id, payment: prior.payment || null };
+      }
+      let walletPaid = 0;
+      let balanceAfter = null;
+      if (walletReq) {
+        const crec = store.customer(customerId);
+        if (!crec) return { ok: false, status: 401, error: "Unauthorized", code: "UNAUTHORIZED" };
+        const availableBalance = walletLedger.round2(Math.max(0, Number(crec.walletBalance) || 0));
+        const share = orderPayment.walletShare({
+          balance: availableBalance,
+          subtotal,
+          discount: promoSnap ? promoSnap.amount : 0,
+          // Full-wallet payment asks for exactly the goods part: walletShare() then refuses
+          // (WALLET_INSUFFICIENT) instead of silently paying only part of it.
+          requested: walletFull ? goodsPayable : walletReq,
+        });
+        if (walletFull && goodsPayable > 0 && availableBalance < goodsPayable) {
+          return {
+            ok: false,
+            status: 409,
+            error: "Insufficient wallet balance",
+            code: "WALLET_INSUFFICIENT",
+            wallet: {
+              available: availableBalance,
+              required: goodsPayable,
+              shortfall: walletLedger.round2(goodsPayable - availableBalance),
+              currency,
+            },
+            canChooseAnotherMethod: true,
+            canTopUp: true,
+          };
+        }
+        if (!share.ok) {
+          const available = walletLedger.round2(Math.max(0, Number(crec.walletBalance) || 0));
+          const required = walletLedger.round2(share.code === "WALLET_EMPTY" ? goodsPayable : share.amount || goodsPayable);
+          return {
+            ok: false,
+            status: 409,
+            error: "Insufficient wallet balance",
+            code: share.code === "WALLET_EMPTY" ? "WALLET_INSUFFICIENT" : share.code,
+            wallet: {
+              available,
+              required: required > 0 ? required : goodsPayable,
+              shortfall: walletLedger.round2(Math.max(0, (required > 0 ? required : goodsPayable) - available)),
+              currency,
+            },
+            // The order was NOT created and nothing was debited: the customer may pick another method.
+            canChooseAnotherMethod: true,
+            canTopUp: true,
+          };
+        }
+        if (share.amount > 0) {
+          const e = walletLedger.applyEntry(crec, {
+            ref: orderPayment.walletPayRef(order.id),
+            type: "order_payment",
+            amount: -share.amount,
+            orderId: order.id,
+            note: "Order paid from wallet",
+            actorType: "customer",
+            actorId: customerId,
+            at: nowIso,
+            status: "succeeded",
+            currency,
+            methodId: "wallet",
+          });
+          if (!e.ok) return { ok: false, status: 409, error: e.error, code: e.code };
+          store.touch("customers");
+          walletPaid = share.amount;
+          balanceAfter = e.entry.balanceAfter;
+        }
+      }
+
+      order.payment = orderPayment.snapshot({
+        total,
+        deliveryFee,
+        walletAmount: walletPaid,
+        method: pay.method,
+        ledgerRef: orderPayment.walletPayRef(order.id),
+        at: nowIso,
+      });
+      if (requestKey) order.requestKey = requestKey;
+      store.orders.orders.unshift(order); // newest first
+      store.touch("orders");
+      return { ok: true, duplicate: false, orderId: order.id, payment: order.payment, balanceAfter };
     });
 
-    const data = loadOrders();
-    data.orders.unshift(order); // newest first
-    saveOrders(data);
+    if (!tx.ok) {
+      return res.status(tx.status || 409).json({
+        ok: false,
+        error: tx.error,
+        code: tx.code,
+        ...(tx.wallet ? { wallet: tx.wallet, ...(tx.wallet) } : {}),
+        ...(tx.canChooseAnotherMethod ? { canChooseAnotherMethod: true } : {}),
+        ...(tx.canTopUp ? { canTopUp: true } : {}),
+        message:
+          tx.code === "WALLET_INSUFFICIENT"
+            ? {
+                ar: "رصيد محفظتك غير كافٍ لإتمام الدفع. اختر طريقة دفع أخرى أو اشحن محفظتك للمتابعة.",
+                fr: "Le solde de votre portefeuille est insuffisant. Choisissez un autre moyen de paiement ou rechargez votre portefeuille.",
+                en: "Your wallet balance is not enough to complete the payment. Choose another payment method or top up your wallet.",
+              }
+            : undefined,
+      });
+    }
 
-    if (catalogLib.applyStock(menu, computedItems)) saveMenu(menu);
+    // A replayed request must not touch stock or send a second notification.
+    if (!tx.duplicate && catalogLib.applyStock(menu, computedItems)) saveMenu(menu);
 
-    if (autoAccepted) {
+    // One notification per real payment (never for a replayed request, never before the
+    // transaction committed, and never when the wallet paid nothing).
+    if (!tx.duplicate) {
+      const paidFromWallet = Number((tx.payment && tx.payment.walletAmount) || 0);
+      if (paidFromWallet > 0) {
+        try {
+          notifyCustomerSimple({
+            customerId: order.customerId,
+            orderId: order.id,
+            type: "wallet_payment",
+            title: "المحفظة",
+            message: `تم دفع ${paidFromWallet} من محفظتك للطلب #${order.id}. الرصيد المتبقي ${tx.balanceAfter}.`,
+          });
+        } catch (_e) {}
+      }
+    }
+
+    if (!tx.duplicate && autoAccepted) {
       try {
         createCustomerOrderStatusNotification({
           customerId: order.customerId,
@@ -3605,8 +4108,11 @@ app.post(
 
     res.json({
       ok: true,
-      id: order.id,
-      ...(trackingIssued ? { trackingToken: trackingIssued.token } : {}),
+      // A replayed request answers with the FIRST order id (never a second order).
+      id: tx.orderId || order.id,
+      ...(tx.duplicate ? { duplicate: true } : {}),
+      ...(trackingIssued && !tx.duplicate ? { trackingToken: trackingIssued.token } : {}),
+      ...(tx.duplicate ? {} : { paidFromWallet: Number((tx.payment && tx.payment.walletAmount) || 0), walletBalance: tx.balanceAfter }),
     });
   },
 );
@@ -4248,10 +4754,12 @@ app.post("/api/customer/orders/:id/cancel", requireCustomer, (req, res) => {
   order.canceledAt = order.canceledAt || new Date().toISOString();
   order.canceledBy = "customer";
   financeLib.finalize(order);
-  refundOrderWallet(order);
   order.updatedAt = new Date().toISOString();
 
   saveOrders(data);
+  // Money first: the wallet part is refunded and the points earned for it are
+  // withdrawn in one idempotent transaction (never a second refund).
+  settleOrderEffects(order.id, { actorType: "customer", actorId: req.customerId });
   try {
     // give the reserved stock back (same as a store rejection)
     const menu = loadMenu();
@@ -6300,10 +6808,11 @@ app.patch(
       }
     }
     financeLib.finalize(order);
-    refundOrderWallet(order);
     order.updatedAt = new Date().toISOString();
 
     saveOrders(data);
+    // Loyalty points are granted only once the delivery is final; a cancel here refunds the wallet part.
+    settleOrderEffects(order.id, { actorType: "driver", actorId: req.driverId });
     res.json({ ok: true, order });
   },
 );
@@ -6379,7 +6888,7 @@ function sendReceipt(res, t) {
  * Create a pending transfer request for a wallet owner. NEVER credits anything.
  * Returns {ok:true, topup} or {ok:false, status, body}.
  */
-function createTransferRequest({ walletType, ownerId, body }) {
+function createTransferRequest({ walletType, ownerId, body, policy = null, clientRequestId = null }) {
   const data = loadTopups();
   const v = topupsLib.validateRequest({
     walletType,
@@ -6390,11 +6899,15 @@ function createTransferRequest({ walletType, ownerId, body }) {
     hasReceipt: !!(body?.receipt && String(body.receipt).startsWith("data:")),
     methods: loadPaymentMethods(),
     topups: data.topups,
+    policy,
+    clientRequestId,
   });
   if (!v.ok) {
     const { status, ...payload } = v;
     return { ok: false, status, body: payload };
   }
+  // A replayed request (same idempotency key) is answered with the SAME record.
+  if (v.duplicate) return { ok: true, topup: v.value.existing, duplicate: true };
   const id = genId();
   let receiptFile = null;
   if (body?.receipt) {
@@ -6412,9 +6925,12 @@ function createTransferRequest({ walletType, ownerId, body }) {
     ...(walletType === "customer" ? { customerId: String(ownerId) } : { driverId: String(ownerId) }),
     methodId: v.value.methodId,
     amount: v.value.amount,
+    fee: v.value.fee != null ? v.value.fee : 0,
+    creditAmount: v.value.creditAmount != null ? v.value.creditAmount : v.value.amount,
     currency: loadConfig().currency || "MAD",
     reference: v.value.reference,
     refKey: v.value.refKey,
+    ...(clientRequestId ? { clientRequestId } : {}),
     receiptFile,
     note: String(body?.note || "").replace(/[<>]/g, "").trim().slice(0, 300),
     status: "pending",
@@ -6422,6 +6938,7 @@ function createTransferRequest({ walletType, ownerId, body }) {
     decidedAt: null,
     decidedBy: null,
     decisionNote: null,
+    provider: { id: v.value.methodId, ref: null, verifiedAt: null },
   };
   data.topups.unshift(rec);
   saveTopups(data);
@@ -6560,6 +7077,396 @@ app.get("/api/admin/drivers/:id/wallet-reconcile", requireAdmin, (req, res) => {
   res.json({ ok: true, ...walletLedger.reconcile(d) });
 });
 
+/* =====================================================================
+ * Admin — customer wallet policy, loyalty programme, manual adjustments
+ *
+ * Permissions are enforced by lib/admin-roles.js on the SERVER (see RULES):
+ *   loyalty.read     view the programme, search customers, read points
+ *   loyalty.adjust   manual points adjustments (independent permission)
+ *   loyalty.settings change the programme rules (system_admin only by default)
+ *   wallet.adjust    manual wallet credit/debit (independent permission)
+ *   wallet.settings  change top-up limits/fees (system_admin only by default)
+ * ===================================================================== */
+
+const adjustLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 30,
+  standardHeaders: true,
+  legacyHeaders: false,
+  keyGenerator: (req) => `adj:${req.adminId || req.ip}`,
+});
+
+function requireAdminPerm(perm) {
+  return (req, res, next) => {
+    if (!req.user || !adminRoles.can(req.adminRole, perm)) {
+      return res.status(403).json({ ok: false, error: "Forbidden", code: "FORBIDDEN" });
+    }
+    next();
+  };
+}
+
+// ---------- wallet policy (top-up limits + fees) ----------
+app.get("/api/admin/wallet/settings", requireAdmin, requireAdminPerm("finance.read"), (req, res) => {
+  const policy = loadWalletSettings();
+  res.json({
+    ok: true,
+    policy,
+    canEdit: adminRoles.can(req.adminRole, "wallet.settings"),
+    currency: loadConfig().currency || "MAD",
+  });
+});
+
+app.put("/api/admin/wallet/settings", requireAdmin, requireAdminPerm("wallet.settings"), (req, res) => {
+  const before = loadWalletSettings();
+  const v = walletService.validatePolicy(req.body || {}, before);
+  if (!v.ok) return res.status(v.status || 400).json({ ok: false, error: v.error, code: v.code });
+  const next = { ...v.value, updatedAt: new Date().toISOString(), updatedBy: String(req.adminId || "") };
+  saveWalletSettings(next);
+  appendAuditLog({
+    actorType: "admin",
+    actorId: String(req.adminId || ""),
+    action: "wallet.settings.update",
+    before,
+    after: next,
+  });
+  res.json({ ok: true, policy: next });
+});
+
+// ---------- loyalty programme settings ----------
+app.get("/api/admin/loyalty/settings", requireAdmin, requireAdminPerm("loyalty.read"), (req, res) => {
+  const data = loadLoyalty();
+  const settings = loyaltyLib.settingsOf(data.settings);
+  res.json({
+    ok: true,
+    settings,
+    preview: { ar: loyaltyLib.publicView(settings, "ar"), fr: loyaltyLib.publicView(settings, "fr"), en: loyaltyLib.publicView(settings, "en") },
+    canEdit: adminRoles.can(req.adminRole, "loyalty.settings"),
+    canAdjust: adminRoles.can(req.adminRole, "loyalty.adjust"),
+    overview: loyaltyOverview(data),
+  });
+});
+
+app.put("/api/admin/loyalty/settings", requireAdmin, requireAdminPerm("loyalty.settings"), (req, res) => {
+  const data = loadLoyalty();
+  const before = loyaltyLib.settingsOf(data.settings);
+  const v = loyaltyLib.normalizeSettings(req.body || {}, before);
+  if (!v.ok) return res.status(v.status || 400).json({ ok: false, error: v.error, code: v.code, field: v.field });
+  const next = { ...v.value, updatedAt: new Date().toISOString(), updatedBy: String(req.adminId || "") };
+  data.settings = next;
+  data.updatedAt = new Date().toISOString();
+  saveLoyalty(data);
+  appendAuditLog({
+    actorType: "admin",
+    actorId: String(req.adminId || ""),
+    action: "loyalty.settings.update",
+    version: next.version,
+    before: { enabled: before.enabled, earn: before.earn, redeem: before.redeem, expiry: before.expiry },
+    after: { enabled: next.enabled, earn: next.earn, redeem: next.redeem, expiry: next.expiry },
+    terms: next.terms,
+  });
+  res.json({ ok: true, settings: next, preview: { ar: loyaltyLib.publicView(next, "ar"), fr: loyaltyLib.publicView(next, "fr"), en: loyaltyLib.publicView(next, "en") } });
+});
+
+/** Programme-wide numbers (nothing personal, safe for a reports-only role). */
+function loyaltyOverview(data) {
+  const now = new Date().toISOString();
+  let accounts = 0;
+  let available = 0;
+  let pending = 0;
+  let earned = 0;
+  let used = 0;
+  let expired = 0;
+  let reversed = 0;
+  let debt = 0;
+  for (const a of data.accounts || []) {
+    const b = loyaltyLib.balances(a, now);
+    if (!b.earnedTotal && !b.adjustments && !b.used) continue;
+    accounts += 1;
+    available += b.available;
+    pending += b.pending;
+    earned += b.earnedTotal;
+    used += b.used;
+    expired += b.expired;
+    reversed += b.reversed;
+    debt += b.debt;
+  }
+  return { accounts, availablePoints: available, pendingPoints: pending, earnedPoints: earned, usedPoints: used, expiredPoints: expired, reversedPoints: reversed, debtPoints: debt };
+}
+
+// Preview a DRAFT of the rules without saving anything (what the customer would see).
+app.post("/api/admin/loyalty/preview", requireAdmin, requireAdminPerm("loyalty.read"), (req, res) => {
+  const before = loyaltyLib.settingsOf(loadLoyalty().settings);
+  const body = Object.assign({}, req.body || {});
+  delete body.expectedVersion; // a preview must never conflict with a concurrent save
+  const v = loyaltyLib.normalizeSettings(body, before);
+  if (!v.ok) return res.status(v.status || 400).json({ ok: false, error: v.error, code: v.code, field: v.field });
+  res.json({
+    ok: true,
+    preview: {
+      ar: loyaltyLib.publicView(v.value, "ar"),
+      fr: loyaltyLib.publicView(v.value, "fr"),
+      en: loyaltyLib.publicView(v.value, "en"),
+    },
+  });
+});
+
+app.get("/api/admin/loyalty/overview", requireAdmin, requireAdminPerm("loyalty.read"), (req, res) => {
+  res.json({ ok: true, overview: loyaltyOverview(loadLoyalty()) });
+});
+
+// ---------- customer search + points / wallet detail ----------
+function loyaltyAccountOf(data, customerId) {
+  return (data.accounts || []).find((a) => String(a.customerId) === String(customerId)) || { customerId: String(customerId), entries: [] };
+}
+
+app.get("/api/admin/loyalty/customers", requireAdmin, requireAdminPerm("loyalty.read"), (req, res) => {
+  const q = String(req.query.q || "").trim().toLowerCase();
+  const data = loadCustomers();
+  const loyalty = loadLoyalty();
+  const now = new Date().toISOString();
+  let list = (data.customers || []).filter((c) => !c.deleted);
+  if (q) {
+    list = list.filter((c) => {
+      const name = `${c.firstName || ""} ${c.lastName || ""}`.toLowerCase();
+      const phone = String(c.phone || "").replace(/\D/g, "");
+      return String(c.id).toLowerCase().includes(q) || name.includes(q) || String(c.email || "").toLowerCase().includes(q) || (q.replace(/\D/g, "") && phone.includes(q.replace(/\D/g, "")));
+    });
+  }
+  const rows = list.slice(0, 40).map((c) => {
+    const a = loyaltyAccountOf(loyalty, c.id);
+    const b = loyaltyLib.balances(a, now);
+    return {
+      id: c.id,
+      name: `${c.firstName || ""} ${c.lastName || ""}`.trim(),
+      email: c.email || null,
+      phone: c.phone || null,
+      walletBalance: walletLedger.round2(Number(c.walletBalance) || 0),
+      points: { available: b.available, pending: b.pending, earned: b.earnedTotal, used: b.used, expired: b.expired, debt: b.debt },
+      entries: (a.entries || []).length,
+    };
+  });
+  res.json({ ok: true, total: list.length, customers: rows, currency: loadConfig().currency || "MAD" });
+});
+
+app.get("/api/admin/loyalty/customers/:id", requireAdmin, requireAdminPerm("loyalty.read"), (req, res) => {
+  const c = customerById(loadCustomers(), req.params.id);
+  if (!c) return res.status(404).json({ ok: false, error: "Not found" });
+  const lang = ["ar", "fr", "en"].includes(String(req.query.lang || "")) ? String(req.query.lang) : "ar";
+  const view = customerWalletView({ customer: c, loyaltyData: loadLoyalty(), lang, limit: 100, topups: loadTopups().topups });
+  res.json({
+    ok: true,
+    customer: { id: c.id, name: `${c.firstName || ""} ${c.lastName || ""}`.trim(), email: c.email || null, phone: c.phone || null },
+    wallet: view.wallet,
+    totals: view.totals,
+    transactions: view.transactions,
+    reconcile: walletService.reconcile(c),
+    loyalty: view.loyalty,
+    topups: view.topups,
+    canAdjustPoints: adminRoles.can(req.adminRole, "loyalty.adjust"),
+    canAdjustWallet: adminRoles.can(req.adminRole, "wallet.adjust"),
+  });
+});
+
+app.get("/api/admin/customers/:id/wallet-reconcile", requireAdmin, requireAdminPerm("finance.read"), (req, res) => {
+  const c = customerById(loadCustomers(), req.params.id);
+  if (!c) return res.status(404).json({ ok: false, error: "Not found" });
+  res.json({ ok: true, ...walletService.reconcile(c) });
+});
+
+// ---------- manual points adjustment (reason + reference mandatory, audited) ----------
+app.post("/api/admin/loyalty/customers/:id/adjust", requireAdmin, requireAdminPerm("loyalty.adjust"), adjustLimiter, (req, res) => {
+  const customer = customerById(loadCustomers(), req.params.id);
+  if (!customer) return res.status(404).json({ ok: false, error: "Not found" });
+  const v = loyaltyLib.validateAdjustment(req.body || {});
+  if (!v.ok) return res.status(v.status || 400).json({ ok: false, error: v.error, code: v.code });
+  const idem = walletService.idempotencyKey({ headers: req.headers, body: req.body });
+  const ref = idem
+    ? `loyalty:adjust:${String(req.adminId || "admin")}:${idem.replace(/[^A-Za-z0-9_-]/g, "").slice(0, 60)}`
+    : `loyalty:adjust:${genId()}`;
+
+  const tx = financeTx((store) => {
+    const account = store.loyaltyAccount(req.params.id, true);
+    const now = new Date().toISOString();
+    loyaltyLib.settlePending(account, now);
+    loyaltyLib.expireDue(account, now);
+    const before = loyaltyLib.balances(account, now);
+    const isCredit = v.value.direction === "credit";
+    const r = isCredit
+      ? loyaltyLib.credit(account, {
+          ref,
+          kind: "adjust",
+          points: v.value.points,
+          reason: `${v.value.reason}${v.value.reference ? ` [${v.value.reference}]` : ""}`,
+          at: now,
+          actorType: "admin",
+          actorId: req.adminId,
+          meta: { reference: v.value.reference },
+        })
+      : loyaltyLib.debit(account, {
+          ref,
+          kind: "adjust",
+          points: v.value.points,
+          reason: `${v.value.reason}${v.value.reference ? ` [${v.value.reference}]` : ""}`,
+          at: now,
+          actorType: "admin",
+          actorId: req.adminId,
+          meta: { reference: v.value.reference },
+        });
+    if (!r.ok) return { ok: false, status: 409, error: r.error, code: r.code, available: r.available };
+    if (!r.duplicate) store.touch("loyalty");
+    return {
+      ok: true,
+      duplicate: !!r.duplicate,
+      entry: r.entry,
+      before,
+      after: loyaltyLib.balances(account, now),
+      customerId: req.params.id,
+      ref,
+    };
+  });
+
+  if (!tx || tx.ok !== true) {
+    const r = tx || { status: 503, error: "Busy" };
+    return res.status(r.status || 400).json({ ok: false, error: r.error, code: r.code, ...(r.available != null ? { available: r.available } : {}) });
+  }
+  if (!tx.duplicate) {
+    appendAuditLog({
+      actorType: "admin",
+      actorId: String(req.adminId || ""),
+      action: "loyalty.adjust",
+      customerId: String(req.params.id),
+      direction: v.value.direction,
+      points: v.value.points,
+      reason: v.value.reason,
+      reference: v.value.reference || "",
+      ref: tx.ref,
+      before: tx.before,
+      after: tx.after,
+    });
+    try {
+      notifyCustomerSimple({
+        customerId: req.params.id,
+        type: v.value.direction === "credit" ? "loyalty_adjust_credit" : "loyalty_adjust_debit",
+        title: "نقاط الوفاء",
+        message:
+          v.value.direction === "credit"
+            ? `أضاف فريق سيمون ${v.value.points} نقطة إلى حسابك: ${v.value.reason}`
+            : `تم خصم ${v.value.points} نقطة من حسابك: ${v.value.reason}`,
+      });
+    } catch (_e) {}
+  }
+  res.json({ ok: true, duplicate: !!tx.duplicate, entry: tx.entry, before: tx.before, after: tx.after, ref: tx.ref });
+});
+
+// ---------- manual wallet adjustment (customer) ----------
+app.post("/api/admin/customers/:id/wallet-adjust", requireAdmin, requireAdminPerm("wallet.adjust"), adjustLimiter, (req, res) => {
+  const amount = Number(req.body?.amount);
+  const direction = String(req.body?.direction || (amount < 0 ? "debit" : "credit")).toLowerCase();
+  const reason = String(req.body?.reason || "").replace(/[<>]/g, "").trim().slice(0, 300);
+  const reference = String(req.body?.reference || "").replace(/[<>]/g, "").trim().slice(0, 80) || null;
+  if (!Number.isFinite(amount) || amount === 0) return res.status(400).json({ ok: false, error: "Invalid amount", code: "BAD_AMOUNT" });
+  if (!["credit", "debit"].includes(direction)) return res.status(400).json({ ok: false, error: "direction must be credit or debit", code: "BAD_DIRECTION" });
+  if (Math.abs(amount) > 100000) return res.status(400).json({ ok: false, error: "Amount too large", code: "BAD_AMOUNT" });
+  if (reason.length < 3) return res.status(400).json({ ok: false, error: "Reason required", code: "REASON_REQUIRED" });
+  const signed = direction === "debit" ? -Math.abs(amount) : Math.abs(amount);
+  const idem = walletService.idempotencyKey({ headers: req.headers, body: req.body });
+  const ref = idem
+    ? `adj:${String(req.adminId || "admin")}:${idem.replace(/[^A-Za-z0-9_-]/g, "").slice(0, 60)}`
+    : `adj:${genId()}`;
+
+  const tx = financeTx((store) => {
+    const customer = store.customer(req.params.id);
+    if (!customer) return { ok: false, status: 404, error: "Not found", code: "NOT_FOUND" };
+    const before = walletLedger.round2(Number(customer.walletBalance) || 0);
+    const r = walletLedger.applyEntry(customer, {
+      ref,
+      type: "admin_adjust",
+      amount: signed,
+      note: `${reason}${reference ? ` [${reference}]` : ""}`,
+      actorType: "admin",
+      actorId: req.adminId,
+      at: new Date().toISOString(),
+      status: "succeeded",
+      reference: reference || null,
+      currency: loadConfig().currency || "MAD",
+    });
+    if (!r.ok) return { ok: false, status: r.code === "INSUFFICIENT_FUNDS" ? 409 : 400, error: r.error, code: r.code, balance: before };
+    if (!r.duplicate) store.touch("customers");
+    return { ok: true, duplicate: !!r.duplicate, entry: r.entry, before, after: r.entry.balanceAfter, ref };
+  });
+
+  if (!tx || tx.ok !== true) {
+    const r = tx || { status: 503, error: "Busy" };
+    return res.status(r.status || 400).json({ ok: false, error: r.error, code: r.code, ...(r.balance != null ? { balance: r.balance } : {}) });
+  }
+  if (!tx.duplicate) {
+    appendAuditLog({
+      actorType: "admin",
+      actorId: String(req.adminId || ""),
+      action: "wallet.adjust.customer",
+      customerId: String(req.params.id),
+      amount: signed,
+      reason,
+      reference: reference || "",
+      ref: tx.ref,
+      before: tx.before,
+      after: tx.after,
+    });
+    try {
+      notifyCustomerSimple({
+        customerId: req.params.id,
+        type: signed > 0 ? "wallet_credit" : "wallet_debit",
+        title: "المحفظة",
+        message: signed > 0 ? `تمت إضافة ${Math.abs(signed)} إلى محفظتك: ${reason}` : `تم خصم ${Math.abs(signed)} من محفظتك: ${reason}`,
+      });
+    } catch (_e) {}
+  }
+  res.json({ ok: true, duplicate: !!tx.duplicate, entry: tx.entry, before: tx.before, after: tx.after, ref: tx.ref });
+});
+
+// ---------- maintenance sweep: pending points mature, expired points expire ----------
+app.post("/api/admin/loyalty/sweep", requireAdmin, requireAdminPerm("loyalty.adjust"), (req, res) => {
+  const tx = financeTx((store) => {
+    const now = new Date().toISOString();
+    let matured = 0;
+    let expiredEntries = 0;
+    let expiredPoints = 0;
+    for (const account of store.loyalty.accounts || []) {
+      matured += loyaltyLib.settlePending(account, now).length;
+      const ex = loyaltyLib.expireDue(account, now);
+      expiredEntries += ex.length;
+      expiredPoints += ex.reduce((s, e) => s + (Number(e.points) || 0), 0);
+    }
+    store.touch("loyalty");
+    return { ok: true, matured, expiredEntries, expiredPoints, at: now };
+  });
+  if (!tx || tx.ok !== true) return res.status(503).json({ ok: false, error: "Busy", code: "FINANCE_BUSY" });
+  appendAuditLog({ actorType: "admin", actorId: String(req.adminId || ""), action: "loyalty.sweep", ...tx });
+  res.json({ ok: true, ...tx });
+});
+
+// Background maintenance: points never stay pending or expired forever, even with no visitor.
+let loyaltySweepTimer = null;
+function scheduleLoyaltyMaintenance() {
+  const run = () => {
+    try {
+      financeTx((store) => {
+        const now = new Date().toISOString();
+        let changed = false;
+        for (const account of store.loyalty.accounts || []) {
+          if (loyaltyLib.settlePending(account, now).length) changed = true;
+          if (loyaltyLib.expireDue(account, now).length) changed = true;
+        }
+        if (changed) store.touch("loyalty");
+        return { ok: true };
+      });
+    } catch (_e) {}
+  };
+  loyaltySweepTimer = setInterval(run, 10 * 60 * 1000);
+  if (loyaltySweepTimer.unref) loyaltySweepTimer.unref();
+}
+scheduleLoyaltyMaintenance();
+
 /***********************
  * Finance: store commission, manual settlements, statements
  * Enforced by role (see lib/admin-roles.js): system_admin and accountant.
@@ -6694,6 +7601,38 @@ app.get("/api/payment-methods", (req, res) => {
   const methods = loadPaymentMethods()
     .filter((m) => m.contexts && m.contexts[context])
     .map((m) => paymentMethods.publicView(m, context, { includeAccount }));
+
+  // The wallet is not a payment provider: it is an internal balance. It is offered at
+  // checkout only to a signed-in customer, and only when it can actually pay (balance > 0).
+  // Nothing here is trusted later: POST /api/orders re-checks the balance in a transaction.
+  if (context === "checkout") {
+    const cid = getCustomerIdFromToken(getCustomerTokenFromReq(req));
+    if (cid) {
+      const c = customerById(loadCustomers(), cid);
+      const bal = walletLedger.round2(Math.max(0, Number(c && c.walletBalance) || 0));
+      const policy = loadWalletSettings();
+      methods.push({
+        id: "wallet",
+        kind: "wallet",
+        name: { ar: "محفظة SIYMON", fr: "Portefeuille SIYMON", en: "SIYMON wallet" },
+        available: !!(policy.enabled && bal > 0),
+        reason: !policy.enabled ? "wallet_disabled" : bal > 0 ? null : "wallet_empty",
+        statusLabel: bal > 0 ? null : { ar: "الرصيد فارغ", fr: "Solde vide", en: "Empty balance" }.ar,
+        statusMessage: {
+          ar: bal > 0 ? "يجب أن يغطي الرصيد كامل قيمة المنتجات؛ رسوم التوصيل تُدفع عند التسليم" : "رصيد المحفظة فارغ: اشحن محفظتك أولاً",
+          fr: bal > 0 ? "Le solde doit couvrir tous les articles ; la livraison se paie à la réception" : "Solde vide : rechargez d'abord votre portefeuille",
+          en: bal > 0 ? "The balance must cover all items; delivery is paid on delivery" : "Empty balance: top up your wallet first",
+        },
+        requireReceipt: false,
+        minAmount: null,
+        maxAmount: null,
+        sortOrder: -10,
+        walletBalance: bal,
+        currency: loadConfig().currency || "MAD",
+      });
+      methods.sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
+    }
+  }
   res.set("Cache-Control", "no-store");
   res.json({ ok: true, context, methods });
 });
@@ -6811,73 +7750,87 @@ app.get("/api/admin/stores/:id/statement", requireAdmin, requireFinance, (req, r
 });
 
 // Review a transfer request. The ONLY place a top-up credits a wallet.
-// Synchronous end to end (no await between the status change and the ledger write), so two
-// simultaneous approvals cannot interleave; the ledger ref `topup:<id>` is the second line of defence.
+// ONE transaction over topups + the owner's wallet: the status change and the
+// ledger credit are written together, so a crash or a double approval can never
+// credit twice (and the ledger ref `topup:<id>` is the second line of defence).
 app.patch("/api/admin/topups/:id", requireAdmin, (req, res) => {
   const id = String(req.params.id || "");
-  const data = loadTopups();
-  const idx = (data.topups || []).findIndex((t) => String(t.id) === id);
-  if (idx < 0) return res.status(404).json({ error: "Not found" });
-  const topup = data.topups[idx];
-  const wt = topupsLib.walletTypeOf(topup);
+  const meta = { actorType: "admin", actorId: req.adminId || "admin" };
+  const tx = financeTx((store) => {
+    const idx = (store.topups.topups || []).findIndex((t) => String(t.id) === id);
+    if (idx < 0) return { ok: false, status: 404, error: "Not found", code: "NOT_FOUND" };
+    const topup = store.topups.topups[idx];
+    const wt = topupsLib.walletTypeOf(topup);
+    const owner = wt === "customer" ? store.customer(topupsLib.ownerIdOf(topup)) : store.driver(topupsLib.ownerIdOf(topup));
+    if (!owner) return { ok: false, status: 409, error: "Wallet owner not found", code: "OWNER_MISSING" };
 
-  // Load the target wallet BEFORE deciding, so a missing owner cannot leave an approved-but-uncredited request.
-  const walletData = wt === "customer" ? loadCustomers() : loadDrivers();
-  const list = wt === "customer" ? walletData.customers : walletData.drivers;
-  const owner = (list || []).find((x) => String(x.id) === topupsLib.ownerIdOf(topup));
-  if (!owner) return res.status(409).json({ error: "Wallet owner not found", code: "OWNER_MISSING" });
-
-  const r = topupsLib.decide(topup, {
-    to: req.body?.status,
-    by: req.adminId || "admin",
-    reason: req.body?.reason || req.body?.note || req.body?.decisionNote,
-    confirmedReference: req.body?.confirmedReference,
-  });
-  if (!r.ok) return res.status(r.status).json({ error: r.error, code: r.code });
-
-  if (r.credit) {
-    const e = walletLedger.applyEntry(owner, {
-      ref: topupsLib.ledgerRef(topup),
-      type: "topup",
-      amount: Number(topup.amount || 0),
-      topupId: topup.id,
-      note: topup.decisionNote || "Top-up confirmed",
-      actorType: "admin",
-      actorId: req.adminId,
-      at: topup.decidedAt,
+    const r = topupsLib.decide(topup, {
+      to: req.body?.status,
+      by: meta.actorId,
+      reason: req.body?.reason || req.body?.note || req.body?.decisionNote,
+      confirmedReference: req.body?.confirmedReference,
     });
-    if (!e.ok) {
-      topup.status = "pending"; // nothing was written yet: undo the in-memory decision
-      topup.decidedAt = topup.decidedBy = topup.decisionNote = null;
-      return res.status(409).json({ error: e.error, code: e.code });
-    }
-    if (wt === "customer") saveCustomers(walletData);
-    else saveDrivers(walletData);
-  }
-  data.topups[idx] = topup;
-  saveTopups(data);
+    if (!r.ok) return { ok: false, status: r.status, error: r.error, code: r.code };
 
+    if (r.credit) {
+      const amount = topupsLib.creditAmountOf(topup);
+      if (!(amount > 0)) return { ok: false, status: 400, error: "Invalid credited amount", code: "BAD_AMOUNT" };
+      const e = walletLedger.applyEntry(owner, {
+        ref: topupsLib.ledgerRef(topup),
+        type: "topup",
+        amount,
+        topupId: topup.id,
+        reference: topup.confirmedReference || topup.reference || null,
+        methodId: topup.methodId || null,
+        note: topup.decisionNote || "Top-up confirmed",
+        actorType: "admin",
+        actorId: meta.actorId,
+        at: topup.decidedAt,
+        status: "succeeded",
+        currency: topup.currency || "MAD",
+      });
+      if (!e.ok) return { ok: false, status: 409, error: e.error, code: e.code };
+      if (!e.duplicate) store.touch(wt === "customer" ? "customers" : "drivers");
+      topup.provider = { ...(topup.provider || {}), id: topup.methodId || null, ref: topup.confirmedReference || null, verifiedAt: topup.decidedAt };
+      topup.creditedAt = e.entry.createdAt;
+      topup.walletBalanceAfter = e.entry.balanceAfter;
+    }
+    store.topups.topups[idx] = topup;
+    store.touch("topups");
+    const ownerView = { ...topup };
+    delete ownerView.receiptFile;
+    return { ok: true, topup, walletType: wt, credit: !!r.credit };
+  });
+
+  if (!tx || tx.ok !== true) {
+    const r = tx || { status: 503, error: "Busy" };
+    return res.status(r.status || 400).json({ error: r.error, code: r.code });
+  }
+
+  const topup = tx.topup;
   appendAuditLog({
     actorType: "admin",
     actorId: String(req.adminId || ""),
     action: "topup.review",
     topupId: id,
-    walletType: wt,
+    walletType: tx.walletType,
     ownerId: topupsLib.ownerIdOf(topup),
     methodId: topup.methodId || "",
     to: topup.status,
     amount: topup.amount,
+    creditAmount: topupsLib.creditAmountOf(topup),
+    confirmedReference: topup.confirmedReference || "",
     reason: topup.decisionNote || "",
   });
-  if (wt === "customer") {
+  if (tx.walletType === "customer") {
     try {
       notifyCustomerSimple({
         customerId: topup.customerId,
-        type: "wallet_topup",
+        type: topup.status === "approved" ? "wallet_topup_success" : "wallet_topup_failed",
         title: "المحفظة",
         message:
           topup.status === "approved"
-            ? `تم تأكيد شحن محفظتك بمبلغ ${topup.amount} ✅`
+            ? `تم تأكيد شحن محفظتك بمبلغ ${topupsLib.creditAmountOf(topup)} ✅`
             : `تعذّر تأكيد شحن محفظتك بمبلغ ${topup.amount}: ${topup.decisionNote || ""}`,
       });
     } catch (_e) {}
@@ -6885,36 +7838,317 @@ app.patch("/api/admin/topups/:id", requireAdmin, (req, res) => {
   res.json({ ok: true, topup });
 });
 
-// ---- customer wallet (separate ledger from the driver wallet) ----
+// ---- customer wallet + loyalty (separate ledger from the driver wallet) ----
 function customerById(data, id) {
   return (data.customers || []).find((c) => String(c.id) === String(id));
 }
 
-app.get("/api/customer/wallet", requireCustomer, (req, res) => {
+/** Method display names (id -> {ar,fr,en}) from the supervisor-configured registry. */
+function paymentMethodNames() {
+  const out = new Map();
+  for (const m of loadPaymentMethods()) out.set(m.id, m.name || {});
+  return out;
+}
+
+/** A top-up request as a wallet transaction (pending/failed requests are visible, not lost). */
+function topupTransaction(t, names) {
+  const status = t.status === "approved" ? "succeeded" : t.status === "pending" ? "pending" : t.status === "failed" ? "failed" : "canceled";
+  const name = names.get(t.methodId) || null;
+  return {
+    id: `topup:${t.id}`,
+    type: "topup",
+    direction: "credit",
+    amount: topupsLib.creditAmountOf(t),
+    signedAmount: topupsLib.creditAmountOf(t),
+    fee: topupsLib.feeOf(t),
+    currency: t.currency || "MAD",
+    status,
+    at: t.createdAt || null,
+    orderId: null,
+    topupId: t.id,
+    methodId: t.methodId || null,
+    methodName: name,
+    reference: t.reference || null,
+    note: t.decisionNote && (t.status === "rejected" || t.status === "failed") ? t.decisionNote : "",
+    source: "payment_method",
+  };
+}
+
+/**
+ * The full wallet view. Every number comes from the server-side ledger; the
+ * browser never sends a balance and never sees another customer's data.
+ */
+function customerWalletView({ customer, loyaltyData, lang = "ar", limit = 100, topups = [], type = "", status = "" }) {
+  const currency = loadConfig().currency || "MAD";
+  const money0 = (v) => walletLedger.round2(Number(v) || 0);
+  const settings = loyaltyLib.settingsOf(loyaltyData.settings);
+  const policy = loadWalletSettings();
+  const entries = Array.isArray(customer.walletHistory) ? customer.walletHistory : [];
+  const account = (loyaltyData.accounts || []).find((a) => String(a.customerId) === String(customer.id)) || { customerId: customer.id, entries: [] };
+  const bal = loyaltyLib.balances(account, new Date().toISOString());
+  const program = loyaltyLib.publicView(settings, lang);
+  const names = paymentMethodNames();
+
+  const mineTopups = (topups || []).filter((t) => topupsLib.walletTypeOf(t) === "customer" && String(t.customerId) === String(customer.id));
+  const pendingTopups = mineTopups.filter((t) => t.status !== "approved").map((t) => topupTransaction(t, names));
+  const ledgerTx = walletService.listTransactions(entries, { limit: 500 });
+  const transactions = ledgerTx
+    .filter((t) => (!type || t.type === type) && (!status || t.status === status))
+    .concat(pendingTopups.filter((t) => (!type || t.type === type) && (!status || t.status === status)))
+    .sort((a, b) => String(b.at || "").localeCompare(String(a.at || "")))
+    .slice(0, Math.max(1, Math.min(200, Number(limit) || 100)))
+    .map((t) => ({ ...t, methodName: t.methodName || names.get(t.methodId) || null }));
+
+  const perUnit = Number(settings.redeem.pointsPerCurrencyUnit) || 1;
+  return {
+    ok: true,
+    currency,
+    // ---- wallet card ----
+    walletBalance: money0(customer.walletBalance),
+    available: money0(customer.walletBalance),
+    wallet: {
+      balance: money0(customer.walletBalance),
+      currency,
+      enabled: !!policy.enabled,
+      minTopup: policy.minTopup,
+      maxTopup: policy.maxTopup,
+      feePercent: policy.feePercent,
+      feeFixed: policy.feeFixed,
+      presets: policy.presets,
+      ledgerEntries: entries.length,
+    },
+    totals: walletService.summary(entries),
+    transactions,
+    // ---- top-up requests (own records, with their real status) ----
+    topups: mineTopups
+      .slice()
+      .sort((a, b) => String(b.createdAt || "").localeCompare(String(a.createdAt || "")))
+      .slice(0, 50)
+      .map(topupsLib.ownerView),
+    // ---- loyalty ----
+    loyalty: {
+      program,
+      balances: bal,
+      valueMAD: loyaltyLib.floor2(bal.available / perUnit),
+      canRedeem: !!program.enabled && !!program.redeem.enabled && bal.available >= Number(settings.redeem.minPoints || 1),
+      minPoints: settings.redeem.minPoints,
+      pointsPerCurrencyUnit: perUnit,
+      maxPointsPerTx: settings.redeem.maxPointsPerTx,
+      entries: loyaltyLib.statement(account, { limit: 100 }),
+    },
+    // legacy fields kept for existing clients (checkout reads walletBalance)
+    walletHistory: entries.slice(0, 50),
+  };
+}
+
+/** Is the customer allowed to see their own wallet? Identity always comes from the token. */
+function meCustomerOr404(req, res) {
   const data = loadCustomers();
   const c = customerById(data, req.customerId);
-  if (!c) return res.status(404).json({ error: "Not found" });
-  const mine = (loadTopups().topups || [])
-    .filter((t) => topupsLib.walletTypeOf(t) === "customer" && String(t.customerId) === String(req.customerId))
-    .sort((a, b) => String(b.createdAt || "").localeCompare(String(a.createdAt || "")))
-    .slice(0, 50)
-    .map(topupsLib.ownerView);
-  res.json({
-    ok: true,
-    walletBalance: Number(c.walletBalance || 0),
-    walletHistory: (Array.isArray(c.walletHistory) ? c.walletHistory : []).slice(0, 50),
-    topups: mine,
-    currency: loadConfig().currency || "MAD",
+  if (!c) {
+    res.status(404).json({ ok: false, error: "Not found", code: "NOT_FOUND" });
+    return null;
+  }
+  return c;
+}
+
+app.get("/api/customer/wallet", requireCustomer, (req, res) => {
+  const c = meCustomerOr404(req, res);
+  if (!c) return;
+  const lang = ["ar", "fr", "en"].includes(String(req.query.lang || "")) ? String(req.query.lang) : "ar";
+  const type = String(req.query.type || "").trim();
+  const status = String(req.query.status || "").trim();
+  res.set("Cache-Control", "no-store");
+  res.json(
+    customerWalletView({
+      customer: c,
+      loyaltyData: loadLoyalty(),
+      lang,
+      limit: Number(req.query.limit) || 100,
+      topups: loadTopups().topups,
+      type,
+      status,
+    }),
+  );
+});
+
+// ---- loyalty points (customer) ----
+app.get("/api/customer/loyalty", requireCustomer, (req, res) => {
+  const c = meCustomerOr404(req, res);
+  if (!c) return;
+  const lang = ["ar", "fr", "en"].includes(String(req.query.lang || "")) ? String(req.query.lang) : "ar";
+  const view = customerWalletView({ customer: c, loyaltyData: loadLoyalty(), lang, limit: 1, topups: [] });
+  res.set("Cache-Control", "no-store");
+  res.json({ ok: true, loyalty: view.loyalty, currency: view.currency });
+});
+
+const redeemLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 10,
+  standardHeaders: true,
+  legacyHeaders: false,
+  keyGenerator: (req) => `redeem:${req.customerId || req.ip}`,
+});
+
+/**
+ * Convert loyalty points into wallet balance.
+ * ONE transaction: the points debit and the wallet credit are written together
+ * (or not at all), share one reference and are idempotent per request key.
+ */
+app.post("/api/customer/wallet/loyalty/redeem", requireCustomer, redeemLimiter, (req, res) => {
+  const c = meCustomerOr404(req, res);
+  if (!c) return;
+  const points = Number(req.body?.points);
+  const idem = walletService.idempotencyKey({ headers: req.headers, body: req.body });
+  const requestKey = idem ? walletService.scopedKey("redeem", req.customerId, idem) : null;
+  const redemptionId = requestKey ? requestKey.replace(/[^A-Za-z0-9_-]/g, "").slice(0, 80) : `r${genId()}`;
+  const pointsRef = loyaltyLib.redeemRef(redemptionId);
+  const moneyRef = `loyalty_redeem:${redemptionId}`;
+
+  const tx = financeTx((store) => {
+    const account = store.loyaltyAccount(req.customerId, false);
+    const settings = store.settings();
+    if (!account) {
+      return { ok: false, status: 409, code: "INSUFFICIENT_POINTS", error: "Not enough available points", available: 0 };
+    }
+    const now = new Date().toISOString();
+    loyaltyLib.settlePending(account, now);
+    loyaltyLib.expireDue(account, now);
+    // Replay: same request key => same result, no second debit.
+    const prior = account.entries.find((e) => e.ref === pointsRef);
+    if (prior && prior.direction === "debit") {
+      const cust = store.customer(req.customerId);
+      return {
+        ok: true,
+        duplicate: true,
+        points: Number(prior.points) || 0,
+        amount: loyaltyLib.floor2((Number(prior.points) || 0) / (Number(settings.redeem.pointsPerCurrencyUnit) || 1)),
+        walletBalance: walletLedger.round2(cust ? Number(cust.walletBalance) || 0 : 0),
+      };
+    }
+    const quote = loyaltyLib.redeemQuote(account, points, settings, {
+      now,
+      redeemedToday: loyaltyLib.redeemedOn(account, now),
+    });
+    if (!quote.ok) return quote;
+
+    const customer = store.customer(req.customerId);
+    if (!customer) return { ok: false, status: 404, error: "Not found", code: "NOT_FOUND" };
+
+    const d = loyaltyLib.debit(account, {
+      ref: pointsRef,
+      kind: "redeem",
+      points: quote.points,
+      reason: "Points converted to wallet balance",
+      walletRef: moneyRef,
+      at: now,
+      actorType: "customer",
+      actorId: req.customerId,
+    });
+    if (!d.ok) return { ok: false, status: d.code === "INSUFFICIENT_POINTS" ? 409 : 400, error: d.error, code: d.code, available: d.available };
+
+    const w = walletLedger.applyEntry(customer, {
+      ref: moneyRef,
+      type: "loyalty_redeem",
+      amount: quote.amount,
+      note: `${quote.points} loyalty points converted`,
+      actorType: "customer",
+      actorId: req.customerId,
+      at: now,
+      status: "succeeded",
+      reference: pointsRef,
+      methodId: "loyalty",
+      currency: loadConfig().currency || "MAD",
+    });
+    if (!w.ok) return { ok: false, status: 409, error: w.error, code: w.code };
+    store.touch("loyalty");
+    store.touch("customers");
+    return {
+      ok: true,
+      duplicate: false,
+      points: quote.points,
+      amount: quote.amount,
+      rate: quote.rate,
+      pointsPerCurrencyUnit: quote.pointsPerCurrencyUnit,
+      walletBalance: w.entry.balanceAfter,
+      balanceAfter: w.entry.balanceAfter,
+      at: now,
+      balances: loyaltyLib.balances(account, now),
+    };
   });
+
+  if (!tx || tx.ok !== true) {
+    const r = tx || { status: 503, code: "FINANCE_BUSY", error: "Busy" };
+    return res.status(r.status || 400).json({ ok: false, error: r.error, code: r.code, ...(r.available != null ? { available: r.available } : {}), ...(r.minPoints != null ? { minPoints: r.minPoints } : {}), ...(r.maxPointsPerTx != null ? { maxPointsPerTx: r.maxPointsPerTx } : {}) });
+  }
+  if (!tx.duplicate) {
+    try {
+      appendAuditLog({
+        actorType: "customer",
+        actorId: String(req.customerId),
+        action: "loyalty.redeem",
+        points: tx.points,
+        amount: tx.amount,
+        ref: pointsRef,
+      });
+    } catch (_e) {}
+    try {
+      notifyCustomerSimple({
+        customerId: req.customerId,
+        type: "loyalty_redeem",
+        title: "المحفظة",
+        message: `تم تحويل ${tx.points} نقطة إلى ${tx.amount} درهم في محفظتك ✅`,
+      });
+    } catch (_e) {}
+  }
+  res.json({ ok: true, ...tx });
+});
+
+// Status polling for a top-up request (the wallet page shows the real state, never a guess).
+app.get("/api/customer/wallet/topups/:id", requireCustomer, (req, res) => {
+  const t = (loadTopups().topups || []).find((x) => String(x.id) === String(req.params.id));
+  if (!t || topupsLib.walletTypeOf(t) !== "customer" || String(t.customerId) !== String(req.customerId)) {
+    return res.status(404).json({ ok: false, error: "Not found" });
+  }
+  const names = paymentMethodNames();
+  res.json({ ok: true, topup: topupsLib.ownerView(t), transaction: topupTransaction(t, names) });
 });
 
 app.post("/api/customer/wallet/topups", requireCustomer, topupLimiter, (req, res) => {
-  const c = customerById(loadCustomers(), req.customerId);
-  if (!c) return res.status(404).json({ error: "Not found" });
-  const r = createTransferRequest({ walletType: "customer", ownerId: req.customerId, body: req.body });
-  if (!r.ok) return res.status(r.status).json(r.body);
-  appendAuditLog({ actorType: "customer", actorId: String(req.customerId), action: "topup.request", topupId: r.topup.id, methodId: r.topup.methodId, amount: r.topup.amount });
-  try { notifyCustomerSimple({ customerId: req.customerId, type: "wallet_topup", title: "المحفظة", message: `طلب شحن ${r.topup.amount} قيد المراجعة` }); } catch (_e) {}
+  const c = meCustomerOr404(req, res);
+  if (!c) return;
+  const idem = walletService.idempotencyKey({ headers: req.headers, body: req.body });
+  const requestKey = idem ? walletService.scopedKey("topup", req.customerId, idem) : null;
+  const r = createTransferRequest({
+    walletType: "customer",
+    ownerId: req.customerId,
+    body: req.body,
+    policy: loadWalletSettings(),
+    clientRequestId: requestKey,
+  });
+  if (!r.ok) return res.status(r.status).json({ ok: false, ...r.body });
+  if (r.duplicate) return res.json({ ok: true, topup: topupsLib.ownerView(r.topup), duplicate: true });
+
+  appendAuditLog({
+    actorType: "customer",
+    actorId: String(req.customerId),
+    action: "topup.request",
+    topupId: r.topup.id,
+    methodId: r.topup.methodId,
+    amount: r.topup.amount,
+    fee: r.topup.fee,
+    creditAmount: r.topup.creditAmount,
+    reference: r.topup.reference,
+  });
+  // "Pending review" — never "credited".
+  try {
+    notifyCustomerSimple({
+      customerId: req.customerId,
+      type: "wallet_topup",
+      title: "المحفظة",
+      message: `طلب شحن ${r.topup.amount} قيد المراجعة. لن يُضاف الرصيد قبل تأكيد وصول المبلغ.`,
+    });
+  } catch (_e) {}
   res.json({ ok: true, topup: topupsLib.ownerView(r.topup) });
 });
 
@@ -7012,10 +8246,11 @@ app.patch("/api/admin/stores/:id/review", requireAdmin, (req, res) => {
         const o = byId.get(oid);
         try {
           financeLib.finalize(o, new Date(nowIso));
-          refundOrderWallet(o);
         } catch (_e) {}
       }
       saveOrders(od);
+      // Refund the wallet part of every canceled order (idempotent), then withdraw its points.
+      for (const oid of handled.cancelled) settleOrderEffects(oid, { actorType: "admin", actorId: req.adminId });
       try {
         const menu = loadMenu();
         let ch = false;
@@ -7607,7 +8842,6 @@ app.patch("/api/orders/:id", requireAdmin, (req, res) => {
   order.total = promoLib.totalOf(order);
   financeLib.refresh(order, driverEarnings.earningOf(order));
   financeLib.finalize(order); // delivered / cancelled by a supervisor
-  refundOrderWallet(order);
 
   data.orders[idx] = order;
 
@@ -7624,6 +8858,8 @@ app.patch("/api/orders/:id", requireAdmin, (req, res) => {
   } catch (_e) {}
 
   saveOrders(data);
+  // Same transaction as the customer/driver paths: refund + points settle, once.
+  settleOrderEffects(order.id, { actorType: "admin", actorId: req.adminId });
 
   res.json(order);
 });
@@ -9365,6 +10601,7 @@ const storeApi = require("./lib/store-routes").registerStoreRoutes({
     return { complaintsAwaiting: list.filter((c) => c.status === "with_party").length };
   },
   pickupCodeFor: (o) => verifyCodes.pickupCodeForStore(VERIFY_SECRET, o),
+  onOrderSettled: (orderId, meta) => settleOrderEffects(orderId, meta || { actorType: "store" }),
   statementFor: (storeId, query) => storeStatementFor(storeId, query),
   app,
   requireAdmin,

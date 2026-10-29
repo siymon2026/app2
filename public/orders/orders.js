@@ -616,6 +616,26 @@ async function loadProfileWallet() {
   }
 }
 
+/* Payment line of an order: real snapshot written by the server, never re-computed here. */
+function paymentLineHtml(o) {
+  const pay = o && o.payment;
+  const method = String((o && o.paymentMethod) || (pay && pay.method) || "cod").toLowerCase();
+  const names = {
+    wallet: { ar: "محفظة SIYMON", fr: "Portefeuille SIYMON", en: "SIYMON wallet" },
+    cod: { ar: "الدفع عند الاستلام", fr: "Paiement à la livraison", en: "Cash on delivery" },
+    tpe: { ar: "بطاقة عبر TPE", fr: "Carte via TPE", en: "Card via TPE" },
+  }[method] || { ar: method, fr: method, en: method };
+  const label = names[lang] || names.ar;
+  const cur = String(o.currency || "").trim();
+  const walletPart = Number(pay && pay.walletAmount) || 0;
+  const due = Number(pay && pay.amountDueOnDelivery) || 0;
+  const bits = [];
+  if (walletPart > 0) bits.push(`${lang === "ar" ? "من المحفظة" : lang === "fr" ? "Du portefeuille" : "From wallet"}: ${walletPart.toFixed(2)} ${escapeHtml(cur)}`);
+  if (due > 0) bits.push(`${lang === "ar" ? "عند التسليم" : lang === "fr" ? "À la livraison" : "On delivery"}: ${due.toFixed(2)} ${escapeHtml(cur)}`);
+  if (pay && pay.walletRefundedAt) bits.push(lang === "ar" ? "أُعيد المبلغ إلى المحفظة" : lang === "fr" ? "Remboursé sur le portefeuille" : "Refunded to wallet");
+  return `<div class="order-info">💳 ${escapeHtml(label)}${bits.length ? ` · ${bits.map(escapeHtml).join(" · ")}` : ""}</div>`;
+}
+
 function escapeHtml(s) {
   return String(s || "").replace(
     /[&<>"']/g,
@@ -804,6 +824,8 @@ function renderOrders(list) {
         </div>
 
         <div class="order-items">${itemsHtml}</div>
+
+        ${paymentLineHtml(o)}
 
         ${stagesHtml(o)}
 

@@ -24,6 +24,7 @@
   <link rel="stylesheet" href="/reveal.css">
   <link rel="stylesheet" href="/admin/admin-notifications.css">
   <link rel="stylesheet" href="/admin/admin-login.css">
+  <link rel="stylesheet" href="/admin/admin-loyalty.css?v=20261029">
 </head>
 <body class="has-sb">
   <aside class="sb" id="sideNav" aria-label="Navigation">
@@ -66,6 +67,7 @@
       <button class="sb-item" id="sbStaff" type="button" data-key="staff" data-src="staffBtn" data-modal="staffModal"><span class="sb-tile t-orange"><svg class="sb-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></span><span class="sb-text" data-i="staff"></span></button>
       <button class="sb-item" id="sbPromos" type="button" data-key="promos" data-src="promosBtn" data-modal="promosModal"><span class="sb-tile t-green"><svg class="sb-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.59 13.41 13.42 20.58a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82Z"/><circle cx="7" cy="7" r="1.5"/></svg></span><span class="sb-text" data-i="promos"></span></button>
       <button class="sb-item" id="sbPayments" type="button" data-key="payments" data-src="paymentsBtn" data-modal="paymentsModal"><span class="sb-tile t-green"><svg class="sb-ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></span><span class="sb-text" data-i="payments"></span></button>
+      <button class="sb-item" id="sbLoyalty" type="button" data-key="loyalty" data-src="loyaltyBtn" data-modal="loyaltyModal"><span class="sb-tile t-green"><svg class="sb-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 2.6 5.6 6.1.8-4.5 4.2 1.2 6L12 16.8 6.6 19.6l1.2-6L3.3 9.4l6.1-.8z"/></svg></span><span class="sb-text" data-i="loyalty"></span></button>
     </nav>
     <div class="sb-bottom">
       <div class="sb-theme" role="group" aria-label="Theme">
@@ -131,6 +133,7 @@
           <button class="btn nav" id="staffBtn" type="button">Staff</button>
           <button class="btn nav" id="promosBtn" type="button">Discount codes</button>
           <button class="btn nav" id="paymentsBtn" type="button">Payment methods</button>
+          <button class="btn nav" id="loyaltyBtn" type="button">Loyalty points</button>
           <button class="btn nav" id="menuManageBtn" type="button" title="Menu"><span id="menuManageText">Menu</span></button>
           <button class="btn nav primary" id="settingsBtn" type="button" title="Settings"><span id="settingsText">Settings</span></button>
         </div>
@@ -956,6 +959,7 @@
   <div class="modal page-view" id="staffModal" data-page="staff"></div>
   <div class="modal page-view" id="promosModal" data-page="promos"></div>
   <div class="modal page-view" id="paymentsModal" data-page="payments"></div>
+  <div class="modal page-view" id="loyaltyModal" data-page="loyalty"></div>
   <div class="modal page-view" id="storeEnterModal" data-page="store-enter"></div>
   <div class="modal page-view" id="portalModal" data-page="portal"></div>
   <div class="modal page-view" id="zonesModal" data-page="zones"></div>
@@ -1273,6 +1277,7 @@
   <script src="/admin/admin-staff.js?v=20261029"></script>
   <script src="/admin/admin-promos.js?v=20261029"></script>
   <script src="/admin/admin-payments.js?v=20261029"></script>
+  <script src="/admin/admin-loyalty.js?v=20261029"></script>
   <script src="/admin/admin-notifications.js"></script>
   <script src="/admin/admin-support.js"></script>
   <script src="/admin/admin-store-support.js?v=1"></script>

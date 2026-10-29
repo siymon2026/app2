@@ -54,7 +54,29 @@ function create(seed) {
       if (p === "/api/customer/wallet" && req.method === "GET") {
         const tk = (req.headers.authorization || "").replace(/^Bearer /i, "") || req.headers["x-customer-token"];
         if (tk !== "ctok") return send(res, 401, { error: "Unauthorized" });
-        return send(res, 200, { ok: true, walletBalance: 125.5, currency: "MAD", topups: [{ id: "t1", amount: 100, status: "approved", createdAt: new Date().toISOString(), reference: "REF12345" }], walletHistory: [{ type: "topup", amount: 100, createdAt: new Date().toISOString() }, { type: "order_payment", amount: -20, orderId: "O1", createdAt: new Date().toISOString() }] });
+        // Same shape as the real GET /api/customer/wallet (see customerWalletView in server.js).
+        const t1 = new Date().toISOString(), t2 = new Date(Date.now() - 3600e3).toISOString();
+        const history = [
+          { id: "h1", ref: "order:O1:wallet", type: "order_payment", amount: -20, orderId: "O1", status: "succeeded", createdAt: t2 },
+          { id: "h2", ref: "topup:t1", type: "topup", amount: 100, topupId: "t1", methodId: "cih", reference: "REF12345", status: "succeeded", createdAt: t1 },
+        ];
+        return send(res, 200, {
+          ok: true, currency: "MAD", walletBalance: 125.5, available: 125.5,
+          wallet: { balance: 125.5, currency: "MAD", enabled: true, minTopup: 10, maxTopup: 20000, feePercent: 0, feeFixed: 0, presets: [50, 100, 200, 500], ledgerEntries: 2 },
+          totals: { added: 100, used: 20, refunded: 0, loyaltyAdded: 0, adjustedIn: 45.5, adjustedOut: 0, totalIn: 145.5, totalOut: 20, net: 125.5 },
+          transactions: [
+            { id: "h1", type: "order_payment", direction: "debit", amount: 20, signedAmount: -20, currency: "MAD", status: "succeeded", at: t2, orderId: "O1" },
+            { id: "h2", type: "topup", direction: "credit", amount: 100, signedAmount: 100, currency: "MAD", status: "succeeded", at: t1, reference: "REF12345", methodName: { ar: "تحويل بنكي", fr: "Virement", en: "Bank transfer" } },
+          ],
+          topups: [{ id: "t1", amount: 100, creditAmount: 100, status: "approved", createdAt: t1, reference: "REF12345", methodId: "cih" }],
+          loyalty: {
+            program: { enabled: true, earn: { enabled: true, unitAmount: 10, pointsPerUnit: 1, rule: "10 MAD = 1 point" }, redeem: { enabled: true, pointsPerCurrencyUnit: 100, minPoints: 100, maxPointsPerTx: 0, rate: 0.01 }, expiry: { enabled: false, days: 365 }, campaigns: [], terms: "terms", customTerms: "" },
+            balances: { earnedTotal: 320, adjustments: 0, available: 300, pending: 20, used: 0, expired: 0, reversed: 0, debt: 0 },
+            valueMAD: 3, canRedeem: true, minPoints: 100, pointsPerCurrencyUnit: 100, maxPointsPerTx: 0,
+            entries: [{ id: "e1", ref: "loyalty:earn:O1", direction: "credit", kind: "earn", points: 320, status: "available", reason: "Order #O1", at: t1 }],
+          },
+          walletHistory: history,
+        });
       }
       if (p === "/api/payment-methods") return send(res, 200, { ok: true, methods: [] });
       if (p === "/api/customer/me" && req.method === "GET") return send(res, 200, { ok: true, customer: { id: "c1", firstName: "علي", lastName: "الإدريسي", phone: "0611111111" } });

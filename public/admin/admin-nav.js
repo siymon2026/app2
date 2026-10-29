@@ -16,9 +16,9 @@
 
   /* ---------- strings owned by the sidebar (everything else mirrors admin.js) ---------- */
   var T = {
-    ar: { menu: "القائمة", home: "الطلبات", group: "الأعمال", search: "بحث…", light: "فاتح", dark: "داكن", collapse: "طي القائمة", expand: "توسيع القائمة", open: "القائمة", logout: "تسجيل الخروج", nav: "التنقل", zones: "مناطق الخدمة", audit: "سجل التدقيق", staff: "الموظفون والصلاحيات", promos: "أكواد الخصم", payments: "طرق الدفع", storeEnter: "دخول متجر", loading: "جارٍ تحميل القسم…" },
-    fr: { menu: "Menu", home: "Commandes", group: "Activité", search: "Rechercher…", light: "Clair", dark: "Sombre", collapse: "Réduire", expand: "Agrandir", open: "Menu", logout: "Déconnexion", nav: "Navigation", zones: "Zones de service", audit: "Journal d’audit", staff: "Équipe et rôles", promos: "Codes promo", payments: "Moyens de paiement", storeEnter: "Entrer en boutique", loading: "Chargement de la section…" },
-    en: { menu: "Menu", home: "Orders", group: "Business", search: "Search…", light: "Light", dark: "Dark", collapse: "Collapse", expand: "Expand", open: "Menu", logout: "Logout", nav: "Navigation", zones: "Service zones", audit: "Audit log", staff: "Staff & roles", promos: "Discount codes", payments: "Payment methods", storeEnter: "Enter store", loading: "Loading section…" }
+    ar: { menu: "القائمة", home: "الطلبات", group: "الأعمال", search: "بحث…", light: "فاتح", dark: "داكن", collapse: "طي القائمة", expand: "توسيع القائمة", open: "القائمة", logout: "تسجيل الخروج", nav: "التنقل", zones: "مناطق الخدمة", audit: "سجل التدقيق", staff: "الموظفون والصلاحيات", promos: "أكواد الخصم", payments: "طرق الدفع", loyalty: "نقاط الوفاء", storeEnter: "دخول متجر", loading: "جارٍ تحميل القسم…" },
+    fr: { menu: "Menu", home: "Commandes", group: "Activité", search: "Rechercher…", light: "Clair", dark: "Sombre", collapse: "Réduire", expand: "Agrandir", open: "Menu", logout: "Déconnexion", nav: "Navigation", zones: "Zones de service", audit: "Journal d’audit", staff: "Équipe et rôles", promos: "Codes promo", payments: "Moyens de paiement", loyalty: "Points de fidélité", storeEnter: "Entrer en boutique", loading: "Chargement de la section…" },
+    en: { menu: "Menu", home: "Orders", group: "Business", search: "Search…", light: "Light", dark: "Dark", collapse: "Collapse", expand: "Expand", open: "Menu", logout: "Logout", nav: "Navigation", zones: "Service zones", audit: "Audit log", staff: "Staff & roles", promos: "Discount codes", payments: "Payment methods", loyalty: "Loyalty points", storeEnter: "Enter store", loading: "Loading section…" }
   };
   function L() { return T[(html.lang || "ar").slice(0, 2)] || T.en; }
   function isMobile() { return mqMobile.matches; }
@@ -94,12 +94,12 @@
 
   /* ---------- routing (the same hash router used by Orders) ---------- */
   var ROUTE_OF = { home: "", drivers: "drivers", dispatch: "dispatch", customers: "customers", support: "support", storeSupport: "store-support", exceptions: "exceptions", system: "system", audit: "audit", feedback: "feedback", reports: "reports", notifications: "notifications",
-                   settings: "settings", topups: "topups", menuManage: "menu", subRest: "menu/restaurants", subMeals: "menu/meals", zones: "zones", storeEnter: "store-enter", portal: "portal", staff: "staff", promos: "promos", payments: "payments" };
+                   settings: "settings", topups: "topups", menuManage: "menu", subRest: "menu/restaurants", subMeals: "menu/meals", zones: "zones", storeEnter: "store-enter", portal: "portal", staff: "staff", promos: "promos", payments: "payments", loyalty: "loyalty" };
   var ROUTE_KEY = {}; Object.keys(ROUTE_OF).forEach(function (k) { ROUTE_KEY[ROUTE_OF[k]] = k; });
   // Close through each page's own function so its polling and other state are cleaned up.
   var PAGE_FN = { settingsModal: "showSettings", menuModal: "showMenu", driversModal: "showDrivers", dispatchModal: "showDispatch", customersModal: "showCustomers",
                   supportModal: "showSupport", storeSupportModal: "showStoreSupport", exceptionsModal: "showExceptions", systemModal: "showSystem", feedbackModal: "showFeedback", reportsModal: "showReports", notificationsModal: "showNotificationsModal", topupsModal: "showTopups",
-                  zonesModal: "showZones", storeEnterModal: "showStoreEnter", portalModal: "showPortal", staffModal: "showStaff", promosModal: "showPromos", paymentsModal: "showPayments" };
+                  zonesModal: "showZones", storeEnterModal: "showStoreEnter", portalModal: "showPortal", staffModal: "showStaff", promosModal: "showPromos", paymentsModal: "showPayments", loyaltyModal: "showLoyalty" };
   var pending = null;              // the requested page while its original handler loads data
   var started = Object.create(null); // outstanding async source handlers
   var abandoned = Object.create(null); // timed-out handlers may still complete later

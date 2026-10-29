@@ -3771,6 +3771,7 @@ function showDetails(order) {
       ${wifiEnabled ? `<button class="btn ghost small" id="detailWifiBtn" type="button">${t.wifiPrint}</button>` : ``}
       <button class="btn ghost small" id="detailBtBtn" type="button">${t.btPrint}</button>
       <button class="btn small" id="detailDoneBtn" type="button">${t.done}</button>
+      ${order.refundedAt ? "" : `<button class="btn ghost small" id="detailRefundBtn" type="button" data-perm="finance.write">${lang === "ar" ? "استرجاع المبلغ" : lang === "fr" ? "Rembourser" : "Refund"}</button>`}
     </div>`;
 
   // Driver dispatch (admin -> driver)
@@ -3875,8 +3876,39 @@ function showDetails(order) {
   </div>
 `;
 
+  // Payment snapshot: which method paid, how much came from the wallet, and what is still due.
+  const payRec = order.payment || null;
+  const payName = {
+    wallet: lang === "ar" ? "محفظة SIYMON" : lang === "fr" ? "Portefeuille SIYMON" : "SIYMON wallet",
+    cod: lang === "ar" ? "الدفع عند الاستلام" : lang === "fr" ? "Paiement à la livraison" : "Cash on delivery",
+    tpe: lang === "ar" ? "بطاقة عبر TPE" : lang === "fr" ? "Carte via TPE" : "Card via TPE",
+  }[String(order.paymentMethod || (payRec && payRec.method) || "cod").toLowerCase()] || String(order.paymentMethod || "");
+  const payStatus = !payRec
+    ? ""
+    : payRec.walletRefundedAt
+      ? lang === "ar" ? "أُعيد المبلغ إلى المحفظة" : lang === "fr" ? "Remboursé sur le portefeuille" : "Refunded to wallet"
+      : Number(payRec.walletAmount || 0) > 0
+        ? (lang === "ar" ? "مدفوع من المحفظة" : lang === "fr" ? "Payé par portefeuille" : "Paid from wallet")
+        : (lang === "ar" ? "غير مدفوع بعد" : lang === "fr" ? "Non payé" : "Not paid yet");
+  const paymentBox = order.paymentMethod || payRec ? `
+    <div class="panel-like" style="margin-top:10px">
+      <b>${lang === "ar" ? "الدفع" : lang === "fr" ? "Paiement" : "Payment"}</b>
+      <div class="row" style="justify-content:space-between;gap:10px;margin-top:6px;flex-wrap:wrap">
+        <span>${escapeHtml(payName)}</span>
+        <span class="muted">${escapeHtml(payStatus)}</span>
+      </div>
+      ${payRec && Number(payRec.walletAmount || 0) > 0 ? `<div class="row" style="justify-content:space-between;gap:10px;margin-top:4px">
+        <span>${lang === "ar" ? "من المحفظة" : lang === "fr" ? "Du portefeuille" : "From wallet"}</span>
+        <b>${money(payRec.walletAmount)}</b></div>` : ""}
+      ${payRec && Number(payRec.amountDueOnDelivery || 0) > 0 ? `<div class="row" style="justify-content:space-between;gap:10px;margin-top:4px">
+        <span>${lang === "ar" ? "المتبقي عند التسليم" : lang === "fr" ? "Reste à la livraison" : "Due on delivery"}</span>
+        <b>${money(payRec.amountDueOnDelivery)}</b></div>` : ""}
+      ${payRec && payRec.reference ? `<div class="muted" style="margin-top:4px;font-size:11px;direction:ltr">${escapeHtml(payRec.reference)}</div>` : ""}
+    </div>` : "";
+
   el("detailsBox").innerHTML = `
     <div style="display:grid; gap:12px">
+      ${paymentBox}
       <div class="ticket-preview">
         <img class="ticket-logo" src="/icons/icon-192.png" alt="siymon"/>
         <pre class="ticket-pre" dir="ltr">${escapeHtml(receiptText)}</pre>
@@ -3941,6 +3973,25 @@ function showDetails(order) {
   el("detailWifiBtn")?.addEventListener("click", () => printWifi(order));
   el("detailBtBtn")?.addEventListener("click", () => printBluetooth(order));
   el("detailDoneBtn")?.addEventListener("click", () => markDone(order.id));
+  el("detailRefundBtn")?.addEventListener("click", async () => {
+    const reason = prompt(
+      lang === "ar"
+        ? "سبب الاسترجاع (إلزامي). سيُعاد الجزء المدفوع من المحفظة تلقائيًا، والجزء النقدي يُسجَّل كاسترجاع يدوي، وتُسحب نقاط الطلب."
+        : lang === "fr"
+          ? "Motif du remboursement (obligatoire). La part portefeuille est recréditée automatiquement, la part espèces est enregistrée, les points sont retirés."
+          : "Refund reason (required). The wallet part is refunded automatically, cash is recorded, points are reversed.",
+    );
+    if (!reason || reason.trim().length < 3) return;
+    if (!confirm(lang === "ar" ? "تأكيد الاسترجاع؟ لا يمكن التراجع." : lang === "fr" ? "Confirmer le remboursement ? Irréversible." : "Confirm the refund? This cannot be undone.")) return;
+    try {
+      const r = await api(`/api/admin/orders/${encodeURIComponent(order.id)}/refund`, { method: "POST", body: JSON.stringify({ reason: reason.trim() }) });
+      toast(`✅ ${lang === "ar" ? "تم الاسترجاع" : lang === "fr" ? "Remboursé" : "Refunded"}: ${r.walletRefunded || 0}`);
+      loadOrders();
+    } catch (e) {
+      const code = e && e.body && e.body.code;
+      toast("❌ " + (code === "ALREADY_REFUNDED" ? (lang === "ar" ? "تم استرجاع هذا الطلب مسبقًا" : "Already refunded") : code === "NOT_DELIVERED" ? (lang === "ar" ? "لا يمكن استرجاع طلب غير مُسلَّم" : "Only delivered orders can be refunded") : (e && e.message) || "Error"));
+    }
+  });
 
   // order chat
   el("openStoreChatBtn")?.addEventListener("click", () => openOrderChatModal(String(order.id), "store"));

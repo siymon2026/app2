@@ -1,0 +1,1 @@
+{"seq":1,"at":"2026-10-29T16:51:10.622Z","event":"permissions.hardened","result":"ok","actor":{"id":"system","role":"","ip":"","type":"system"},"detail":{"changed":1},"prev":"0000000000000000000000000000000000000000000000000000000000000000","hash":"78ec7aeb6646ab48b44b2ffd70418d7593b2e1cf5743edd58e32e1042e26fac3"}

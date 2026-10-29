@@ -48,7 +48,11 @@ test("zone routes are registered with the real admin guard and the audit log", (
 });
 
 test("no other code path creates customer orders without the gate", () => {
-  // Orders are inserted in exactly two places: POST /api/orders and the pharmacy acceptance. Both are covered above.
-  const inserts = src.match(/data\.orders\.unshift\(order\)/g) || [];
-  assert.equal(inserts.length, 2, "a new order-creation path must be added to the zone gate and to this test");
+  // Orders are inserted in exactly two places: POST /api/orders (inside the wallet
+  // transaction, `store.orders.orders.unshift`) and the pharmacy acceptance
+  // (`data.orders.unshift`). Both are covered above.
+  const direct = src.match(/(?<!store\.)\bdata\.orders\.unshift\(order\)/g) || [];
+  const inWalletTx = src.match(/store\.orders\.orders\.unshift\(order\)/g) || [];
+  assert.equal(direct.length, 1, "a new order-creation path must be added to the zone gate and to this test");
+  assert.equal(inWalletTx.length, 1, "the /api/orders insert must stay inside the financial transaction");
 });
