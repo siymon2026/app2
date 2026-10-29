@@ -1,0 +1,179 @@
+/* ==========================================================================
+   Notification editor (admin) — scoped to #notificationsModal
+   Uses the project's --brand and the html[data-theme="dark"] switch.
+   Surfaces use color-mix(currentColor) so they adapt to light & dark.
+   Layout uses logical properties => correct in RTL and LTR.
+   ========================================================================== */
+#notificationsModal .ne{
+  --ne-brand: var(--brand, #5DD62C);
+  --ne-line: color-mix(in srgb, currentColor 14%, transparent);
+  --ne-fill: color-mix(in srgb, currentColor 4.5%, transparent);
+  --ne-fill2: color-mix(in srgb, currentColor 8%, transparent);
+  --ne-muted: color-mix(in srgb, currentColor 62%, transparent);
+  --ne-ok: #1f9d6b; --ne-warn: #d98a00; --ne-bad: #d92d20;
+  --ne-r: 16px;
+}
+html[data-theme="dark"] #notificationsModal .ne{ --ne-ok:#3ecaa3; --ne-warn:#f5b84a; --ne-bad:#ff6b5e; }
+
+#notificationsModal .ne-head{ display:flex; align-items:flex-start; justify-content:space-between; gap:12px; margin-block-end:14px; }
+#notificationsModal .ne-head-t{ display:flex; gap:12px; align-items:center; min-width:0; }
+#notificationsModal .ne-head h3{ margin:0; font-size:1.25rem; }
+#notificationsModal .ne-sub{ margin:2px 0 0; font-size:.85rem; color:var(--ne-muted); }
+#notificationsModal .ne-ico{ flex:none; width:42px; height:42px; border-radius:12px; display:grid; place-items:center;
+  background: color-mix(in srgb, var(--ne-brand) 16%, transparent); color:var(--brand-text,#5DD62C); }
+#notificationsModal .ne-ico svg, #notificationsModal .ne svg{ width:20px; height:20px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+
+#notificationsModal .ne-banner{ display:flex; gap:10px; align-items:flex-start; padding:12px 14px; border-radius:12px; margin-block-end:14px; font-size:.9rem; line-height:1.5;
+  background: color-mix(in srgb, var(--ne-warn) 14%, transparent); border:1px solid color-mix(in srgb, var(--ne-warn) 45%, transparent); }
+#notificationsModal .ne-banner[hidden]{ display:none; }
+
+/* layout: form + sticky preview */
+#notificationsModal .ne-layout{ display:grid; grid-template-columns: minmax(0,1fr) 340px; gap:18px; align-items:start; }
+#notificationsModal .ne-col{ display:flex; flex-direction:column; gap:14px; min-width:0; }
+#notificationsModal .ne-prev-sticky{ position:sticky; top:12px; }
+
+#notificationsModal .ne-box{ border:1px solid var(--ne-line); background:var(--ne-fill); border-radius:var(--ne-r); padding:16px; }
+#notificationsModal .ne-box h4{ margin:0 0 12px; font-size:.98rem; }
+
+/* fields */
+#notificationsModal .ne-field{ display:flex; flex-direction:column; gap:6px; margin-block-end:14px; }
+#notificationsModal .ne-field:last-child{ margin-block-end:0; }
+#notificationsModal .ne-lbl-row{ display:flex; justify-content:space-between; align-items:baseline; gap:8px; }
+#notificationsModal .ne-lbl-row label{ font-weight:600; font-size:.9rem; }
+#notificationsModal .ne-count, #notificationsModal .ne-opt{ font-size:.78rem; color:var(--ne-muted); font-variant-numeric:tabular-nums; }
+#notificationsModal .ne-count.warn{ color:var(--ne-warn); }
+#notificationsModal .ne-count.max{ color:var(--ne-bad); font-weight:700; }
+#notificationsModal .ne input[type="text"], #notificationsModal .ne textarea{
+  width:100%; box-sizing:border-box; padding:11px 12px; border-radius:12px; font:inherit; color:inherit;
+  background:transparent; border:1px solid var(--ne-line); outline:none; resize:vertical; min-height:44px; }
+#notificationsModal .ne input[type="text"]:focus, #notificationsModal .ne textarea:focus{
+  border-color:var(--ne-brand); box-shadow:0 0 0 3px color-mix(in srgb, var(--ne-brand) 22%, transparent); }
+#notificationsModal .ne .invalid{ border-color:var(--ne-bad) !important; }
+#notificationsModal .ne-hint{ font-size:.8rem; color:var(--ne-muted); line-height:1.5; margin:0; }
+#notificationsModal .ne-err{ font-size:.82rem; color:var(--ne-bad); }
+#notificationsModal .ne-err[hidden]{ display:none; }
+
+/* image */
+#notificationsModal .ne-drop{ border:1.5px dashed var(--ne-line); border-radius:14px; padding:12px; }
+#notificationsModal .ne-pick{ display:inline-flex; align-items:center; gap:8px; }
+#notificationsModal .ne-thumb{ display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+#notificationsModal .ne-thumb[hidden]{ display:none; }
+#notificationsModal .ne-thumb img{ width:120px; max-width:40%; aspect-ratio:2/1; object-fit:cover; border-radius:10px; border:1px solid var(--ne-line); }
+#notificationsModal .ne-thumb-actions{ display:flex; gap:8px; flex-wrap:wrap; }
+#notificationsModal .ne-danger{ color:var(--ne-bad); }
+
+/* audience */
+#notificationsModal .ne-radios{ display:grid; gap:8px; }
+#notificationsModal .ne-radio{ display:flex; gap:10px; align-items:flex-start; padding:10px 12px; border:1px solid var(--ne-line); border-radius:12px; cursor:pointer; }
+#notificationsModal .ne-radio:has(input:checked){ border-color:var(--ne-brand); background:color-mix(in srgb, var(--ne-brand) 10%, transparent); }
+#notificationsModal .ne-radio input{ margin-block-start:4px; accent-color:var(--ne-brand); }
+#notificationsModal .ne-radio b{ display:block; font-size:.92rem; }
+#notificationsModal .ne-radio small{ color:var(--ne-muted); font-size:.8rem; }
+#notificationsModal .ne-stats{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; margin-block-start:12px; }
+#notificationsModal .ne-stat{ border-radius:12px; padding:10px; background:var(--ne-fill2); text-align:center; }
+#notificationsModal .ne-stat b{ display:block; font-size:1.25rem; font-variant-numeric:tabular-nums; }
+#notificationsModal .ne-stat span{ font-size:.75rem; color:var(--ne-muted); }
+#notificationsModal .ne-stats-msg{ grid-column:1/-1; font-size:.85rem; color:var(--ne-muted); }
+#notificationsModal .ne-stats-msg.err{ color:var(--ne-bad); }
+#notificationsModal .ne-skel{ height:58px; border-radius:12px; background:linear-gradient(90deg,var(--ne-fill2),var(--ne-fill),var(--ne-fill2)); background-size:200% 100%; animation:ne-sh 1.2s linear infinite; }
+@keyframes ne-sh{ to{ background-position:-200% 0; } }
+
+/* test */
+#notificationsModal .ne-test-row{ display:flex; gap:8px; }
+#notificationsModal .ne-test-row input{ flex:1; min-width:0; }
+
+/* actions */
+#notificationsModal .ne-actions{ display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end; }
+#notificationsModal .ne-actions .btn{ min-height:46px; }
+#notificationsModal .ne-actions .good{ flex:1 1 180px; font-weight:700; }
+#notificationsModal .ne .btn[disabled]{ opacity:.5; cursor:not-allowed; }
+#notificationsModal .ne .btn.busy{ position:relative; }
+#notificationsModal .ne .btn.busy::after{ content:""; width:14px; height:14px; margin-inline-start:8px; display:inline-block; vertical-align:-2px;
+  border:2px solid currentColor; border-inline-end-color:transparent; border-radius:50%; animation:ne-spin .7s linear infinite; }
+@keyframes ne-spin{ to{ transform:rotate(360deg); } }
+#notificationsModal .ne-only-narrow{ display:none; }
+#notificationsModal .ne-link{ align-self:flex-start; background:none; border:0; text-decoration:underline; }
+#notificationsModal .ne-msg{ min-height:1.2em; font-size:.88rem; line-height:1.5; }
+#notificationsModal .ne-msg.ok{ color:var(--ne-ok); }
+#notificationsModal .ne-msg.warn{ color:var(--ne-warn); }
+#notificationsModal .ne-msg.bad{ color:var(--ne-bad); }
+
+/* ---------- phone preview ---------- */
+#notificationsModal .ne-prev-title{ font-weight:700; margin-block-end:8px; font-size:.92rem; }
+#notificationsModal .ne-phone{ position:relative; border-radius:34px; padding:14px 12px 22px; color:#fff; overflow:hidden;
+  background:radial-gradient(120% 80% at 80% 0%, #202020 0%, #0F0F0F 60%), #0F0F0F;
+  border:6px solid #0b0c0e; box-shadow:0 14px 40px rgba(0,0,0,.28); direction:ltr; min-height:300px; }
+#notificationsModal .ne-phone-top{ display:flex; justify-content:space-between; align-items:center; font-size:.72rem; opacity:.85; padding:0 8px 18px; }
+#notificationsModal .ne-notch{ width:70px; height:18px; border-radius:12px; background:#000; }
+#notificationsModal .ne-notif{ direction:inherit; background:rgba(250,250,252,.94); color:#0F0F0F; border-radius:18px; padding:11px 13px 13px; box-shadow:0 6px 18px rgba(0,0,0,.35); }
+html[dir="rtl"] #notificationsModal .ne-notif{ direction:rtl; }
+#notificationsModal .ne-notif-h{ display:flex; align-items:center; gap:7px; font-size:.72rem; color:#5b606b; margin-block-end:6px; }
+#notificationsModal .ne-notif-h img{ border-radius:6px; }
+#notificationsModal .ne-app{ font-weight:700; letter-spacing:.04em; }
+#notificationsModal .ne-when{ margin-inline-start:auto; }
+#notificationsModal .ne-notif-t{ font-weight:700; font-size:.92rem; line-height:1.35; overflow-wrap:anywhere; }
+#notificationsModal .ne-notif-b{ font-size:.84rem; line-height:1.45; color:#2c3038; margin-block-start:2px; overflow-wrap:anywhere; white-space:pre-line;
+  display:-webkit-box; -webkit-line-clamp:4; -webkit-box-orient:vertical; overflow:hidden; }
+#notificationsModal .ne-notif-t.ph, #notificationsModal .ne-notif-b.ph{ color:#9aa0ab; font-weight:500; }
+#notificationsModal .ne-notif-img{ display:block; width:100%; margin-block-start:9px; border-radius:10px; aspect-ratio:2/1; object-fit:cover; background:#e7e9ee; }
+#notificationsModal .ne-notif-img[hidden]{ display:none; }
+#notificationsModal .ne-opens{ margin-block-start:10px; font-size:.72rem; opacity:.8; text-align:center; direction:ltr; overflow-wrap:anywhere; }
+#notificationsModal .ne-opens[hidden]{ display:none; }
+#notificationsModal .ne-prev-note{ margin:10px 2px 0; font-size:.78rem; color:var(--ne-muted); line-height:1.5; }
+
+/* ---------- history ---------- */
+#notificationsModal .ne-history{ margin-block-start:18px; }
+#notificationsModal .ne-hist-head{ display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; margin-block-end:12px; }
+#notificationsModal .ne-hist-head h4{ margin:0; }
+#notificationsModal .ne-tabs{ display:flex; gap:6px; }
+#notificationsModal .ne-tab{ border:1px solid var(--ne-line); background:transparent; color:inherit; padding:7px 12px; border-radius:999px; font:inherit; font-size:.85rem; cursor:pointer; }
+#notificationsModal .ne-tab i{ font-style:normal; opacity:.7; font-variant-numeric:tabular-nums; }
+#notificationsModal .ne-tab.on{ background:color-mix(in srgb, var(--ne-brand) 16%, transparent); border-color:var(--ne-brand); }
+#notificationsModal .ne-list{ display:grid; gap:10px; grid-template-columns:repeat(auto-fill,minmax(290px,1fr)); }
+#notificationsModal .ne-item{ border:1px solid var(--ne-line); border-radius:14px; padding:12px; display:flex; flex-direction:column; gap:8px; background:var(--ne-fill); }
+#notificationsModal .ne-item b{ overflow-wrap:anywhere; }
+#notificationsModal .ne-item p{ margin:0; font-size:.86rem; color:var(--ne-muted); overflow-wrap:anywhere; white-space:pre-line; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
+#notificationsModal .ne-item img{ width:100%; aspect-ratio:2/1; object-fit:cover; border-radius:10px; }
+#notificationsModal .ne-item small{ color:var(--ne-muted); font-size:.76rem; }
+#notificationsModal .ne-chips{ display:flex; flex-wrap:wrap; gap:6px; }
+#notificationsModal .ne-chip{ font-size:.72rem; padding:3px 8px; border-radius:999px; background:var(--ne-fill2); }
+#notificationsModal .ne-chip.ok{ background:color-mix(in srgb, var(--ne-ok) 18%, transparent); color:var(--ne-ok); }
+#notificationsModal .ne-chip.bad{ background:color-mix(in srgb, var(--ne-bad) 16%, transparent); color:var(--ne-bad); }
+#notificationsModal .ne-chip.warn{ background:color-mix(in srgb, var(--ne-warn) 18%, transparent); color:var(--ne-warn); }
+#notificationsModal .ne-item-actions{ display:flex; gap:8px; flex-wrap:wrap; margin-block-start:auto; }
+#notificationsModal .ne-empty, #notificationsModal .ne-state{ grid-column:1/-1; text-align:center; padding:26px 12px; color:var(--ne-muted); font-size:.9rem; }
+#notificationsModal .ne-state.err{ color:var(--ne-bad); }
+
+/* ---------- confirm dialog ---------- */
+#notificationsModal .ne-confirm{ position:fixed; inset:0; z-index:9999; display:grid; place-items:center; padding:16px; background:rgba(8,10,14,.62); backdrop-filter:blur(3px); }
+#notificationsModal .ne-confirm[hidden]{ display:none; }
+#notificationsModal .ne-conf-card{ width:min(440px,100%); border-radius:18px; padding:20px; background:var(--card, #fff); color:var(--text, #0F0F0F); border:1px solid var(--ne-line); box-shadow:0 24px 60px rgba(0,0,0,.4); max-height:90dvh; overflow:auto; }
+html[data-theme="dark"] #notificationsModal .ne-conf-card{ background:var(--card, #23252b); color:var(--text, #F8F8F8); }
+#notificationsModal .ne-conf-card h4{ margin:0 0 12px; font-size:1.05rem; }
+#notificationsModal .ne-conf-row{ display:flex; justify-content:space-between; gap:12px; padding:8px 0; border-block-end:1px dashed var(--ne-line); font-size:.9rem; }
+#notificationsModal .ne-conf-row span:first-child{ color:var(--ne-muted); flex:none; }
+#notificationsModal .ne-conf-row b{ text-align:end; overflow-wrap:anywhere; }
+#notificationsModal .ne-conf-warn{ margin-block-start:10px; font-size:.84rem; color:var(--ne-warn); line-height:1.5; }
+#notificationsModal .ne-conf-actions{ display:flex; gap:10px; margin-block-start:16px; }
+#notificationsModal .ne-conf-actions .btn{ flex:1; min-height:46px; }
+
+/* ---------- responsive ---------- */
+@media (max-width: 1000px){
+  #notificationsModal .ne-layout{ grid-template-columns:1fr; }
+  #notificationsModal .ne-prev-sticky{ position:static; }
+  #notificationsModal .ne-prev-col{ order:-1; }          /* preview first on tablet/phone */
+  #notificationsModal .ne-phone{ max-width:340px; margin-inline:auto; }
+}
+@media (max-width: 640px){
+  #notificationsModal .ne-box{ padding:13px; }
+  #notificationsModal .ne-stats{ grid-template-columns:1fr 1fr 1fr; }
+  #notificationsModal .ne-test-row{ flex-direction:column; }
+  #notificationsModal .ne-actions{ position:sticky; bottom:0; z-index:5; padding:10px 0 calc(10px + env(safe-area-inset-bottom,0px));
+    background:linear-gradient(to top, var(--bg, var(--card, #fff)) 70%, transparent); }
+  html[data-theme="dark"] #notificationsModal .ne-actions{ background:linear-gradient(to top, var(--bg, var(--card, #202020)) 70%, transparent); }
+  #notificationsModal .ne-only-narrow{ display:inline-flex; align-items:center; justify-content:center; }
+  #notificationsModal .ne-list{ grid-template-columns:1fr; }
+}
+@media (prefers-reduced-motion: reduce){
+  #notificationsModal .ne-skel, #notificationsModal .ne .btn.busy::after{ animation:none; }
+}

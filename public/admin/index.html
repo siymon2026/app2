@@ -1,0 +1,1271 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin</title>
+  <link rel="stylesheet" href="/brand.css" />
+    <link rel="stylesheet" href="/admin/admin.css">
+  <link rel="stylesheet" href="/pw-toggle.css">
+  <link rel="stylesheet" href="/admin/admin-dispatch.css" />
+  <link rel="stylesheet" href="/admin/admin-nav.css">
+  <link rel="stylesheet" href="/admin/admin-stores.css">
+  <link rel="stylesheet" href="/admin/admin-store-types.css">
+  <link rel="stylesheet" href="/admin/admin-enter.css?v=20261023">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+  <link rel="stylesheet" href="/admin/admin-support.css">
+  <link rel="stylesheet" href="/admin/admin-store-support.css?v=1">
+  <link rel="stylesheet" href="/admin/admin-exceptions.css?v=1">
+  <link rel="stylesheet" href="/admin/admin-system.css?v=1">
+  <link rel="stylesheet" href="/admin/admin-feedback.css?v=1">
+  <link rel="stylesheet" href="/shared/reports-ui.css?v=1">
+  <link rel="stylesheet" href="/admin/admin-orders.css">
+  <link rel="stylesheet" href="/admin/admin-customers.css">
+  <link rel="stylesheet" href="/reveal.css">
+  <link rel="stylesheet" href="/admin/admin-notifications.css">
+  <link rel="stylesheet" href="/admin/admin-login.css">
+</head>
+<body class="has-sb">
+  <aside class="sb" id="sideNav" aria-label="Navigation">
+    <div class="sb-top">
+      <div class="sb-logo"><img src="/icons/icon-192.png" alt="" width="36" height="36" /><span class="sb-name">siymon</span></div>
+      <button class="sb-toggle" id="sbToggle" type="button" aria-label="Collapse"><svg class="sb-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button>
+    </div>
+    <div class="sb-search" id="sbSearchWrap">
+      <button class="sb-search-btn" id="sbSearchBtn" type="button" data-key="search" aria-label="Search"><svg class="sb-ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></button>
+      <input id="sbSearch" type="search" autocomplete="off" data-i-ph="search" />
+    </div>
+    <nav class="sb-scroll" id="sbScroll">
+      <div class="sb-label" data-i="menu"></div>
+      <button class="sb-item active" type="button" data-key="home" id="sbHome"><svg class="sb-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg><span class="sb-text" data-i="home"></span><span class="sb-badge" hidden></span></button>
+      <button class="sb-item" type="button" data-key="drivers" data-src="driversBtn" data-text="driversText" data-modal="driversModal"><svg class="sb-ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="18.5" cy="17.5" r="3.5"/><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="15" cy="5" r="1"/><path d="M12 17.5V14l-3-3 4-3 2 3h2"/></svg><span class="sb-text" data-i="drivers"></span><span class="sb-badge" hidden></span></button>
+      <button class="sb-item" type="button" data-key="dispatch" data-src="dispatchBtn" data-text="dispatchText" data-modal="dispatchModal"><svg class="sb-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg><span class="sb-text" data-i="dispatch"></span><span class="sb-badge" hidden></span></button>
+      <button class="sb-item" type="button" data-key="customers" data-src="customersBtn" data-text="customersText" data-modal="customersModal"><svg class="sb-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg><span class="sb-text" data-i="customers"></span><span class="sb-badge" hidden></span></button>
+      <button class="sb-item" type="button" data-key="support" data-src="supportBtn" data-text="supportText" data-modal="supportModal"><svg class="sb-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg><span class="sb-text" data-i="support"></span><span class="sb-badge" hidden></span></button>
+      <button class="sb-item" type="button" data-key="storeSupport" data-src="storeSupportBtn" data-text="storeSupportText" data-modal="storeSupportModal"><svg class="sb-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="m2 7 4.4-4.4A2 2 0 0 1 7.8 2h8.4a2 2 0 0 1 1.4.6L22 7"/><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><path d="M9 22v-6h6v6"/></svg><span class="sb-text"></span><span class="sb-badge" hidden></span></button>
+      <button class="sb-item" type="button" data-key="exceptions" data-src="exceptionsBtn" data-text="exceptionsText" data-modal="exceptionsModal"><svg class="sb-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg><span class="sb-text"></span><span class="sb-badge" hidden></span></button>
+      <button class="sb-item" type="button" data-key="feedback" data-src="feedbackBtn" data-text="feedbackText" data-modal="feedbackModal"><svg class="sb-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.2 6.4 20.2l1.1-6.2L3 9.6l6.2-.9z"/></svg><span class="sb-text"></span><span class="sb-badge" hidden></span></button>
+      <button class="sb-item" type="button" data-key="reports" data-src="reportsBtn" data-text="reportsText" data-modal="reportsModal"><svg class="sb-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg><span class="sb-text"></span><span class="sb-badge" hidden></span></button>
+      <button class="sb-item" type="button" data-key="notifications" data-src="notificationsBtn" data-text="notificationsText" data-modal="notificationsModal"><svg class="sb-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><span class="sb-text" data-i="notifications"></span><span class="sb-badge" hidden></span></button>
+      <button class="sb-item" type="button" data-key="system" data-src="systemBtn" data-text="systemText" data-modal="systemModal"><svg class="sb-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 4 5v6c0 5 3.4 9.4 8 11 4.6-1.6 8-6 8-11V5z"/><path d="m9 12 2 2 4-4"/></svg><span class="sb-text"></span><span class="sb-badge" hidden></span></button>
+      <div class="sb-sep" role="separator"></div>
+      <button class="sb-item" type="button" data-key="settings" data-src="settingsBtn" data-text="settingsText" data-modal="settingsModal"><svg class="sb-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg><span class="sb-text" data-i="settings"></span><span class="sb-badge" hidden></span></button>
+      <div class="sb-label" data-i="group"></div>
+      <button class="sb-item sb-parent" type="button" data-key="menuManage" data-src="menuManageBtn" data-text="menuManageText" data-modal="menuModal" aria-expanded="false" aria-controls="sbSubMenu">
+        <span class="sb-tile t-orange"><svg class="sb-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7"/><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4"/><path d="M2 7h20"/></svg></span><span class="sb-text" data-i="menuManage"></span><span class="sb-badge" hidden></span><svg class="sb-ico sb-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+      <div class="sb-sub" id="sbSubMenu" hidden>
+        <button class="sb-subitem" type="button" data-key="subRest" data-tab="menuTabRestaurants" data-text="menuTabRestaurants"><span class="sb-text"></span></button>
+        <button class="sb-subitem" type="button" data-key="subMeals" data-tab="menuTabItems" data-text="menuTabItems"><span class="sb-text"></span></button>
+      </div>
+      <button class="sb-item" type="button" data-key="topups" data-src="topupsBtn" data-text="topupsText" data-modal="topupsModal"><span class="sb-tile t-green"><svg class="sb-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/></svg></span><span class="sb-text" data-i="topups"></span><span class="sb-badge" hidden></span></button>
+      <a class="sb-item" id="sbZones" href="/admin/zones/" data-key="zones"><span class="sb-tile t-green"><svg class="sb-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></span><span class="sb-text" data-i="zones"></span></a>
+      <a class="sb-item" id="sbPortal" href="/restaurant/" target="_blank" rel="noopener" data-key="portal" data-text="restaurantPortalText"><span class="sb-tile t-blue"><svg class="sb-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></span><span class="sb-text" data-i="portal"></span></a>
+    </nav>
+    <div class="sb-bottom">
+      <div class="sb-theme" role="group" aria-label="Theme">
+        <button type="button" data-set="light" data-key="light"><svg class="sb-ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2m-7.07-2.93 1.41-1.41M17.66 6.34l1.41-1.41M2 12h2M20 12h2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41"/></svg><span data-i="light"></span></button>
+        <button type="button" data-set="dark" data-key="dark"><svg class="sb-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg><span data-i="dark"></span></button>
+      </div>
+      <div class="sb-user">
+        <span class="sb-avatar" id="sbAvatar" data-key="user">A</span>
+        <div class="sb-user-text"><b id="sbUserName">—</b><small id="sbUserMail"></small></div>
+        <button class="sb-logout" id="sbLogout" type="button" data-key="logout" aria-label="Logout"><svg class="sb-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg></button>
+      </div>
+    </div>
+  </aside>
+  <div class="sb-backdrop" id="sbBackdrop"></div>
+  <div class="sb-tip" id="sbTip" role="tooltip"></div>
+
+  <header class="app-header">
+    <div class="wrap">
+      <div class="topbar">
+        <button class="hbtn hbtn-burger" id="navBurger" type="button" title="Menu" aria-label="Menu" aria-controls="sideNav" aria-expanded="false"></button>
+
+        <div class="brand">
+          <img class="logo-img" src="/icons/icon-192.png" alt="logo" width="40" height="40" />
+          <div class="brand-text">
+            <h1 id="adminBrand">siymon Admin</h1>
+            <p id="adminSubtitle">إدارة الطلبات والطباعة</p>
+          </div>
+        </div>
+
+        <div class="actions" role="toolbar" aria-label="Controls">
+          <button class="btn ghost hbtn hbtn-lang" id="adminLangToggle" type="button" title="Language" aria-label="Language">EN</button>
+          <button class="btn ghost hbtn hbtn-sound" id="soundToggle" type="button" title="Sound" aria-label="Sound">Sound ON</button>
+          <button class="btn ghost hbtn hbtn-rest" id="restToggleBtn" type="button" title="Restaurant" aria-label="Restaurant">Restaurant</button>
+          <button class="btn ghost hbtn hbtn-theme icon-btn" id="themeToggle" type="button" title="Theme" aria-label="Theme"></button>
+          <button class="btn hbtn hbtn-logout" id="logoutBtn" type="button" title="Logout" aria-label="Logout">Logout</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="admin-wrap">
+    <div class="admin-header">
+      <div class="kpi">
+        <span class="badge" id="kpiAll"><span class="dot"></span><span id="kpiAllText">All</span>: <b id="allCount">0</b></span>
+        <span class="badge" id="kpiNew"><span class="dot"></span><span id="kpiNewText">New</span>: <b id="newCount">0</b></span>
+      </div>
+      <div class="admin-actions">
+        <div class="admin-actions-main" aria-label="Navigation" id="legacyNav" hidden>
+          <button class="btn nav" id="driversBtn" type="button" title="Drivers"><span id="driversText">Drivers</span></button>
+          <button class="btn nav" id="dispatchBtn" type="button" title="Dispatch"><span id="dispatchText">Dispatch</span></button>
+          <button class="btn nav" id="customersBtn" type="button" title="Customers"><span id="customersText">Customers</span></button>
+          <button class="btn nav" id="supportBtn" type="button" title="Support"><span id="supportText">Support</span></button>
+          <button class="btn nav" id="storeSupportBtn" type="button" title="Store support"><span id="storeSupportText">Store support</span></button>
+          <button class="btn nav" id="exceptionsBtn" type="button" title="Exceptions"><span id="exceptionsText">Exceptions</span></button>
+          <button class="btn nav" id="systemBtn" type="button" title="System settings &amp; audit"><span id="systemText">System</span></button>
+          <button class="btn nav" id="feedbackBtn" type="button" title="Ratings & complaints"><span id="feedbackText">Ratings &amp; complaints</span></button>
+          <button class="btn nav" id="reportsBtn" type="button" title="Reports"><span id="reportsText">Reports</span></button>
+          <button class="btn nav" id="notificationsBtn" type="button" title="Notifications"><span id="notificationsText">Notifications</span></button>
+          <button class="btn nav" id="topupsBtn" type="button" title="Topups"><span id="topupsText">Topups</span></button>
+          <a class="btn nav" id="restaurantPortalBtn" href="/restaurant/" target="_blank" rel="noopener" title="Restaurant Portal"><span id="restaurantPortalText">Restaurant Portal</span></a>
+          <button class="btn nav" id="menuManageBtn" type="button" title="Menu"><span id="menuManageText">Menu</span></button>
+          <button class="btn nav primary" id="settingsBtn" type="button" title="Settings"><span id="settingsText">Settings</span></button>
+        </div>
+        <div class="admin-actions-tools" aria-label="Tools">
+          <button class="btn ghost" id="refreshBtn" type="button" title="Refresh"><span id="refreshText">Refresh</span></button>
+          <button class="btn ghost" id="btConnectBtn" type="button" title="Bluetooth"><span id="btText">Connect BT</span></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="ord-head">
+      <h2 id="ordersTitle">Orders</h2>
+      <p id="ordersFound" class="muted"></p>
+    </div>
+    <div class="ord-tabs" id="ordersTabs" role="tablist" aria-label="Order status">
+      <button type="button" class="ord-tab active" role="tab" data-tab="all"></button>
+      <button type="button" class="ord-tab" role="tab" data-tab="new"></button>
+      <button type="button" class="ord-tab" role="tab" data-tab="processing"></button>
+      <button type="button" class="ord-tab" role="tab" data-tab="done"></button>
+      <button type="button" class="ord-tab" role="tab" data-tab="canceled"></button>
+    </div>
+
+    <div class="panel-like filters">
+      <div class="filter-row">
+        <div class="input-row">
+          <label id="filterDayLabel" for="filterDate">Filter day</label>
+          <input type="date" id="filterDate" />
+        </div>
+
+        <div class="btn-row">
+          <button class="btn ghost small" id="todayBtn" type="button">Today</button>
+          <button class="btn ghost small" id="allBtn" type="button">All</button>
+        </div>
+
+        <div class="search-wrap">
+          <input type="text" id="searchInput" placeholder="Search by name / phone / address / ID" />
+        </div>
+      </div>
+      <div class="hint muted" id="filterHint"></div>
+    </div>
+
+    <div class="split" style="margin-top:14px">
+      <div class="ord-main">
+      <div class="table-wrap ord-wrap" aria-label="Orders list">
+        <table class="table ord-table" id="ordersTable">
+          <thead>
+            <tr>
+              <th id="thId">ID</th>
+              <th id="thTime">Time</th>
+              <th id="thCustomer">Customer</th>
+              <th id="thAddr">Address</th>
+              <th id="thTotal">Total</th>
+              <th id="thStatus">Status</th>
+              <th id="thActions">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="ordersBody"></tbody>
+        </table>
+      </div>
+      <div class="ord-pager" id="ordersPager" aria-label="Pagination"></div>
+      </div>
+
+      <div class="panel-like details-panel">
+        <h3 id="detailsTitle">Order details</h3>
+        <div id="detailsBox" class="muted">Select an order to view details.</div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Admin pages: every sidebar section renders here, inside the shared layout (sidebar + header stay in place) -->
+  <section class="admin-wrap admin-pages" id="adminPages" aria-live="polite">
+  <div class="modal page-view" id="settingsModal" data-page="settings">
+    <div class="modal-card">
+      <h3 id="settingsTitle">Settings</h3>
+
+      <div class="grid2">
+        <div class="input-row">
+          <label id="wifiEnabledLabel" for="wifiEnabled">Wi‑Fi printing</label>
+          <select id="wifiEnabled">
+            <option value="on">Enabled</option>
+            <option value="off">Disabled</option>
+          </select>
+        </div>
+
+        <div class="input-row">
+          <label id="restaurantModeLabel" for="restaurantMode">Restaurant</label>
+          <select id="restaurantMode">
+            <option value="auto">Auto</option>
+            <option value="open">Force open</option>
+            <option value="closed">Force closed</option>
+          </select>
+        </div>
+
+        <div class="input-row">
+          <label id="printerIpLabel" for="printerIp">Printer IP</label>
+          <input id="printerIp" type="text" placeholder="192.168.1.50" />
+        </div>
+
+        <div class="input-row">
+          <label id="printerPortLabel" for="printerPort">Printer Port</label>
+          <input id="printerPort" type="number" placeholder="9100" />
+        </div>
+
+        <div class="input-row" style="grid-column:1/-1">
+          <label id="couriersLabel" for="couriersInput">Couriers (WhatsApp numbers, one per line)</label>
+          <textarea id="couriersInput" rows="4"></textarea>
+        </div>
+
+        <div class="input-row">
+          <label id="bankAccountNameLabel" for="bankAccountName">Account name</label>
+          <input id="bankAccountName" type="text" placeholder="siymon" />
+        </div>
+
+        <div class="input-row">
+          <label id="driverWalletEnabledLabel" for="driverWalletEnabled">Driver wallet</label>
+          <select id="driverWalletEnabled">
+            <option value="on">Enabled</option>
+            <option value="off">Disabled</option>
+          </select>
+        </div>
+
+        <div class="input-row">
+          <label id="driverWalletChargeModeLabel" for="driverWalletChargeMode">Wallet deduction</label>
+          <select id="driverWalletChargeMode">
+            <option value="subtotal">Subtract order subtotal (no delivery)</option>
+            <option value="commission">Subtract fixed commission</option>
+            <option value="total">Subtract total (includes delivery)</option>
+          </select>
+        </div>
+
+        <div class="input-row">
+          <label id="driverCommissionLabel" for="driverCommissionPerOrder">Commission per order</label>
+          <input id="driverCommissionPerOrder" type="number" step="0.01" placeholder="0" />
+        </div>
+
+        <div class="input-row">
+          <label for="deliveryPricingMode">Delivery pricing · التسعير</label>
+          <select id="deliveryPricingMode">
+            <option value="flat">Flat fee per store · رسوم ثابتة لكل متجر</option>
+            <option value="distance">Road distance (per km) · حسب مسافة الطريق</option>
+          </select>
+        </div>
+        <div class="input-row">
+          <label for="deliveryPricePerKm">Price per km (0–50) · سعر الكيلومتر</label>
+          <input id="deliveryPricePerKm" type="number" step="0.01" min="0" max="50" placeholder="0" />
+        </div>
+        <div class="input-row">
+          <label for="deliveryBaseFee">Base fee (default 0) · رسوم أساسية</label>
+          <input id="deliveryBaseFee" type="number" step="0.01" min="0" max="100" placeholder="0" />
+        </div>
+        <div class="input-row">
+          <label for="deliveryMaxKm">Max distance km (1–60) · أقصى مسافة</label>
+          <input id="deliveryMaxKm" type="number" step="1" min="1" max="60" placeholder="15" />
+        </div>
+
+        <div class="input-row">
+          <label for="driverEarningsMode">Driver earnings · أرباح السائق</label>
+          <select id="driverEarningsMode">
+            <option value="delivery_fee">= Delivery fee (legacy) · = رسوم التوصيل</option>
+            <option value="formula">Base + per km (road) · أساسي + حسب المسافة</option>
+          </select>
+        </div>
+        <div class="input-row">
+          <label for="driverEarningBase">Driver base per delivery (0–200) · مبلغ أساسي للسائق</label>
+          <input id="driverEarningBase" type="number" step="0.01" min="0" max="200" placeholder="0" />
+        </div>
+        <div class="input-row">
+          <label for="driverEarningPerKm">Driver per km (0–50) · للسائق عن كل كم</label>
+          <input id="driverEarningPerKm" type="number" step="0.01" min="0" max="50" placeholder="0" />
+        </div>
+
+        <div class="input-row" style="grid-column:1/-1">
+          <label id="bankAccountLabel" for="bankAccount">Bank account (RIB/IBAN)</label>
+          <textarea id="bankAccount" rows="3" placeholder="RIB / IBAN ..."></textarea>
+        </div>
+        <div class="input-row" style="grid-column:1/-1; margin-top:6px">
+          <label id="policyRequireLabel" for="policyRequire">Require policy acceptance</label>
+          <select id="policyRequire">
+            <option value="on">Required</option>
+            <option value="off">Optional</option>
+          </select>
+        </div>
+
+        <div class="input-row" style="grid-column:1/-1">
+          <label id="policyArLabel" for="policyAr">Company policy (AR)</label>
+          <textarea id="policyAr" rows="5" placeholder="..."></textarea>
+        </div>
+
+        <div class="input-row" style="grid-column:1/-1">
+          <label id="policyFrLabel" for="policyFr">Company policy (FR)</label>
+          <textarea id="policyFr" rows="5" placeholder="..."></textarea>
+        </div>
+
+        <div class="input-row" style="grid-column:1/-1">
+          <label id="policyEnLabel" for="policyEn">Company policy (EN)</label>
+          <textarea id="policyEn" rows="5" placeholder="..."></textarea>
+        </div>
+
+        <!-- Offers banner -->
+        <div class="input-row" style="grid-column:1/-1">
+          <label id="bannersLabel" for="bannerUpload">Offers banner images</label>
+          <input id="bannerUpload" type="file" accept="image/*" multiple />
+          <div class="hint muted" id="bannerHint"></div>
+          <div class="banner-list" id="bannerList"></div>
+        </div>
+
+      </div>
+
+      <div class="row-actions" style="margin-top:12px">
+        <button class="btn good" id="saveCfgBtn" type="button"><span id="saveCfgText">Save</span></button>
+        <button class="btn ghost" id="closeCfgBtn" type="button"><span id="closeCfgText">Close</span></button>
+      </div>
+
+      <div class="hint" id="cfgHint"></div>
+
+      <div class="hint muted" style="margin-top:10px">
+        <b id="btHintTitle">Bluetooth printing:</b>
+        <span id="btHintText">Use Chrome/Edge on Android/Desktop. HTTPS is required for Web Bluetooth.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal page-view" id="menuModal" data-page="menu">
+    <div class="modal-card" style="max-width:980px">
+      <div class="row" style="justify-content:space-between;align-items:center;gap:10px">
+        <h3 id="menuTitle" style="margin:0">Restaurants & Menu</h3>
+        <button class="btn ghost" id="closeMenuBtn" type="button">✕</button>
+      </div>
+
+      <div class="tabs" style="margin-top:10px">
+        <button class="tab active" id="menuTabRestaurants" type="button">Restaurants</button>
+        <button class="tab" id="menuTabItems" type="button">Meals</button>
+        <button class="tab" id="menuTabHome" type="button">Home</button>
+      </div>
+
+      <!-- Home tab (categories / banners / sections) -->
+      <div id="menuPanelHome" style="margin-top:12px;display:none"></div>
+
+      <!-- Restaurants tab -->
+      <div id="menuPanelRestaurants" style="margin-top:12px">
+        <div class="panel-like" style="margin-bottom:12px">
+          <h4 id="restAddTitle" style="margin:0 0 10px 0">Add restaurant</h4>
+          <div class="grid2">
+            <div class="input-row">
+              <label for="restNameAr" id="restNameArLabel">Name (AR)</label>
+              <input id="restNameAr" type="text" placeholder="مطعم..." />
+            </div>
+            <div class="input-row">
+              <label for="restNameEn" id="restNameEnLabel">Name (EN)</label>
+              <input id="restNameEn" type="text" placeholder="Restaurant..." />
+            </div>
+            <div class="input-row">
+              <label for="restNameFr" id="restNameFrLabel">Name (FR)</label>
+              <input id="restNameFr" type="text" placeholder="Restaurant..." />
+            </div>
+            <div class="input-row">
+              <label for="restPhone" id="restPhoneLabel">Phone</label>
+              <input id="restPhone" type="tel" placeholder="06..." />
+            </div>
+            <div class="input-row" style="grid-column:1/-1">
+              <label for="restAddress" id="restAddressLabel">Address</label>
+              <input id="restAddress" type="text" placeholder="City, street..." />
+            </div>
+            <div class="input-row">
+              <label for="restActive" id="restActiveLabel">Active</label>
+              <select id="restActive">
+                <option value="1">Yes</option>
+                <option value="0">No</option>
+              </select>
+            </div>
+            <div class="input-row" style="align-self:end">
+              <button class="btn good" id="addRestBtn" type="button"><span id="addRestText">Add</span></button>
+            </div>
+          </div>
+          <div class="hint" id="restHint"></div>
+        </div>
+
+        <div class="panel-like">
+          <h4 id="restListTitle" style="margin:0 0 10px 0">Restaurants</h4>
+          <table class="table">
+            <thead>
+              <tr>
+                <th id="restThName">Name</th>
+                <th id="restThPhone">Phone</th>
+                <th id="restThLogin">Login</th>
+                <th id="restThPass">Password</th>
+                <th id="restThStatus">Status</th>
+                <th id="restThAct">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="restaurantsBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Meals tab -->
+      <div id="menuPanelItems" style="margin-top:12px;display:none">
+        <div class="panel-like" style="margin-bottom:12px">
+          <h4 id="itemAddTitle" style="margin:0 0 10px 0">Add meal</h4>
+          <div class="grid2">
+            <div class="input-row">
+              <label for="itemRestaurant" id="itemRestaurantLabel">Restaurant</label>
+              <select id="itemRestaurant"></select>
+            </div>
+            <div class="input-row">
+              <label for="itemPrice" id="itemPriceLabel">Price</label>
+              <input id="itemPrice" type="number" step="0.01" placeholder="0" />
+            </div>
+
+            <div class="input-row">
+              <label for="itemCat" id="itemCatLabel">Category key</label>
+              <input id="itemCat" type="text" placeholder="moroccan / italian ..." />
+            </div>
+            <div class="input-row">
+              <label for="itemImgFile" id="itemImgLabel">Meal image</label>
+              <input id="itemImgFile" type="file" accept="image/*" />
+              <img id="itemImgPrev" class="img-preview" alt="preview" style="display:none" />
+              <input id="itemImg" type="hidden" />
+              <div class="hint muted" id="itemImgHint"></div>
+            </div>
+
+            <div class="input-row">
+              <label for="itemCatAr" id="itemCatArLabel">Category (AR)</label>
+              <input id="itemCatAr" type="text" placeholder="مغربي..." />
+            </div>
+            <div class="input-row">
+              <label for="itemCatEn" id="itemCatEnLabel">Category (EN)</label>
+              <input id="itemCatEn" type="text" placeholder="Moroccan..." />
+            </div>
+            <div class="input-row">
+              <label for="itemCatFr" id="itemCatFrLabel">Category (FR)</label>
+              <input id="itemCatFr" type="text" placeholder="Marocain..." />
+            </div>
+
+            <div class="input-row">
+              <label for="itemNameAr" id="itemNameArLabel">Name (AR)</label>
+              <input id="itemNameAr" type="text" placeholder="اسم الوجبة..." />
+            </div>
+            <div class="input-row">
+              <label for="itemNameEn" id="itemNameEnLabel">Name (EN)</label>
+              <input id="itemNameEn" type="text" placeholder="Meal name..." />
+            </div>
+            <div class="input-row">
+              <label for="itemNameFr" id="itemNameFrLabel">Name (FR)</label>
+              <input id="itemNameFr" type="text" placeholder="Nom du plat..." />
+            </div>
+
+            <div class="input-row">
+              <label for="itemDescAr" id="itemDescArLabel">Description (AR)</label>
+              <input id="itemDescAr" type="text" placeholder="وصف..." />
+            </div>
+            <div class="input-row">
+              <label for="itemDescEn" id="itemDescEnLabel">Description (EN)</label>
+              <input id="itemDescEn" type="text" placeholder="Description..." />
+            </div>
+            <div class="input-row">
+              <label for="itemDescFr" id="itemDescFrLabel">Description (FR)</label>
+              <input id="itemDescFr" type="text" placeholder="Description..." />
+            </div>
+
+            <div class="input-row">
+              <label for="itemAvail" id="itemAvailLabel">Available</label>
+              <select id="itemAvail">
+                <option value="1">Yes</option>
+                <option value="0">No</option>
+              </select>
+            </div>
+            <div class="input-row" style="align-self:end">
+              <button class="btn good" id="addItemBtn" type="button"><span id="addItemText">Add</span></button>
+            </div>
+          </div>
+          <div class="hint" id="itemHint"></div>
+        </div>
+
+        <div class="panel-like">
+          <h4 id="itemListTitle" style="margin:0 0 10px 0">Meals</h4>
+          <table class="table">
+            <thead>
+              <tr>
+                <th id="itemThName">Name</th>
+                <th id="itemThRestaurant">Restaurant</th>
+                <th id="itemThPrice">Price</th>
+                <th id="itemThStatus">Status</th>
+                <th id="itemThAct">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="itemsBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal page-view" id="dispatchModal" data-page="dispatch">
+    <div class="modal-card dsp-card">
+      <div class="dsp-head">
+        <div><h3 id="dspTitle" style="margin:0"></h3><p class="muted" id="dspSub" style="margin:4px 0 0"></p></div>
+        <button class="btn ghost" id="dspClose" type="button" aria-label="Close">✕</button>
+      </div>
+      <div class="dsp-warn" id="dspWarn" hidden></div>
+      <div class="dsp-counts" id="dspCounts"></div>
+      <div class="dsp-grid">
+        <section class="dsp-panel">
+          <div id="dspMap" class="dsp-map"></div>
+          <div class="dsp-legend" id="dspLegend"></div>
+</section>
+        <section class="dsp-panel">
+          <h4 id="dspPendingTitle"></h4>
+          <div id="dspPending" class="dsp-list"></div>
+          <h4 id="dspDriversTitle"></h4>
+          <div class="dsp-filters" id="dspFilters"></div>
+          <div id="dspDrivers" class="dsp-list"></div>
+        </section>
+      </div>
+      <details class="dsp-panel dsp-settings" id="dspSettingsBox">
+        <summary id="dspSettingsTitle"></summary>
+        <div class="dsp-form">
+          <label><span id="dspLblMode"></span>
+            <select id="dspMode"><option value="pull"></option><option value="offers"></option></select></label>
+          <label class="dsp-check"><input type="checkbox" id="dspAuto" /><span id="dspLblAuto"></span></label>
+          <label><span id="dspLblTtl"></span><input type="number" id="dspTtl" min="10" max="120" step="5" /></label>
+          <label><span id="dspLblPickup"></span>
+            <span class="dsp-inline"><input id="dspPkLat" inputmode="decimal" placeholder="lat" /><input id="dspPkLng" inputmode="decimal" placeholder="lng" /><input id="dspPkName" placeholder="name" /></span></label>
+          <button class="btn" id="dspSave" type="button"></button>
+          <span class="muted" id="dspSaveMsg"></span>
+        </div>
+      </details>
+      <section class="dsp-panel">
+        <h4 id="dspEventsTitle"></h4>
+        <div id="dspEvents" class="dsp-events"></div>
+      </section>
+    </div>
+  </div>
+
+  <div class="modal page-view" id="driversModal" data-page="drivers">
+    <div class="modal-card cu-card" style="max-width:980px">
+      <div class="row cu-head" style="justify-content:space-between;align-items:center;gap:10px">
+        <div>
+          <h3 id="driversTitle" style="margin:0">Drivers</h3>
+          <p id="driversCount" class="muted cu-count"></p>
+        </div>
+        <div class="row" style="gap:10px">
+          <a class="btn ghost small" href="/driver/" target="_blank" rel="noopener" id="openDriverPortalLink">Driver Portal</a>
+          <button class="btn ghost" id="closeDriversBtn" type="button" aria-label="Close">✕</button>
+        </div>
+      </div>
+
+      <div class="ord-tabs" id="driversTabs" role="tablist" aria-label="Driver status" style="margin-top:12px">
+        <button class="ord-tab" type="button" role="tab" id="driversTabAll" data-dtab="all"></button>
+        <button class="ord-tab active" type="button" role="tab" id="driversTabPending" data-dtab="pending"></button>
+        <button class="ord-tab" type="button" role="tab" id="driversTabApproved" data-dtab="approved"></button>
+        <button class="ord-tab" type="button" role="tab" id="driversTabRejected" data-dtab="rejected"></button>
+        <button class="ord-tab" type="button" role="tab" id="driversTabSuspended" data-dtab="suspended"></button>
+      </div>
+
+      <div class="cu-toolbar">
+        <label class="cu-search">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+          <input id="drvSearch" type="search" autocomplete="off" placeholder="Search…" />
+        </label>
+        <select id="drvRange" class="cu-select" aria-label="Registration date">
+          <option value="all">All time</option>
+          <option value="today">Today</option>
+          <option value="7d">Last 7 days</option>
+          <option value="30d">Last 30 days</option>
+        </select>
+        <button class="cu-clear" id="drvClear" type="button" hidden>Clear</button>
+      </div>
+      <div class="hint muted cu-results" id="driversHint"></div>
+
+      <div class="cu-wrap">
+        <table class="table cu-table" style="min-width:900px">
+          <thead>
+            <tr>
+              <th id="dThName">Name</th>
+              <th id="dThEmail">Email</th>
+              <th id="dThPhone">Phone</th>
+              <th id="dThCard">Card</th>
+              <th id="dThStatus">Status</th>
+              <th id="dThCreated">Created</th>
+              <th id="dThActions">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="driversBody"></tbody>
+        </table>
+      </div>
+      <div class="ord-pager cu-pager" id="drvPager" aria-label="Pagination"></div>
+    </div>
+  </div>
+
+  <div class="modal page-view" id="customersModal" data-page="customers">
+    <div class="modal-card cu-card" style="max-width:980px">
+      <div class="row cu-head" style="justify-content:space-between;align-items:center;gap:10px">
+        <div>
+          <h3 id="customersTitle" style="margin:0">Customers</h3>
+          <p id="customersCount" class="muted cu-count"></p>
+        </div>
+        <button class="btn ghost" id="closeCustomersBtn" type="button" aria-label="Close">✕</button>
+      </div>
+
+      <div class="cu-toolbar">
+        <label class="cu-search">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+          <input id="custSearch" type="search" autocomplete="off" placeholder="Search…" />
+        </label>
+        <select id="custRange" class="cu-select" aria-label="Registration date">
+          <option value="all">All time</option>
+          <option value="today">Today</option>
+          <option value="7d">Last 7 days</option>
+          <option value="30d">Last 30 days</option>
+        </select>
+        <button class="cu-clear" id="custClear" type="button" hidden>Clear</button>
+      </div>
+      <div class="hint muted cu-results" id="customersHint"></div>
+
+      <div class="cu-wrap">
+        <table class="table cu-table">
+          <thead>
+            <tr>
+              <th id="cThName">Full name</th>
+              <th id="cThEmail">Email</th>
+              <th id="cThPhone">Phone</th>
+              <th id="cThCreated">Created</th>
+              <th id="cThActions">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="customersBody"></tbody>
+        </table>
+      </div>
+      <div class="ord-pager cu-pager" id="custPager" aria-label="Pagination"></div>
+    </div>
+  </div>
+
+  <div class="modal page-view" id="supportModal" data-page="support">
+    <div class="modal-card sc-card" role="dialog" aria-labelledby="supportTitle">
+      <aside class="sc-list">
+        <div class="sc-list-head">
+          <h3 id="supportTitle">Support</h3>
+          <div class="sc-head-actions">
+            <button class="sc-iconbtn" id="refreshSupportBtn" type="button" aria-label="Refresh" title="Refresh"><svg class="sc-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 0 1 15-6.7L21 8M21 3v5h-5M21 12a9 9 0 0 1-15 6.7L3 16M3 21v-5h5"/></svg></button>
+            <button class="sc-iconbtn" id="closeSupportBtn" type="button" aria-label="Close" title="Close"><svg class="sc-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+            <button class="sc-iconbtn sc-primary" id="scNewBtn" type="button" aria-label="New chat" title="New chat" aria-expanded="false"><svg class="sc-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
+          </div>
+        </div>
+        <label class="sc-search"><svg class="sc-ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><input id="scSearch" type="search" autocomplete="off" placeholder="Search" /></label>
+        <div class="sc-new" id="scNewPanel" hidden>
+          <label class="sc-search sc-search-sm"><svg class="sc-ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><input id="scNewSearch" type="search" autocomplete="off" placeholder="Search customer" /></label>
+          <div class="sc-new-list" id="scNewList"></div>
+        </div>
+        <div class="sc-section" id="supportConvosTitle">Conversations</div>
+        <div class="sc-items" id="supportConvosBody" role="list"></div>
+      </aside>
+
+      <section class="sc-chat">
+        <header class="sc-chat-head">
+          <button class="sc-iconbtn sc-back" id="scBack" type="button" aria-label="Back" title="Back"><svg class="sc-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button>
+          <span class="sc-avatar" id="scChatAvatar" aria-hidden="true"></span>
+          <div class="sc-who"><b id="supportChatWith">—</b><small id="supportChatMeta" class="muted"></small></div>
+          <a class="sc-iconbtn sc-primary sc-call" id="scCall" href="#" hidden aria-label="Call" title="Call"><svg class="sc-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg></a>
+        </header>
+        <div class="chat-box sc-msgs" id="supportChatBox" aria-live="polite"></div>
+        <div class="sc-composer">
+          <div class="sc-emoji" id="scEmojiPop" hidden role="listbox" aria-label="Emoji"></div>
+          <div class="sc-field">
+            <button class="sc-field-btn" id="scEmojiBtn" type="button" aria-label="Emoji" title="Emoji" aria-expanded="false"><svg class="sc-ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01"/></svg></button>
+            <input id="supportMsgInput" type="text" autocomplete="off" placeholder="Type a message..." />
+          </div>
+          <button class="sc-send" id="supportSendBtn" type="button" aria-label="Send" title="Send"><svg class="sc-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg></button>
+        </div>
+        <div class="hint sc-hint" id="supportHint"></div>
+      </section>
+    </div>
+  </div>
+
+  <div class="modal page-view" id="topupsModal" data-page="topups">
+    <div class="modal-card" style="max-width:980px">
+      <div class="row" style="justify-content:space-between;align-items:center;gap:10px">
+        <h3 id="topupsTitle" style="margin:0">Topups</h3>
+        <button class="btn ghost" id="closeTopupsBtn" type="button">✕</button>
+      </div>
+
+      <div class="panel-like" style="margin-top:12px">
+        <div class="row" style="justify-content:space-between;align-items:center">
+          <div class="row" style="gap:8px;align-items:center">
+            <b id="topupsListTitle">Topup requests</b>
+            <select id="topupsFilter">
+              <option value="all">All</option>
+              <option value="pending">Pending</option>
+              <option value="approved">Approved</option>
+              <option value="rejected">Rejected</option>
+            </select>
+          </div>
+          <button class="btn" id="refreshTopupsBtn" type="button">Refresh</button>
+        </div>
+        <div style="height:10px"></div>
+        <div style="overflow:auto; max-height:70vh">
+          <table class="table">
+            <thead>
+              <tr>
+                <th id="tThTime">Time</th>
+                <th id="tThDriver">Driver</th>
+                <th id="tThAmount">Amount</th>
+                <th id="tThStatus">Status</th>
+                <th id="tThReceipt">Receipt</th>
+                <th id="tThActions">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="topupsBody"></tbody>
+          </table>
+        </div>
+        <div class="hint" id="topupsHint"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal page-view" id="notificationsModal" data-page="notifications">
+    <div class="modal-card ne" style="max-width:1180px">
+      <div class="ne-head">
+        <div class="ne-head-t">
+          <span class="ne-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg></span>
+          <div>
+            <h3 id="notificationsTitle">Notifications</h3>
+            <p class="ne-sub" data-ne="subtitle"></p>
+          </div>
+        </div>
+        <button class="btn ne-close" id="closeNotifBtn" type="button"><span id="closeNotifText">Close</span></button>
+      </div>
+
+      <div class="ne-banner" id="neBanner" role="status" hidden></div>
+
+      <div class="ne-layout">
+        <!-- ============ Editor ============ -->
+        <div class="ne-col">
+          <section class="ne-box" aria-labelledby="neSecContent">
+            <h4 id="neSecContent" data-ne="secContent"></h4>
+
+            <div class="ne-field">
+              <div class="ne-lbl-row"><label id="notifTitleLabel" for="notifTitle" data-ne="fTitle"></label><span class="ne-count" id="neTitleCount" aria-live="off">0/120</span></div>
+              <input id="notifTitle" type="text" maxlength="120" autocomplete="off" data-ne-ph="phTitle" />
+              <div class="ne-err" id="neTitleErr" hidden></div>
+            </div>
+
+            <div class="ne-field">
+              <div class="ne-lbl-row"><label id="notifMsgLabel" for="notifMsg" data-ne="fMsg"></label><span class="ne-count" id="neMsgCount" aria-live="off">0/1000</span></div>
+              <textarea id="notifMsg" rows="4" maxlength="1000" data-ne-ph="phMsg"></textarea>
+              <div class="ne-err" id="neMsgErr" hidden></div>
+            </div>
+
+            <div class="ne-field">
+              <div class="ne-lbl-row"><label for="notifLink" data-ne="fLink"></label><span class="ne-opt" data-ne="optional"></span></div>
+              <input id="notifLink" type="text" inputmode="url" dir="ltr" autocomplete="off" maxlength="500" placeholder="/notifications/" />
+              <div class="ne-hint" data-ne="linkHint"></div>
+              <div class="ne-err" id="neLinkErr" hidden></div>
+            </div>
+
+            <div class="ne-field">
+              <div class="ne-lbl-row"><label id="notifImgLabel" for="notifImg" data-ne="fImg"></label><span class="ne-opt" data-ne="optional"></span></div>
+              <input id="notifImg" type="file" accept="image/jpeg,image/png,image/webp" hidden />
+              <div class="ne-drop" id="neDrop">
+                <button class="btn ne-pick" id="neImgPick" type="button">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="1.6"/><path d="m21 15-5-5L5 21"/></svg>
+                  <span data-ne="addImage"></span>
+                </button>
+                <div class="ne-thumb" id="neThumb" hidden>
+                  <img id="notifImgPrev" alt="" />
+                  <div class="ne-thumb-actions">
+                    <button class="btn" id="neImgReplace" type="button" data-ne="replaceImage"></button>
+                    <button class="btn ne-danger" id="neImgRemove" type="button" data-ne="removeImage"></button>
+                  </div>
+                </div>
+              </div>
+              <div class="ne-hint" id="notifImgHint"></div>
+              <div class="ne-err" id="neImgErr" hidden></div>
+            </div>
+          </section>
+
+          <section class="ne-box" aria-labelledby="neSecAud">
+            <h4 id="neSecAud" data-ne="secAudience"></h4>
+            <div class="ne-radios" role="radiogroup" aria-labelledby="neSecAud">
+              <label class="ne-radio"><input type="radio" name="neAudience" value="all" checked /><span><b data-ne="audAll"></b><small data-ne="audAllD"></small></span></label>
+              <label class="ne-radio"><input type="radio" name="neAudience" value="ordered" /><span><b data-ne="audOrdered"></b><small data-ne="audOrderedD"></small></span></label>
+              <label class="ne-radio"><input type="radio" name="neAudience" value="no_orders" /><span><b data-ne="audNoOrders"></b><small data-ne="audNoOrdersD"></small></span></label>
+            </div>
+            <div class="ne-stats" id="neStats" aria-live="polite"></div>
+          </section>
+
+          <section class="ne-box" aria-labelledby="neSecTest">
+            <h4 id="neSecTest" data-ne="secTest"></h4>
+            <p class="ne-hint" data-ne="testHint"></p>
+            <div class="ne-test-row">
+              <input id="neTestTarget" type="text" dir="ltr" autocomplete="off" data-ne-ph="phTest" />
+              <button class="btn" id="neTestBtn" type="button"><span data-ne="btnTest"></span></button>
+            </div>
+          </section>
+
+          <div class="ne-actions" id="neActions">
+            <button class="btn ne-only-narrow" id="nePreviewBtn" type="button"><span data-ne="btnPreview"></span></button>
+            <button class="btn" id="neDraftBtn" type="button"><span id="neDraftText" data-ne="btnDraft"></span></button>
+            <button class="btn good" id="sendNotifBtn" type="button"><span id="sendNotifText" data-ne="btnSend"></span></button>
+          </div>
+          <div class="ne-msg" id="notifHint" role="alert" aria-live="assertive"></div>
+          <button class="btn ne-link" id="neCancelEdit" type="button" hidden><span data-ne="cancelEdit"></span></button>
+        </div>
+
+        <!-- ============ Live preview ============ -->
+        <aside class="ne-col ne-prev-col" id="nePrevCol" aria-label="preview">
+          <div class="ne-prev-sticky">
+            <div class="ne-prev-title" data-ne="prevTitle"></div>
+            <div class="ne-phone" aria-hidden="false">
+              <div class="ne-phone-top"><span id="nePhoneTime">9:41</span><span class="ne-notch"></span><span class="ne-phone-st">●●●</span></div>
+              <div class="ne-notif" id="neNotif">
+                <div class="ne-notif-h">
+                  <img src="/icons/icon-192.png" alt="" width="20" height="20" />
+                  <span class="ne-app">SYMON</span>
+                  <span class="ne-when" data-ne="now"></span>
+                </div>
+                <div class="ne-notif-t" id="nePrevTitle" dir="auto"></div>
+                <div class="ne-notif-b" id="nePrevMsg" dir="auto"></div>
+                <img class="ne-notif-img" id="nePrevImg" alt="" hidden />
+              </div>
+              <div class="ne-opens" id="nePrevOpens" hidden></div>
+            </div>
+            <p class="ne-prev-note" data-ne="prevNote"></p>
+          </div>
+        </aside>
+      </div>
+
+      <!-- ============ History ============ -->
+      <section class="ne-box ne-history" aria-labelledby="notifListTitle">
+        <div class="ne-hist-head">
+          <h4 id="notifListTitle">Sent notifications</h4>
+          <div class="ne-tabs" role="tablist">
+            <button class="ne-tab on" id="neTabSent" role="tab" type="button" data-tab="sent"><span data-ne="tabSent"></span> <i id="neCntSent">0</i></button>
+            <button class="ne-tab" id="neTabDraft" role="tab" type="button" data-tab="draft"><span data-ne="tabDraft"></span> <i id="neCntDraft">0</i></button>
+          </div>
+        </div>
+        <div id="notifList" class="notif-list ne-list" aria-live="polite"></div>
+      </section>
+
+      <!-- ============ Confirm dialog ============ -->
+      <div class="ne-confirm" id="neConfirm" role="dialog" aria-modal="true" aria-labelledby="neConfTitle" hidden>
+        <div class="ne-conf-card">
+          <h4 id="neConfTitle"></h4>
+          <div class="ne-conf-body" id="neConfBody"></div>
+          <div class="ne-conf-actions">
+            <button class="btn" id="neConfCancel" type="button"><span data-ne="cancel"></span></button>
+            <button class="btn good" id="neConfOk" type="button"><span id="neConfOkText"></span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal page-view" id="reportsModal" data-page="reports"><div class="modal-card" role="dialog" aria-labelledby="rpTitle" style="padding:16px"><h3 id="rpTitle" style="margin:0 0 12px"></h3><div id="rpMount"></div></div></div>
+  </section>
+
+  <!-- Auth modal (glass split card) -->
+  <div class="modal" id="authModal">
+    <div class="modal-card ga-card" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+      <div class="ga-form">
+        <h3 id="authTitle" class="ga-title">Admin access</h3>
+
+        <div class="tabs ga-tabs">
+          <button class="tab active" id="tabLogin" type="button">Login</button>
+          <button class="tab" id="tabSignup" type="button">Sign up</button>
+        </div>
+
+        <div id="loginForm" class="grid2 ga-fields">
+          <div class="input-row ga-field" style="grid-column:1/-1">
+            <label id="loginIdLabel" for="loginId">Email أو Phone</label>
+            <span class="ga-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/></svg></span>
+            <input id="loginId" type="text" autocomplete="username" placeholder="admin@email.com أو 06..." />
+          </div>
+          <div class="input-row ga-field" style="grid-column:1/-1">
+            <label id="loginPassLabel" for="loginPassword">Password</label>
+            <span class="ga-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span>
+            <input id="loginPassword" type="password" autocomplete="current-password" placeholder="••••••••" data-no-pw-toggle />
+            <button class="ga-eye" type="button" data-ga-eye="loginPassword" aria-label="Show password" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button>
+          </div>
+          <button class="btn primary ga-submit" id="loginBtn" type="button" style="grid-column:1/-1"><span id="loginText">Login</span></button>
+        </div>
+
+        <div id="signupForm" class="grid2 ga-fields" style="display:none">
+          <div class="input-row ga-field">
+            <label id="signupEmailLabel" for="signupEmail">Email</label>
+            <input id="signupEmail" type="email" autocomplete="email" placeholder="admin@email.com" />
+          </div>
+          <div class="input-row ga-field">
+            <label id="signupPhoneLabel" for="signupPhone">Phone</label>
+            <input id="signupPhone" type="tel" autocomplete="tel" placeholder="06..." />
+          </div>
+          <div class="input-row ga-field">
+            <label id="signupPassLabel" for="signupPassword">Password</label>
+            <input id="signupPassword" type="password" autocomplete="new-password" placeholder="••••••••" data-no-pw-toggle />
+            <button class="ga-eye" type="button" data-ga-eye="signupPassword" aria-label="Show password" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button>
+          </div>
+          <div class="input-row ga-field">
+            <label id="signupPass2Label" for="signupPassword2">Confirm Password</label>
+            <input id="signupPassword2" type="password" autocomplete="new-password" placeholder="••••••••" data-no-pw-toggle />
+            <button class="ga-eye" type="button" data-ga-eye="signupPassword2" aria-label="Show password" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button>
+          </div>
+          <button class="btn good ga-submit" id="signupBtn" type="button"><span id="signupText">Create account</span></button>
+          <div class="hint muted" id="signupHint">If this is the first admin, signup is open. Otherwise it requires an admin login.</div>
+        </div>
+
+        <div class="hint ga-hint" id="authHint" role="alert" aria-live="polite"></div>
+      </div>
+
+      <div class="ga-welcome" aria-hidden="false">
+        <h2 id="gaWelcomeTitle">HELLO,<br>FRIEND!</h2>
+        <p id="gaWelcomeText">Enter your personal details and start your journey with us.</p>
+        <button class="ga-ghost" id="gaSwitchBtn" type="button"><span id="gaSwitchText">Create Account</span> <span aria-hidden="true">→</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Driver details modal -->
+  <div class="modal" id="driverViewModal">
+    <div class="modal-card" style="max-width:980px">
+      <div class="row" style="justify-content:space-between;align-items:center;gap:10px">
+        <h3 id="driverViewTitle" style="margin:0">Driver details</h3>
+        <button class="btn ghost" id="closeDriverViewBtn" type="button">✕</button>
+      </div>
+      <div id="driverViewBox" style="margin-top:12px"></div>
+    </div>
+  </div>
+
+  <!-- Image zoom modal (driver images) -->
+  <div class="modal" id="imgZoomModal">
+    <div class="modal-card" style="max-width:1100px">
+      <div class="row" style="justify-content:space-between;align-items:center;gap:10px">
+        <h3 id="imgZoomTitle" style="margin:0">تكبير الصورة</h3>
+        <button class="btn ghost" id="closeImgZoomBtn" type="button">✕</button>
+      </div>
+      <div class="zoom-toolbar" style="margin-top:10px">
+        <div class="row" style="gap:8px;flex-wrap:wrap">
+          <button class="btn ghost small" id="zoomOutBtn" type="button">−</button>
+          <button class="btn ghost small" id="zoomInBtn" type="button">+</button>
+          <button class="btn ghost small" id="zoomResetBtn" type="button">100%</button>
+          <span class="muted" id="zoomPct" style="font-size:12px">100%</span>
+        </div>
+        <a class="btn ghost small" id="zoomOpenBtn" href="#" target="_blank" rel="noopener">فتح</a>
+      </div>
+      <div class="zoom-stage" style="margin-top:12px">
+        <img id="imgZoomImg" alt="zoom" />
+      </div>
+    </div>
+  </div>
+
+  
+
+  <!-- Restaurant auth modal -->
+  <div class="modal" id="restAuthModal">
+    <div class="modal-card" style="max-width:720px">
+      <div class="row" style="justify-content:space-between;align-items:center;gap:10px">
+        <h3 id="restAuthTitle" style="margin:0">Restaurant Login</h3>
+        <button class="btn ghost" id="closeRestAuthBtn" type="button">✕</button>
+      </div>
+
+      <div class="panel-like" style="margin-top:12px">
+        <div class="hint" id="restAuthHint"></div>
+        <div class="grid" style="grid-template-columns:1fr 1fr;gap:12px">
+          <div class="field">
+            <label id="restAuthEmailLabel" for="restAuthEmail">Email</label>
+            <input id="restAuthEmail" type="email" placeholder="restaurant@example.com" />
+          </div>
+          <div class="field">
+            <label id="restAuthPhoneLabel" for="restAuthPhone">Phone</label>
+            <input id="restAuthPhone" type="tel" placeholder="06/07xxxxxxxx" />
+          </div>
+          <div class="field">
+            <label id="restAuthPassLabel" for="restAuthPass">Password</label>
+            <input id="restAuthPass" type="password" placeholder="••••••••" />
+          </div>
+          <div class="field">
+            <label id="restAuthPass2Label" for="restAuthPass2">Confirm password</label>
+            <input id="restAuthPass2" type="password" placeholder="••••••••" />
+          </div>
+        </div>
+        <div class="row" style="margin-top:12px;gap:10px;justify-content:flex-end">
+          <button class="btn" id="clearRestPassBtn" type="button">Clear Password</button>
+          <button class="btn good" id="saveRestAuthBtn" type="button">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Restaurant edit modal -->
+  <div class="modal" id="restEditModal">
+    <div class="modal-card" style="max-width:760px">
+      <div class="row" style="justify-content:space-between;align-items:center;gap:10px">
+        <h3 id="restEditTitle" style="margin:0">Edit restaurant</h3>
+        <button class="btn ghost" id="closeRestEditBtn" type="button">✕</button>
+      </div>
+
+      <div class="panel-like" style="margin-top:12px">
+        <div class="grid2">
+          <div class="input-row">
+            <label for="restEditNameAr" id="restEditNameArLabel">Name (AR)</label>
+            <input id="restEditNameAr" type="text" placeholder="مطعم..." />
+          </div>
+          <div class="input-row">
+            <label for="restEditNameEn" id="restEditNameEnLabel">Name (EN)</label>
+            <input id="restEditNameEn" type="text" placeholder="Restaurant..." />
+          </div>
+          <div class="input-row">
+            <label for="restEditNameFr" id="restEditNameFrLabel">Name (FR)</label>
+            <input id="restEditNameFr" type="text" placeholder="Restaurant..." />
+          </div>
+          <div class="input-row">
+            <label for="restEditPhone" id="restEditPhoneLabel">Phone</label>
+            <input id="restEditPhone" type="tel" placeholder="06..." />
+          </div>
+          <div class="input-row" style="grid-column:1/-1">
+            <label for="restEditAddress" id="restEditAddressLabel">Address</label>
+            <input id="restEditAddress" type="text" placeholder="City, street..." />
+          </div>
+          <div class="input-row">
+            <label for="restLogoFile">اللوغو / Logo</label>
+            <input id="restLogoFile" type="file" accept="image/*" />
+            <img id="restLogoPrev" alt="" style="display:none;width:64px;height:64px;border-radius:50%;object-fit:cover;margin-top:6px" />
+          </div>
+          <div class="input-row">
+            <label for="restCoverFile">صورة المطعم / Cover</label>
+            <input id="restCoverFile" type="file" accept="image/*" />
+            <img id="restCoverPrev" alt="" style="display:none;width:100%;max-height:110px;border-radius:12px;object-fit:cover;margin-top:6px" />
+          </div>
+          <div class="input-row">
+            <label for="restEditActive" id="restEditActiveLabel">Active</label>
+            <select id="restEditActive">
+              <option value="1">Yes</option>
+              <option value="0">No</option>
+            </select>
+          </div>
+          <div id="storesExtraFields" style="grid-column:1/-1"></div>
+        </div>
+
+        <div class="row" style="margin-top:12px;gap:10px;justify-content:flex-end">
+          <button class="btn good" id="saveRestEditBtn" type="button"><span id="saveRestEditText">Save</span></button>
+        </div>
+        <div class="hint" id="restEditHint"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Meal edit modal -->
+  <div class="modal" id="itemEditModal">
+    <div class="modal-card" style="max-width:980px">
+      <div class="row" style="justify-content:space-between;align-items:center;gap:10px">
+        <h3 id="itemEditTitle" style="margin:0">Edit meal</h3>
+        <button class="btn ghost" id="closeItemEditBtn" type="button">✕</button>
+      </div>
+
+      <div class="panel-like" style="margin-top:12px">
+        <div class="grid2">
+          <div class="input-row">
+            <label for="itemEditRestaurant" id="itemEditRestaurantLabel">Restaurant</label>
+            <select id="itemEditRestaurant"></select>
+          </div>
+          <div class="input-row">
+            <label for="itemEditPrice" id="itemEditPriceLabel">Price</label>
+            <input id="itemEditPrice" type="number" step="0.01" placeholder="0" />
+          </div>
+
+          <div class="input-row">
+            <label for="itemEditCat" id="itemEditCatLabel">Category key</label>
+            <input id="itemEditCat" type="text" placeholder="moroccan / italian ..." />
+          </div>
+          <div class="input-row">
+            <label for="itemEditImgFile" id="itemEditImgLabel">Meal image</label>
+            <input id="itemEditImgFile" type="file" accept="image/*" />
+            <img id="itemEditImgPrev" class="img-preview" alt="preview" style="display:none" />
+            <input id="itemEditImg" type="hidden" />
+            <div class="hint muted" id="itemEditImgHint"></div>
+          </div>
+
+          <div class="input-row">
+            <label for="itemEditCatAr" id="itemEditCatArLabel">Category (AR)</label>
+            <input id="itemEditCatAr" type="text" placeholder="مغربي..." />
+          </div>
+          <div class="input-row">
+            <label for="itemEditCatEn" id="itemEditCatEnLabel">Category (EN)</label>
+            <input id="itemEditCatEn" type="text" placeholder="Moroccan..." />
+          </div>
+          <div class="input-row">
+            <label for="itemEditCatFr" id="itemEditCatFrLabel">Category (FR)</label>
+            <input id="itemEditCatFr" type="text" placeholder="Marocain..." />
+          </div>
+
+          <div class="input-row">
+            <label for="itemEditNameAr" id="itemEditNameArLabel">Name (AR)</label>
+            <input id="itemEditNameAr" type="text" placeholder="اسم الوجبة..." />
+          </div>
+          <div class="input-row">
+            <label for="itemEditNameEn" id="itemEditNameEnLabel">Name (EN)</label>
+            <input id="itemEditNameEn" type="text" placeholder="Meal name..." />
+          </div>
+          <div class="input-row">
+            <label for="itemEditNameFr" id="itemEditNameFrLabel">Name (FR)</label>
+            <input id="itemEditNameFr" type="text" placeholder="Nom du plat..." />
+          </div>
+
+          <div class="input-row">
+            <label for="itemEditDescAr" id="itemEditDescArLabel">Description (AR)</label>
+            <input id="itemEditDescAr" type="text" placeholder="وصف..." />
+          </div>
+          <div class="input-row">
+            <label for="itemEditDescEn" id="itemEditDescEnLabel">Description (EN)</label>
+            <input id="itemEditDescEn" type="text" placeholder="Description..." />
+          </div>
+          <div class="input-row">
+            <label for="itemEditDescFr" id="itemEditDescFrLabel">Description (FR)</label>
+            <input id="itemEditDescFr" type="text" placeholder="Description..." />
+          </div>
+
+          <div class="input-row">
+            <label for="itemEditAvail" id="itemEditAvailLabel">Available</label>
+            <select id="itemEditAvail">
+              <option value="1">Yes</option>
+              <option value="0">No</option>
+            </select>
+          </div>
+          <div id="itemsExtraFields" style="grid-column:1/-1"></div>
+        </div>
+
+        <div class="row" style="margin-top:12px;gap:10px;justify-content:flex-end">
+          <button class="btn good" id="saveItemEditBtn" type="button"><span id="saveItemEditText">Save</span></button>
+        </div>
+        <div class="hint" id="itemEditHint"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+<!-- Order chat modal (Driver ↔ Customer) -->
+<div class="modal" id="orderChatModal">
+  <div class="modal-card" style="max-width:980px">
+    <div class="row" style="justify-content:space-between;align-items:center;gap:10px">
+      <h3 id="orderChatModalTitle" style="margin:0">Order Chat</h3>
+      <button class="btn ghost" id="closeOrderChatModalBtn" type="button">✕</button>
+    </div>
+
+    <div class="panel-like" style="margin-top:10px">
+      <div class="muted" id="orderChatParties"></div>
+    </div>
+
+    <div class="chat-box" id="orderChatModalBox" style="margin-top:12px"></div>
+
+    <div class="row" style="justify-content:space-between;align-items:center;gap:10px;margin-top:10px">
+      <button class="btn ghost small" id="refreshOrderChatBtn" type="button">Refresh</button>
+      <div class="hint muted" id="orderChatModalHint"></div>
+    </div>
+  </div>
+</div>
+
+  <script src="/pw-toggle.js"></script>
+  <script src="/admin/admin-login.js"></script>
+  <script src="/admin/admin-perms.js?v=20261026"></script>
+  <script src="/admin/admin-refresh.js?v=20261026"></script>
+  <script src="/admin/admin.js?v=20261026"></script>
+  <script src="/admin/admin-stores.js"></script>
+  <script src="/admin/admin-store-types.js"></script>
+  <script src="/admin/admin-enter.js?v=20261023"></script>
+  <div class="modal page-view" id="exceptionsModal" data-page="exceptions"></div>
+  <div class="modal page-view" id="systemModal" data-page="system"></div>
+  <div class="modal page-view" id="feedbackModal" data-page="feedback"></div>
+
+  <div class="modal page-view" id="storeSupportModal" data-page="storeSupport">
+    <div class="modal-card ss-card" role="dialog" aria-labelledby="ssTitle">
+      <div class="ss-head">
+        <h3 id="ssTitle">Store support</h3>
+        <div class="ss-tabs" role="tablist">
+          <button type="button" id="ssTabTickets" role="tab" class="on">Tickets<span class="ss-b" id="ssTicketBadge" hidden></span></button>
+          <button type="button" id="ssTabChannels" role="tab">Channels</button>
+        </div>
+        <button class="ss-ib" id="ssRefresh" type="button" aria-label="Refresh" title="Refresh">↻</button>
+        <button class="ss-ib" id="ssClose" type="button" aria-label="Close" title="Close">✕</button>
+      </div>
+      <div class="ss-body" id="ssBody">
+        <div class="ss-list">
+          <div class="ss-filters">
+            <select id="ssStatus" aria-label="Status"></select>
+            <input id="ssSearch" type="search" autocomplete="off" />
+          </div>
+          <div class="ss-items" id="ssItems"></div>
+        </div>
+        <div class="ss-thread">
+          <div class="ss-empty" id="ssEmpty">—</div>
+          <div id="ssThreadBox" style="display:flex;flex-direction:column;min-height:0;flex:1" hidden>
+            <div class="ss-thead">
+              <button class="ss-ib ss-back" id="ssBackBtn" type="button" aria-label="Back">‹</button>
+              <div><b id="ssWho"></b><small id="ssSubj"></small></div>
+              <button class="ss-btn" id="ssStatusBtn" type="button" data-to="closed"></button>
+            </div>
+            <div class="ss-msgs" id="ssMsgs"></div>
+            <div class="ss-compose">
+              <input id="ssInput" type="text" maxlength="2000" autocomplete="off" />
+              <button class="ss-btn pri" id="ssSend" type="button"></button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="ssChannels" hidden>
+        <div class="ss-tools"><p id="ssChNote"></p><button class="ss-btn pri" id="ssAddCh" type="button"></button></div>
+        <div class="ss-chlist" id="ssChList"></div>
+        <div class="ss-form" id="ssForm" hidden>
+          <div class="row">
+            <label><span data-ssl="kind">Type</span>
+              <select id="ssfKind"><option value="phone">Phone</option><option value="whatsapp">WhatsApp</option><option value="email">Email</option><option value="telegram">Telegram</option></select></label>
+            <label><span data-ssl="value">Number or address</span><input id="ssfValue" dir="ltr" maxlength="120" autocomplete="off" /></label>
+          </div>
+          <div class="row">
+            <label><span data-ssl="labelAr">Name (Arabic)</span><input id="ssfAr" maxlength="60" /></label>
+            <label><span data-ssl="labelFr">Name (French)</span><input id="ssfFr" maxlength="60" /></label>
+            <label><span data-ssl="labelEn">Name (English)</span><input id="ssfEn" maxlength="60" /></label>
+          </div>
+          <label><span data-ssl="hours">Hours</span><input id="ssfHours" maxlength="80" /></label>
+          <div class="chk">
+            <label><input type="checkbox" id="ssfA_stores" /><span data-ssl="stores">Stores</span></label>
+            <label><input type="checkbox" id="ssfA_drivers" /><span data-ssl="drivers">Drivers</span></label>
+            <label><input type="checkbox" id="ssfA_customers" /><span data-ssl="customers">Customers</span></label>
+            <label><input type="checkbox" id="ssfEnabled" checked /><span data-ssl="enabled">Enabled</span></label>
+          </div>
+          <div class="ss-tools"><span></span><span><button class="ss-btn" id="ssfCancel" type="button" data-ssl="cancel">Cancel</button> <button class="ss-btn pri" id="ssfSave" type="button" data-ssl="save">Save</button></span></div>
+        </div>
+      </div>
+      <div class="ss-hint" id="ssHint" role="alert"></div>
+    </div>
+  </div>
+
+  <script src="/admin/admin-staff.js?v=20261024"></script>
+  <script src="/admin/admin-promos.js?v=20261025"></script>
+  <script src="/admin/admin-payments.js?v=20261025"></script>
+  <script src="/admin/admin-notifications.js"></script>
+  <script src="/admin/admin-support.js"></script>
+  <script src="/admin/admin-store-support.js?v=1"></script>
+  <script src="/admin/admin-exceptions.js?v=1"></script>
+  <script src="/admin/admin-system.js?v=1"></script>
+  <script src="/admin/admin-feedback.js?v=1"></script>
+  <script src="/shared/reports-ui.js?v=1"></script>
+  <script src="/admin/admin-reports.js?v=1"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+  <script src="/shared/minimap.js?v=2"></script>
+  <script src="/admin/admin-dispatch.js"></script>
+  <script src="/admin/admin-nav.js?v=20261026"></script>
+  <script src="/reveal.js"></script>
+</body>
+</html>

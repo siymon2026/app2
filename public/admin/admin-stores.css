@@ -1,0 +1,17 @@
+.st-section{grid-column:1/-1;border-top:1px solid var(--border,rgba(128,128,128,.28));padding-top:12px;margin-top:4px}
+.st-section>h5{margin:0 0 8px;font-size:14px}
+.st-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.st-check{display:flex;align-items:center;gap:8px;min-height:40px}
+.st-check input{width:auto}
+.st-chips{display:flex;flex-wrap:wrap;gap:8px}
+.st-chips label{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border:1px solid var(--border,rgba(128,128,128,.35));border-radius:999px;cursor:pointer}
+.st-hours{display:grid;grid-template-columns:90px auto 1fr 1fr;gap:6px 10px;align-items:center}
+.st-bar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.st-bar input,.st-bar select{flex:1 1 140px;min-width:0}
+.st-badge{display:inline-block;padding:2px 8px;border-radius:999px;font-size:12px;border:1px solid currentColor}
+.st-badge.active{color:#16a34a}.st-badge.paused{color:#d97706}.st-badge.unpublished{color:#6b7280}.st-badge.archived{color:#b91c1c}
+.st-card{border:1px solid var(--border,rgba(128,128,128,.3));border-radius:12px;padding:12px;margin-bottom:10px}
+.st-card .st-grid{margin-bottom:8px}
+.st-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.st-img{width:72px;height:48px;border-radius:8px;object-fit:cover;background:rgba(128,128,128,.2)}
+.st-hint{font-size:12px;opacity:.75;margin-top:4px}

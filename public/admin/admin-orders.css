@@ -1,0 +1,130 @@
+/* =====================================================================
+   Orders list redesign (title, status tabs, rounded rows, pagination).
+   Scoped to .ord-* / #ordersTable only — sidebar, header and other pages are untouched.
+   Uses the admin tokens (--brand, --card, --text, --muted, --border) with fallbacks.
+   ===================================================================== */
+.ord-head{ margin:4px 0 12px; }
+.ord-head h2{ margin:0; font-size:26px; font-weight:800; color:var(--text,inherit); letter-spacing:.2px; }
+.ord-head p{ margin:2px 0 0; font-size:14px; color:var(--muted,#8b8b92); }
+
+/* status tabs */
+.ord-tabs{ display:flex; gap:4px; margin:0 0 12px; overflow-x:auto; scrollbar-width:none; border-bottom:1px solid var(--border,rgba(127,127,127,.22)); }
+.ord-tabs::-webkit-scrollbar{ display:none; }
+.ord-tab{
+  position:relative; flex:none; display:inline-flex; align-items:center; gap:8px; min-height:44px; padding:0 14px;
+  border:0; background:transparent; cursor:pointer; font:inherit; font-size:15px; font-weight:600; color:var(--muted,#8b8b92);
+  transition:color .15s;
+}
+.ord-tab:hover{ color:var(--text,inherit); }
+.ord-tab.active{ color:var(--brand-text,#5DD62C); }
+.ord-tab.active::after{ content:""; position:absolute; inset-inline:10px; bottom:-1px; height:2px; border-radius:2px; background:var(--brand,#5DD62C); }
+.ord-tab:focus-visible{ outline:2px solid var(--brand,#5DD62C); outline-offset:-2px; border-radius:8px; }
+.ord-count{
+  min-width:22px; height:20px; padding:0 6px; border-radius:999px; display:inline-grid; place-items:center;
+  font-size:12px; font-weight:700; background:rgba(127,127,127,.14); color:inherit;
+}
+.ord-tab.active .ord-count{ background:var(--brand,#5DD62C); color:#0F0F0F; }
+
+/* table: rounded separate rows */
+.ord-main{ min-width:0; }
+.ord-wrap{ overflow-x:auto; -webkit-overflow-scrolling:touch; max-width:100%; background:transparent; border:0; box-shadow:none; padding:0; }
+.ord-table{ width:100%; min-width:800px; border-collapse:separate; border-spacing:0 8px; background:transparent; }
+.ord-table thead th{
+  position:static; padding:12px 14px; font-size:12px; font-weight:700; text-align:start; white-space:nowrap;
+  color:var(--muted,#8b8b92); background:rgba(127,127,127,.09); border:0;
+}
+.ord-table thead th:first-child{ border-radius:12px 0 0 12px; }
+.ord-table thead th:last-child{ border-radius:0 12px 12px 0; }
+html[dir="rtl"] .ord-table thead th:first-child{ border-radius:0 12px 12px 0; }
+html[dir="rtl"] .ord-table thead th:last-child{ border-radius:12px 0 0 12px; }
+
+.ord-table tbody td{
+  padding:12px 14px; font-size:14px; vertical-align:middle; color:var(--text,inherit);
+  background:var(--card,transparent); border-block:1px solid var(--border,rgba(127,127,127,.22));
+  transition:background .15s, color .15s, border-color .15s;
+}
+.ord-table tbody td:first-child{ border-inline-start:1px solid var(--border,rgba(127,127,127,.22)); border-radius:12px 0 0 12px; }
+.ord-table tbody td:last-child{ border-inline-end:1px solid var(--border,rgba(127,127,127,.22)); border-radius:0 12px 12px 0; }
+html[dir="rtl"] .ord-table tbody td:first-child{ border-radius:0 12px 12px 0; }
+html[dir="rtl"] .ord-table tbody td:last-child{ border-radius:12px 0 0 12px; }
+.ord-table tbody tr{ cursor:pointer; }
+.ord-table tbody tr:hover td{ background:rgba(127,127,127,.07); border-color:rgba(127,127,127,.34); }
+
+.ord-id b{ font-weight:700; }
+.ord-time{ white-space:nowrap; }
+.ord-time .ord-d{ display:block; font-weight:600; }
+.ord-time small{ display:block; margin-top:2px; font-size:12px; color:var(--muted,#8b8b92); }
+.ord-cust{ min-width:130px; }
+.ord-cust b{ display:block; font-weight:700; }
+.ord-cust small{ display:block; margin-top:2px; font-size:12px; color:var(--muted,#8b8b92); }
+.ord-addr{ max-width:220px; }
+.ord-addr span{ display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; font-size:13px; color:var(--muted,#8b8b92); }
+.ord-total{ white-space:nowrap; }
+
+/* status = colored dot + label */
+.ord-status{
+  display:inline-flex; align-items:center; gap:8px; padding:0; background:transparent !important; border:0 !important;
+  box-shadow:none !important; font-size:13px; font-weight:600; white-space:nowrap; color:var(--sc,inherit) !important;
+}
+.ord-status::before{ content:""; width:9px; height:9px; border-radius:50%; background:var(--sc); box-shadow:0 0 0 3px color-mix(in srgb,var(--sc) 20%,transparent); flex:none; }
+.ord-status.new{ --sc:var(--brand,#5DD62C); }
+.ord-status.sent{ --sc:#3b82f6; }
+.ord-status.ready{ --sc:#06b6d4; }
+.ord-status.delivery{ --sc:#8b5cf6; }
+.ord-status.done{ --sc:#22c55e; }
+.ord-status.bad{ --sc:#ef4444; }
+
+/* actions */
+.ord-actions .row-actions{ display:flex; align-items:center; gap:6px; flex-wrap:nowrap; }
+.ord-ico{
+  width:34px; height:34px; padding:7px; flex:none; display:inline-grid; place-items:center; cursor:pointer;
+  border-radius:10px; border:0; background:rgba(127,127,127,.12); color:var(--text,inherit); transition:background .15s, color .15s;
+}
+.ord-ico svg{ width:100%; height:100%; fill:none; stroke:currentColor; stroke-width:1.9; stroke-linecap:round; stroke-linejoin:round; }
+.ord-ico:hover{ background:var(--brand,#5DD62C); color:#0F0F0F; }
+.ord-btn{
+  height:34px; padding:0 14px; border-radius:10px; border:0; cursor:pointer; font:inherit; font-size:13px; font-weight:700; white-space:nowrap;
+  transition:filter .15s, opacity .15s;
+}
+.ord-btn--accept{ background:#22c55e; color:#fff; }
+.ord-btn--done{ background:var(--brand,#5DD62C); color:#0F0F0F; }
+.ord-btn:hover:not(:disabled){ filter:brightness(1.08); }
+.ord-btn:disabled{ opacity:.35; cursor:not-allowed; }
+.ord-ico:focus-visible,.ord-btn:focus-visible,.ord-pg:focus-visible{ outline:2px solid var(--brand,#5DD62C); outline-offset:2px; }
+
+/* selected row: primary color highlight */
+.ord-table tbody tr.selected td{ background:var(--brand,#5DD62C); color:#0F0F0F; border-color:var(--brand,#5DD62C); }
+.ord-table tbody tr.selected .ord-time small,
+.ord-table tbody tr.selected .ord-cust small,
+.ord-table tbody tr.selected .ord-addr span{ color:rgba(255,255,255,.85); }
+.ord-table tbody tr.selected .ord-status{ color:#fff !important; }
+.ord-table tbody tr.selected .ord-status::before{ background:#fff; box-shadow:0 0 0 3px rgba(255,255,255,.3); }
+.ord-table tbody tr.selected .ord-ico{ background:rgba(255,255,255,.2); color:#fff; }
+.ord-table tbody tr.selected .ord-ico:hover{ background:#fff; color:var(--brand-text,#5DD62C); }
+.ord-table tbody tr.selected .ord-btn--done{ background:#fff; color:var(--brand-text,#5DD62C); }
+
+.ord-empty{ text-align:center !important; padding:32px 14px !important; color:var(--muted,#8b8b92) !important; border-radius:12px !important; border-inline-start:1px solid var(--border,rgba(127,127,127,.22)); border-inline-end:1px solid var(--border,rgba(127,127,127,.22)); }
+.ord-table tbody tr.ord-empty-row{ cursor:default; }
+.ord-table tbody tr.ord-empty-row:hover td{ background:var(--card,transparent); }
+
+/* pagination */
+.ord-pager{ display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-top:6px; padding:0 4px; }
+.ord-info{ font-size:13px; color:var(--muted,#8b8b92); }
+.ord-pages{ display:flex; align-items:center; gap:4px; }
+.ord-pg{
+  min-width:34px; height:34px; padding:0 8px; display:inline-grid; place-items:center; border:0; border-radius:10px; cursor:pointer;
+  background:transparent; color:var(--muted,#8b8b92); font:inherit; font-size:14px; font-weight:600; transition:background .15s, color .15s;
+}
+.ord-pg:hover:not(:disabled):not(.on){ background:rgba(127,127,127,.14); color:var(--text,inherit); }
+.ord-pg.on{ background:var(--brand,#5DD62C); color:#0F0F0F; }
+.ord-pg:disabled{ opacity:.35; cursor:not-allowed; }
+.ord-pg svg{ width:18px; height:18px; fill:none; stroke:currentColor; stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round; }
+html[dir="rtl"] .ord-pg-arrow svg{ transform:scaleX(-1); }
+.ord-pg-gap{ padding:0 4px; color:var(--muted,#8b8b92); }
+
+@media (max-width:640px){
+  .ord-head h2{ font-size:22px; }
+  .ord-tab{ padding:0 10px; font-size:14px; }
+  .ord-pager{ justify-content:center; }
+}
+@media (prefers-reduced-motion:reduce){ .ord-table td, .ord-tab, .ord-pg, .ord-ico, .ord-btn{ transition:none; } }

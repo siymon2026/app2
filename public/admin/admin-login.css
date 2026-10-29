@@ -1,0 +1,155 @@
+/* =====================================================================
+   Glassmorphism login (V2) — restyles #authModal only. Additive: loads after admin.css.
+   Uses the admin tokens: --brand (#5DD62C fallback), dark surface #202020, --text, --muted.
+   ===================================================================== */
+#authModal{
+  --ga-brand:var(--brand,#5DD62C);
+  --ga-brand2:#5DD62C;
+  --ga-text:#F8F8F8;
+  --ga-muted:#a3a5ad;
+  --ga-line:rgba(255,255,255,.14);
+  --ga-glass:rgba(44,46,51,.55);
+  --ga-field:rgba(255,255,255,.06);
+  --ga-bad:#f87171;
+}
+
+/* backdrop: dark scene with faceted "shards" */
+#authModal.show{
+  position:fixed; inset:0; z-index:200; display:grid; place-items:center; padding:16px; overflow:auto;
+  background:
+    radial-gradient(60% 50% at 20% 10%, rgba(93,214,44,.16), transparent 60%),
+    radial-gradient(50% 45% at 90% 95%, rgba(255,255,255,.07), transparent 60%),
+    #0b0b0d;
+}
+#authModal.show::before,
+#authModal.show::after{
+  content:""; position:fixed; inset:0; pointer-events:none;
+  background:
+    linear-gradient(115deg, transparent 0 18%, rgba(255,255,255,.07) 18.2%, transparent 18.6% 100%),
+    linear-gradient(62deg, transparent 0 42%, rgba(255,255,255,.06) 42.2%, transparent 42.7% 100%),
+    linear-gradient(140deg, transparent 0 66%, rgba(255,255,255,.08) 66.2%, transparent 66.7% 100%),
+    linear-gradient(160deg, #17181b 0 30%, #101113 30% 55%, #1b1c20 55% 78%, #0e0f11 78% 100%);
+  opacity:.9; clip-path:polygon(0 0,100% 0,100% 100%,0 100%);
+}
+#authModal.show::after{
+  background:linear-gradient(200deg, transparent 0 35%, rgba(255,255,255,.05) 35% 36%, transparent 36% 100%),
+             linear-gradient(20deg, transparent 0 58%, rgba(93,214,44,.10) 58% 58.6%, transparent 58.6% 100%);
+}
+
+/* glass card */
+#authModal .ga-card{
+  position:relative; z-index:1; display:grid; grid-template-columns:1.05fr .95fr;
+  width:min(900px,100%); min-height:440px; max-width:none; padding:0; margin:0; overflow:hidden;
+  border-radius:22px; border:1px solid var(--ga-line); color:var(--ga-text);
+  background:linear-gradient(135deg,rgba(255,255,255,.10),rgba(255,255,255,.03)),var(--ga-glass);
+  -webkit-backdrop-filter:blur(26px) saturate(140%); backdrop-filter:blur(26px) saturate(140%);
+  box-shadow:0 30px 80px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,255,255,.12);
+  animation:ga-in .45s cubic-bezier(.2,.8,.2,1);
+}
+@keyframes ga-in{ from{ opacity:0; transform:translateY(14px) scale(.985);} to{ opacity:1; transform:none; } }
+
+/* left: form */
+#authModal .ga-form{ padding:44px 40px; display:flex; flex-direction:column; justify-content:center; gap:14px; min-width:0; }
+#authModal .ga-title{ margin:0 0 6px; font-size:28px; font-weight:800; letter-spacing:.2px; color:var(--ga-text); }
+#authModal .ga-tabs{ display:none; }
+#authModal .ga-fields{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+#authModal #loginForm.ga-fields{ grid-template-columns:1fr; }
+
+#authModal .ga-field{ position:relative; margin:0; }
+#authModal .ga-field label{
+  display:block; margin:0 0 4px; font-size:12px; font-weight:600; color:var(--ga-muted);
+}
+#authModal .ga-field input{
+  width:100%; height:46px; box-sizing:border-box; border:0; border-bottom:1px solid var(--ga-line); border-radius:10px 10px 0 0;
+  background:var(--ga-field); color:var(--ga-text); font:inherit; font-size:15px; padding:0 14px; outline:0;
+  transition:border-color .2s, background .2s, box-shadow .2s;
+}
+#authModal .ga-field input::placeholder{ color:rgba(255,255,255,.35); }
+#authModal .ga-field input:hover{ background:rgba(255,255,255,.09); }
+#authModal .ga-field input:focus{ border-bottom-color:var(--ga-brand); background:rgba(255,255,255,.10); box-shadow:0 8px 20px -12px var(--ga-brand); }
+#authModal #loginForm .ga-field input{ padding-inline-start:42px; padding-inline-end:44px; }
+#authModal #signupForm .ga-field input[type=password]{ padding-inline-end:44px; }
+#authModal .ga-ico{ position:absolute; inset-inline-start:13px; bottom:13px; width:18px; height:18px; color:var(--ga-muted); pointer-events:none; }
+#authModal .ga-ico svg, #authModal .ga-eye svg{ width:100%; height:100%; fill:none; stroke:currentColor; stroke-width:1.9; stroke-linecap:round; stroke-linejoin:round; }
+#authModal .ga-field:focus-within .ga-ico{ color:var(--ga-brand); }
+#authModal .ga-eye{
+  position:absolute; inset-inline-end:6px; bottom:5px; width:36px; height:36px; padding:8px; border:0; border-radius:8px;
+  background:transparent; color:var(--ga-muted); cursor:pointer; transition:color .2s, background .2s;
+}
+#authModal .ga-eye:hover{ color:var(--ga-text); background:rgba(255,255,255,.08); }
+#authModal .ga-eye.on{ color:var(--ga-brand); }
+#authModal .ga-eye:focus-visible,#authModal .ga-ghost:focus-visible,#authModal .ga-submit:focus-visible{ outline:2px solid var(--ga-brand); outline-offset:2px; }
+
+/* glass buttons */
+#authModal .ga-submit{
+  height:48px; margin-top:6px; border-radius:999px; font-weight:700; font-size:15px; color:#fff; cursor:pointer;
+  border:1px solid rgba(255,255,255,.22); background:linear-gradient(135deg,rgba(255,255,255,.14),rgba(255,255,255,.05));
+  box-shadow:0 10px 24px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.18);
+  transition:transform .15s, background .2s, border-color .2s, box-shadow .2s;
+}
+#authModal .ga-submit:hover:not(:disabled){
+  transform:translateY(-1px); border-color:var(--ga-brand);
+  background:linear-gradient(135deg,var(--ga-brand),var(--ga-brand2)); box-shadow:0 12px 28px -8px var(--ga-brand);
+}
+#authModal .ga-submit:active:not(:disabled){ transform:translateY(0); }
+#authModal .ga-submit:disabled{ cursor:progress; opacity:.75; }
+#authModal .is-busy .ga-submit{ position:relative; }
+#authModal .is-busy .ga-submit span{ opacity:.55; }
+#authModal .is-busy .ga-submit::after{
+  content:""; position:absolute; inset-block:0; inset-inline-end:18px; margin:auto; width:16px; height:16px; border-radius:50%;
+  border:2px solid rgba(255,255,255,.35); border-top-color:#fff; animation:ga-spin .7s linear infinite;
+}
+@keyframes ga-spin{ to{ transform:rotate(360deg);} }
+
+#authModal #signupHint{ grid-column:1/-1; font-size:12px; color:var(--ga-muted); }
+#authModal .ga-hint{ min-height:20px; font-size:13px; color:var(--ga-bad); }
+#authModal .ga-hint:empty{ min-height:0; }
+
+/* right: welcome panel, slanted divider */
+#authModal .ga-welcome{
+  position:relative; display:flex; flex-direction:column; justify-content:center; align-items:flex-start; gap:14px; padding:44px 48px;
+  background:linear-gradient(160deg,rgba(255,255,255,.08),rgba(255,255,255,.02));
+  border-inline-start:1px solid var(--ga-line);
+  clip-path:polygon(9% 0,100% 0,100% 100%,0 100%);
+}
+html[dir="rtl"] #authModal .ga-welcome{ clip-path:polygon(0 0,91% 0,100% 100%,0 100%); }
+#authModal .ga-welcome::before{
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background:radial-gradient(70% 60% at 80% 85%,rgba(93,214,44,.22),transparent 65%);
+}
+#authModal .ga-welcome h2{ margin:0; position:relative; font-size:30px; line-height:1.15; font-weight:800; letter-spacing:.3px; color:#fff; }
+#authModal .ga-welcome p{ margin:0; position:relative; max-width:240px; font-size:14px; line-height:1.55; color:var(--ga-muted); }
+#authModal .ga-ghost{
+  position:relative; margin-top:6px; height:42px; padding:0 22px; border-radius:999px; cursor:pointer; font:inherit; font-weight:600; font-size:14px; color:#fff;
+  border:1px solid rgba(255,255,255,.28); background:rgba(255,255,255,.07); transition:background .2s, border-color .2s, transform .15s;
+}
+#authModal .ga-ghost:hover{ background:rgba(255,255,255,.14); border-color:var(--ga-brand); transform:translateY(-1px); }
+
+/* phone / narrow: single column, tabs replace the welcome panel */
+@media (max-width:720px){
+  #authModal.show{ place-items:start center; padding:12px; }
+  #authModal .ga-card{ grid-template-columns:1fr; min-height:0; margin-block:auto; border-radius:20px; }
+  #authModal .ga-form{ padding:28px 20px 24px; }
+  #authModal .ga-title{ font-size:24px; }
+  #authModal .ga-tabs{
+    display:flex; gap:4px; padding:4px; margin:0 0 4px; border-radius:999px; background:var(--ga-field); border:1px solid var(--ga-line);
+  }
+  #authModal .ga-tabs .tab{
+    flex:1; height:40px; border:0; border-radius:999px; background:transparent; color:var(--ga-muted); font:inherit; font-weight:600; cursor:pointer;
+  }
+  #authModal .ga-tabs .tab.active{ background:linear-gradient(135deg,var(--ga-brand),var(--ga-brand2)); color:#0F0F0F; }
+  #authModal .ga-fields, #authModal #signupForm.ga-fields{ grid-template-columns:1fr; }
+  #authModal .ga-field input{ height:50px; font-size:16px; } /* 16px avoids iOS zoom */
+  #authModal .ga-submit{ height:52px; }
+  #authModal .ga-welcome{ display:none; }
+}
+
+@media (prefers-reduced-motion:reduce){
+  #authModal .ga-card{ animation:none; }
+  #authModal .is-busy .ga-submit::after{ animation-duration:2s; }
+  #authModal *{ transition:none !important; }
+}
+/* browsers without backdrop-filter */
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  #authModal .ga-card{ background:rgba(34,36,40,.96); }
+}

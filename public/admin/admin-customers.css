@@ -1,0 +1,98 @@
+/* =====================================================================
+   Customers list (inside #customersModal): toolbar, rounded rows, avatars, actions.
+   Scoped to .cu-* — reuses .ord-ico / .ord-pg / .ord-time from admin-orders.css.
+   ===================================================================== */
+.cu-head h3{ font-size:24px; font-weight:800; }
+.cu-count{ margin:2px 0 0; font-size:14px; color:var(--muted,#8b8b92); }
+
+.cu-toolbar{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin:14px 0 6px; }
+.cu-search{
+  position:relative; flex:1 1 240px; max-width:380px; display:block; margin:0;
+}
+.cu-search svg{
+  position:absolute; inset-inline-start:13px; top:50%; transform:translateY(-50%); width:18px; height:18px; pointer-events:none;
+  fill:none; stroke:var(--muted,#8b8b92); stroke-width:2; stroke-linecap:round; stroke-linejoin:round;
+}
+.cu-search input{
+  width:100%; box-sizing:border-box; height:44px; padding:0 14px; padding-inline-start:42px; border-radius:12px;
+  border:1px solid var(--border,rgba(127,127,127,.25)); background:rgba(127,127,127,.07); color:var(--text,inherit); font:inherit; font-size:14px; outline:0;
+  transition:border-color .15s, box-shadow .15s, background .15s;
+}
+.cu-search input:focus{ border-color:var(--brand,#5DD62C); background:transparent; box-shadow:0 0 0 3px color-mix(in srgb,var(--brand,#5DD62C) 22%,transparent); }
+.cu-select{
+  height:44px; padding:0 36px 0 14px; padding-inline-end:36px; border-radius:12px; cursor:pointer; font:inherit; font-size:14px; font-weight:600;
+  border:1px solid var(--border,rgba(127,127,127,.25)); background-color:rgba(127,127,127,.07); color:var(--text,inherit); outline:0;
+  transition:border-color .15s, box-shadow .15s;
+}
+.cu-select:focus-visible{ border-color:var(--brand,#5DD62C); box-shadow:0 0 0 3px color-mix(in srgb,var(--brand,#5DD62C) 22%,transparent); }
+.cu-clear{
+  height:44px; padding:0 14px; border:0; border-radius:12px; cursor:pointer; font:inherit; font-size:13px; font-weight:700;
+  background:transparent; color:var(--brand-text,#5DD62C);
+}
+.cu-clear:hover{ background:color-mix(in srgb,var(--brand,#5DD62C) 12%,transparent); }
+.cu-clear:focus-visible{ outline:2px solid var(--brand,#5DD62C); outline-offset:2px; }
+.cu-results{ min-height:18px; margin:0 2px 4px; font-size:13px; }
+.cu-results:empty{ min-height:0; margin:0; }
+
+/* table */
+.cu-wrap{ overflow-x:auto; max-width:100%; -webkit-overflow-scrolling:touch; }
+.cu-table{ width:100%; min-width:680px; border-collapse:separate; border-spacing:0 8px; background:transparent; }
+.cu-table thead th{
+  position:static; padding:12px 14px; font-size:12px; font-weight:700; text-align:start; white-space:nowrap;
+  color:var(--muted,#8b8b92); background:rgba(127,127,127,.09); border:0;
+}
+.cu-table thead th:first-child{ border-radius:12px 0 0 12px; }
+.cu-table thead th:last-child{ border-radius:0 12px 12px 0; }
+html[dir="rtl"] .cu-table thead th:first-child{ border-radius:0 12px 12px 0; }
+html[dir="rtl"] .cu-table thead th:last-child{ border-radius:12px 0 0 12px; }
+.cu-table tbody td{
+  padding:11px 14px; font-size:14px; vertical-align:middle; color:var(--text,inherit); background:var(--card,transparent);
+  border-block:1px solid var(--border,rgba(127,127,127,.22)); transition:background .15s, border-color .15s;
+}
+.cu-table tbody td:first-child{ border-inline-start:1px solid var(--border,rgba(127,127,127,.22)); border-radius:12px 0 0 12px; }
+.cu-table tbody td:last-child{ border-inline-end:1px solid var(--border,rgba(127,127,127,.22)); border-radius:0 12px 12px 0; }
+html[dir="rtl"] .cu-table tbody td:first-child{ border-radius:0 12px 12px 0; }
+html[dir="rtl"] .cu-table tbody td:last-child{ border-radius:12px 0 0 12px; }
+.cu-table tbody tr:hover td{ background:rgba(127,127,127,.07); border-color:rgba(127,127,127,.34); }
+
+.cu-name{ min-width:170px; }
+.cu-who{ display:flex; align-items:center; gap:12px; }
+.cu-name b{ font-weight:700; }
+.cu-avatar{
+  position:relative; flex:none; width:36px; height:36px; border-radius:50%; overflow:hidden; display:grid; place-items:center;
+  font-size:13px; font-weight:800; letter-spacing:.3px; color:var(--brand-text,#5DD62C);
+  background:color-mix(in srgb,var(--brand,#5DD62C) 16%,transparent);
+}
+.cu-avatar img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+.cu-link,.cu-tel{ color:var(--brand-text,#5DD62C); text-decoration:none; font-weight:500; overflow-wrap:anywhere; }
+.cu-tel{ color:inherit; word-break:normal; white-space:nowrap; unicode-bidi:plaintext; }
+.cu-link:hover,.cu-tel:hover{ text-decoration:underline; }
+.cu-actions{ white-space:nowrap; }
+.cu-actions .ord-ico{ margin-inline-end:6px; }
+.cu-actions .ord-ico:last-child{ margin-inline-end:0; }
+.cu-empty{ text-align:center; padding:32px 14px !important; color:var(--muted,#8b8b92) !important; border-radius:12px !important; border-inline:1px solid var(--border,rgba(127,127,127,.22)); }
+.cu-table tbody tr.cu-empty-row:hover td{ background:var(--card,transparent); }
+.cu-pager{ margin-top:4px; }
+
+@media (max-width:640px){
+  .cu-toolbar{ gap:8px; }
+  .cu-search{ flex:1 1 100%; max-width:none; }
+  .cu-select{ flex:1 1 auto; }
+  .cu-search input,.cu-select{ font-size:16px; }
+  .cu-pager{ justify-content:center; }
+}
+@media (prefers-reduced-motion:reduce){ .cu-table td,.cu-search input,.cu-select{ transition:none; } }
+
+/* keep the card inside the viewport so only the table area scrolls horizontally */
+#customersModal .cu-card, #driversModal .cu-card{ width:100%; box-sizing:border-box; min-width:0; max-height:calc(100vh - 24px); overflow-y:auto; }
+#customersModal .cu-wrap, #driversModal .cu-wrap{ min-width:0; }
+
+/* Drivers list shares the customer list styles above; extras: status dot + card number + reject button */
+.ord-status.dr-pending{ --sc:#f59e0b; }
+.ord-status.dr-approved{ --sc:#22c55e; }
+.ord-status.dr-rejected{ --sc:#ef4444; }
+.dr-card{ white-space:nowrap; font-variant-numeric:tabular-nums; }
+.ord-btn--reject{ background:rgba(239,68,68,.14); color:#ef4444; }
+.cu-actions .ord-btn{ margin-inline-start:6px; }
+.cu-actions .ord-ico,.cu-actions .ord-btn{ vertical-align:middle; }
+.cu-link{ min-width:150px; display:inline-block; }

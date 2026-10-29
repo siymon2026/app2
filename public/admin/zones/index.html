@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex">
+  <title>SIYMON — Service zones</title>
+  <link rel="stylesheet" href="/brand.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+  <link rel="stylesheet" href="/admin/zones/zones.css?v=1">
+  <script src="/theme-boot.js?v=1"></script>
+</head>
+<body>
+  <header class="zn-top">
+    <a class="zn-back" id="znBack" href="/admin/index.html"></a>
+    <h1 id="znTitle"></h1>
+    <span class="zn-spacer"></span>
+    <select id="znLang" aria-label="Language"><option value="ar">العربية</option><option value="fr">Français</option><option value="en">English</option></select>
+  </header>
+
+  <p class="zn-note" id="znRoleNote" hidden></p>
+  <p class="zn-banner" id="znSeedNote" hidden></p>
+
+  <main class="zn-main">
+    <aside class="zn-side" aria-label="Zones">
+      <div class="zn-side-head">
+        <strong id="znListTitle"></strong>
+        <button class="zn-btn pri" id="znNew" type="button"></button>
+      </div>
+      <ul class="zn-list" id="znList"></ul>
+      <p class="zn-empty" id="znEmpty" hidden></p>
+      <div class="zn-test">
+        <strong id="znTestTitle"></strong>
+        <p id="znTestHelp" class="zn-muted"></p>
+        <button class="zn-btn" id="znTestBtn" type="button"></button>
+        <div id="znTestOut" class="zn-testout" role="status" aria-live="polite"></div>
+      </div>
+    </aside>
+
+    <section class="zn-mapwrap">
+      <div id="znMap" role="application"></div>
+      <div class="zn-maptools" id="znTools" hidden>
+        <button class="zn-btn" id="znDraw" type="button"></button>
+        <button class="zn-btn" id="znUndo" type="button"></button>
+        <button class="zn-btn" id="znClear" type="button"></button>
+        <button class="zn-btn" id="znFit" type="button"></button>
+      </div>
+      <p class="zn-hint" id="znMapHint"></p>
+    </section>
+
+    <form class="zn-form" id="znForm" autocomplete="off" novalidate hidden>
+      <h2 id="znFormTitle"></h2>
+      <label><span id="lNameAr"></span><input id="fNameAr" maxlength="80" dir="rtl"></label>
+      <label><span id="lNameFr"></span><input id="fNameFr" maxlength="80" dir="ltr"></label>
+      <label><span id="lNameEn"></span><input id="fNameEn" maxlength="80" dir="ltr"></label>
+      <label><span id="lCity"></span><input id="fCity" maxlength="60" required></label>
+      <label><span id="lMax"></span><input id="fMax" type="number" min="1" max="60" step="0.5" inputmode="decimal"><small id="lMaxHelp" class="zn-muted"></small></label>
+      <label class="zn-check"><input id="fActive" type="checkbox"><span id="lActive"></span></label>
+      <label><span id="lNote"></span><textarea id="fNote" maxlength="200" rows="2"></textarea></label>
+      <p class="zn-muted" id="znPolyInfo"></p>
+      <p class="zn-err" id="znErr" role="alert" hidden></p>
+      <div class="zn-actions">
+        <button class="zn-btn pri" id="znSave" type="submit"></button>
+        <button class="zn-btn" id="znCancel" type="button"></button>
+        <button class="zn-btn bad" id="znDelete" type="button" hidden></button>
+      </div>
+    </form>
+  </main>
+
+  <div class="zn-toast" id="znToast" role="status" aria-live="polite" hidden></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+  <script src="/admin/zones/zones.js?v=1"></script>
+</body>
+</html>

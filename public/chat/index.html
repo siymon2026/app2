@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <script src="/theme-boot.js?v=1"></script>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content"
+    />
+    <title>siymon | الدردشة</title>
+
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="theme-color" content="#0F0F0F" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <meta name="apple-mobile-web-app-title" content="siymon" />
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+
+    <link rel="stylesheet" href="/brand.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500;600;700;800&family=Cairo:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/orders/orders.css?v=36" />
+    <link rel="stylesheet" href="/chat-ui.css?v=36" />
+    <link rel="stylesheet" href="/page.css?v=36" />
+    <link rel="stylesheet" href="/subnav.css?v=36" />
+    <link rel="stylesheet" href="/offline.css?v=37" />
+    <script src="/offline.js?v=37"></script>
+    <script src="/siymon-page.js?v=36"></script>
+    <script src="/subnav.js?v=36" defer></script>
+  </head>
+
+  <body class="chat-page" data-nav="user">
+    <!-- A real page, not a pop-up: .cc-modal only borrows the chat styling. -->
+    <div class="cc-modal cc-page" id="chatPage">
+      <div class="modal-card cc-card" role="main" aria-labelledby="chatTitle">
+        <header class="cc-head">
+          <a
+            class="cc-iconbtn cc-back"
+            id="goHome"
+            href="/"
+            data-back
+            aria-label="الرجوع"
+            title="الرجوع"
+          >
+            <svg class="cc-ico" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="m9 6 6 6-6 6" />
+            </svg>
+          </a>
+          <span class="cc-avatar" id="chatAvatar" aria-hidden="true">🎧</span>
+          <div class="cc-who">
+            <b id="chatTitle">الدعم</b>
+            <small id="chatSub">نرد عليك في أقرب وقت</small>
+          </div>
+        </header>
+
+        <div class="chat-box cc-msgs" id="chatBox" aria-live="polite"></div>
+
+        <div class="cc-composer">
+          <div class="cc-emoji" hidden role="listbox" aria-label="Emoji"></div>
+          <div class="cc-field">
+            <button
+              class="cc-field-btn cc-emoji-btn"
+              type="button"
+              aria-label="Emoji"
+              aria-expanded="false"
+            >
+              <svg class="cc-ico" viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="10" />
+                <path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01" />
+              </svg>
+            </button>
+            <input
+              id="chatInput"
+              type="text"
+              autocomplete="off"
+              enterkeyhint="send"
+              placeholder="اكتب رسالة..."
+            />
+          </div>
+          <button
+            class="cc-send"
+            id="chatSendBtn"
+            type="button"
+            aria-label="إرسال"
+            title="إرسال"
+          >
+            <svg class="cc-ico" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="m22 2-7 20-4-9-9-4Z" />
+              <path d="M22 2 11 13" />
+            </svg>
+          </button>
+        </div>
+        <div class="hint cc-hint" id="chatHint"></div>
+      </div>
+    </div>
+
+    <script src="/chat/chat.js?v=38"></script>
+  </body>
+</html>

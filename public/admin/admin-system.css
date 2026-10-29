@@ -1,0 +1,16 @@
+/* System settings + audit log (admin). Reuses the .ex-* look of the exception center; scoped to #systemModal. */
+#systemModal .ex-card{ --ex-brand:var(--brand,#5DD62C); --ex-line:color-mix(in srgb,currentColor 14%,transparent); --ex-fill:color-mix(in srgb,currentColor 5%,transparent);
+  --ex-fill2:color-mix(in srgb,currentColor 9%,transparent); --ex-muted:color-mix(in srgb,currentColor 62%,transparent); --ex-bad:#d92d20;
+  width:min(1100px,100%); height:min(820px,calc(100dvh - 36px)); max-height:none; padding:0; overflow:hidden; display:flex; flex-direction:column; border-radius:22px }
+html[data-theme="dark"] #systemModal .ex-card{ --ex-bad:#ff6b5e }
+.sys-body{ flex:1; min-height:0; overflow:auto; padding:14px 16px; display:grid; gap:14px; align-content:start }
+.sys-group{ border:1px solid var(--ex-line); border-radius:16px; padding:12px 14px; display:grid; gap:8px }
+.sys-group h4{ margin:0 } .sys-group .ex-form{ border:0; padding:0; margin:0; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)) }
+.sys-group input[type=checkbox]{ width:auto } .sys-group .ex-b{ justify-self:start }
+.sys-scroll{ overflow-x:auto } .sys-table{ width:100%; border-collapse:collapse; font-size:13px }
+.sys-table th,.sys-table td{ text-align:start; padding:7px 8px; border-bottom:1px solid var(--ex-line); vertical-align:top; overflow-wrap:anywhere }
+.sys-row{ cursor:pointer } .sys-row:hover,.sys-row:focus{ background:var(--ex-fill) }
+.sys-det pre{ margin:0; max-height:260px; overflow:auto; direction:ltr; text-align:left; font-size:12px; background:var(--ex-fill); padding:8px; border-radius:10px; white-space:pre-wrap }
+.sys-ver{ min-height:20px; font-size:13px } .sys-ver.good{ color:var(--ex-brand); font-weight:700 } .sys-ver.bad{ color:var(--ex-bad); font-weight:700 }
+.sys-card .ex-filters input,.sys-card .ex-filters select{ flex:1 1 150px; width:auto }
+@media (max-width:760px){ .sys-body{ padding:10px } }

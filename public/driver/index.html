@@ -1,0 +1,656 @@
+<!doctype html>
+<html lang="ar" dir="rtl" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0F0F0F" />
+  <title>SIYMON Driver</title>
+  <link rel="manifest" href="/driver/manifest.webmanifest" />
+  <link rel="icon" href="/icons-driver/icon-192.png" />
+  <link rel="apple-touch-icon" href="/icons-driver/apple-touch-icon.png" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="Siymon Driver" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="/brand.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/driver/driver.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+</head>
+<body>
+
+  <!-- ============ Icon sprite (single stroke-icon set + brand glyphs) ============ -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V9.5"/></symbol>
+      <symbol id="i-package" viewBox="0 0 24 24"><path d="M21 8 12 3 3 8v8l9 5 9-5V8Z"/><path d="m3 8 9 5 9-5"/><path d="M12 13v8"/></symbol>
+      <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+      <symbol id="i-wallet" viewBox="0 0 24 24"><path d="M19 7V5a2 2 0 0 0-2-2H5a2 2 0 0 0 0 4h14a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5"/><circle cx="16.5" cy="14" r="1" fill="currentColor"/></symbol>
+      <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
+      <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 8 3 8H3s3-1 3-8"/><path d="M10.3 21a2 2 0 0 0 3.4 0"/></symbol>
+      <symbol id="i-bell-off" viewBox="0 0 24 24"><path d="M8.7 3A6 6 0 0 1 18 8c0 2.6.4 4.4.9 5.6M6.3 6.3C6.1 6.8 6 7.4 6 8c0 7-3 8-3 8h13"/><path d="M10.3 21a2 2 0 0 0 3.4 0"/><path d="m3 3 18 18"/></symbol>
+      <symbol id="i-phone" viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2Z"/></symbol>
+      <symbol id="i-chat" viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11.6 7.1L3 21l1.9-5.4A8 8 0 1 1 21 12Z"/></symbol>
+      <symbol id="i-pin" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></symbol>
+      <symbol id="i-navigation" viewBox="0 0 24 24"><path d="m3 11 19-9-9 19-2-8-8-2Z"/></symbol>
+      <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
+      <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+      <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></symbol>
+      <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+      <symbol id="i-mic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></symbol>
+      <symbol id="i-image" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="1.6"/><path d="m21 16-5-5-8 8"/></symbol>
+      <symbol id="i-send" viewBox="0 0 24 24"><path d="m22 2-7 20-4-9-9-4 20-7Z"/><path d="M22 2 11 13"/></symbol>
+      <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4.5v15l12-7.5-12-7.5Z"/></symbol>
+      <symbol id="i-pause" viewBox="0 0 24 24"><path d="M8 5v14M16 5v14"/></symbol>
+      <symbol id="i-stop" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/></symbol>
+      <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1l1-13M9 7V4h6v3"/></symbol>
+      <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></symbol>
+      <symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 13.5A9 9 0 1 1 10.5 3a7 7 0 0 0 10.5 10.5Z"/></symbol>
+      <symbol id="i-volume" viewBox="0 0 24 24"><path d="M11 5 6 9H3v6h3l5 4V5Z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></symbol>
+      <symbol id="i-logout" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></symbol>
+      <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/></symbol>
+      <symbol id="i-headset" viewBox="0 0 24 24"><path d="M4 14v-2a8 8 0 0 1 16 0v2"/><rect x="2.5" y="14" width="4" height="6" rx="1.5"/><rect x="17.5" y="14" width="4" height="6" rx="1.5"/><path d="M20 20c0 1.5-2 2-5 2"/></symbol>
+      <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></symbol>
+      <symbol id="i-eye-off" viewBox="0 0 24 24"><path d="M10.6 5.1A10 10 0 0 1 12 5c6.5 0 10 7 10 7a17 17 0 0 1-3 3.8M6.6 6.6A17 17 0 0 0 2 12s3.5 7 10 7a9.7 9.7 0 0 0 4.4-1M9.9 9.9a3 3 0 0 0 4.2 4.2M3 3l18 18"/></symbol>
+      <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3 2 20h20L12 3Z"/><path d="M12 10v4M12 17.5h.01"/></symbol>
+      <symbol id="i-inbox" viewBox="0 0 24 24"><path d="M3 13l3-8h12l3 8v6a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-6Z"/><path d="M3 13h5l1 3h6l1-3h5"/></symbol>
+      <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 11a8 8 0 0 0-14-4L4 9M4 4v5h5M4 13a8 8 0 0 0 14 4l2-2M20 20v-5h-5"/></symbol>
+      <symbol id="i-wifi-off" viewBox="0 0 24 24"><path d="M2 8.8a15 15 0 0 1 4-2.4M22 8.8a15 15 0 0 0-9-3.7M5 12.6a10 10 0 0 1 3-1.8M19 12.6a10 10 0 0 0-4-2.2M8.5 16.4a5 5 0 0 1 7 0M12 20h.01M3 3l18 18"/></symbol>
+      <symbol id="i-receipt" viewBox="0 0 24 24"><path d="M5 3v18l2.5-1.5L10 21l2-1.5L14 21l2.5-1.5L19 21V3l-2.5 1.5L14 3l-2 1.5L10 3 7.5 4.5 5 3Z"/><path d="M9 9h6M9 13h6"/></symbol>
+      <symbol id="i-store" viewBox="0 0 24 24"><path d="M4 9l1.5-5h13L20 9M4 9v11h16V9"/><path d="M4 9a3 3 0 0 0 5.3 1.9M9.3 10.9a3 3 0 0 0 5.4 0M14.7 10.9A3 3 0 0 0 20 9"/><path d="M9 20v-5h6v5"/></symbol>
+      <symbol id="i-trend" viewBox="0 0 24 24"><path d="m3 17 6-6 4 4 8-8M15 7h6v6"/></symbol>
+      <symbol id="i-arrow-down" viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></symbol>
+      <symbol id="i-arrow-up" viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></symbol>
+      <symbol id="i-id-card" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><circle cx="9" cy="11" r="2"/><path d="M6 16c.6-1.6 2-2 3-2s2.400.4 3 2M15 10h3M15 14h3"/></symbol>
+      <symbol id="i-lock" viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></symbol>
+      <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m3 8 9 6 9-6"/></symbol>
+      <symbol id="i-camera" viewBox="0 0 24 24"><path d="M4 8h3l1.5-2.5h7L17 8h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1Z"/><circle cx="12" cy="13.500" r="3.500"/></symbol>
+      <symbol id="i-moon-offline" viewBox="0 0 24 24"><path d="M21 13.5A9 9 0 1 1 10.5 3a7 7 0 0 0 10.5 10.5Z"/></symbol>
+      <!-- Brand glyphs (filled) -->
+      <symbol id="b-google" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.500 12.300c0-.8-.1-1.600-.2-2.300H12v4.500h6.500a5.600 5.600 0 0 1-2.400 3.700v3h3.900c2.300-2.100 3.500-5.200 3.500-8.900Z"/><path fill="#34A853" d="M12 24c3.200 0 6-1.100 7.900-2.900l-3.900-3c-1.100.7-2.500 1.200-4 1.200-3.100 0-5.700-2.100-6.600-4.900H1.400v3.100A12 12 0 0 0 12 24Z"/><path fill="#FBBC05" d="M5.400 14.400a7.200 7.200 0 0 1 0-4.800V6.500H1.400a12 12 0 0 0 0 10.900l4-3Z"/><path fill="#EA4335" d="M12 4.800c1.700 0 3.300.6 4.500 1.800l3.400-3.400A12 12 0 0 0 1.400 6.500l4 3.100C6.300 6.900 8.900 4.800 12 4.800Z"/></symbol>
+      <symbol id="b-apple" viewBox="0 0 24 24"><path fill="currentColor" d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.040-2.040.027-3.910 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.090 1.013 1.454 2.208 3.090 3.792 3.039 1.520-.065 2.090-.987 3.935-.987 1.831 0 2.350.987 3.960.948 1.637-.026 2.676-1.480 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.220-4.857-.026-3.040 2.480-4.494 2.597-4.559-1.429-2.090-3.623-2.324-4.390-2.376-2-.156-3.675 1.090-4.610 1.090ZM15.530 3.830c.843-1.012 1.400-2.427 1.245-3.830-1.207.052-2.662.805-3.532 1.818-.780.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.702Z"/></symbol>
+    </defs>
+  </svg>
+
+  <div class="app-shell" id="appShell">
+
+    <!-- Connectivity banner (shown only while the network is actually down) -->
+    <div class="net-banner hidden" id="netBanner" role="status" aria-live="polite">
+      <svg class="ic" aria-hidden="true"><use href="#i-wifi-off"/></svg>
+      <span id="netBannerText" data-i18n="offlineBanner">لا يوجد اتصال بالإنترنت. سيتم التحديث تلقائياً عند عودته.</span>
+    </div>
+
+    <!-- ============ AUTH SCREEN ============ -->
+    <section id="authScreen">
+      <div class="auth-top">
+        <button class="pill-btn" id="authLangBtn" type="button" aria-label="Language">
+          <svg class="ic" aria-hidden="true"><use href="#i-globe"/></svg><span id="authLangText">EN</span>
+        </button>
+      </div>
+
+      <div class="auth-hero">
+        <div class="logo-tile"><img src="/icons-driver/icon-192.png" alt="SIYMON" /></div>
+        <h1 id="authTitle" data-i18n="authTitle">بوابة السائق</h1>
+        <p id="authSubtitle" data-i18n="subtitle">استقبل الطلبات وتتبع التوصيل بسهولة</p>
+      </div>
+
+      <div class="auth-card">
+        <div class="segmented" role="tablist">
+          <button class="seg-btn active" id="tabLogin" type="button" role="tab" data-i18n="tabLogin">دخول</button>
+          <button class="seg-btn" id="tabSignup" type="button" role="tab" data-i18n="tabSignup">تسجيل</button>
+        </div>
+
+        <!-- Login -->
+        <form id="loginForm" novalidate>
+          <div class="field">
+            <label for="loginId" data-i18n="loginIdLabel">البريد الإلكتروني أو رقم الهاتف</label>
+            <div class="input-wrap">
+              <svg class="ic lead" aria-hidden="true"><use href="#i-user"/></svg>
+              <input id="loginId" type="text" inputmode="email" autocomplete="username" autocapitalize="off" spellcheck="false" placeholder="driver@email.com / 06…" data-i18n-ph="loginIdPh" />
+            </div>
+          </div>
+          <div class="field">
+            <label for="loginPassword" data-i18n="password">كلمة السر</label>
+            <div class="input-wrap">
+              <svg class="ic lead" aria-hidden="true"><use href="#i-lock"/></svg>
+              <input id="loginPassword" type="password" autocomplete="current-password" placeholder="••••••••" />
+              <button class="eye-btn" type="button" data-eye="loginPassword" aria-label="Show password"><svg class="ic"><use href="#i-eye"/></svg></button>
+            </div>
+          </div>
+          <div class="hint err" id="authHintLogin" role="alert"></div>
+          <button class="btn primary block lg" id="loginBtn" type="submit">
+            <span id="loginText" data-i18n="login">دخول</span>
+          </button>
+
+          <div class="divider"><span data-i18n="orContinueWith">أو المتابعة باستخدام</span></div>
+          <div class="social-row">
+            <div class="social-slot">
+              <button class="social-btn" id="googleBtn" type="button">
+                <svg class="brand" aria-hidden="true"><use href="#b-google"/></svg><span>Google</span>
+              </button>
+              <div class="gsi-host hidden" id="googleHost"></div>
+            </div>
+            <div class="social-slot">
+              <button class="social-btn" id="appleBtn" type="button">
+                <svg class="brand" aria-hidden="true"><use href="#b-apple"/></svg><span>Apple</span>
+              </button>
+            </div>
+          </div>
+          <p class="hint muted center" id="socialHint" data-i18n="socialHint">الدخول الاجتماعي متاح للحسابات المسجلة مسبقاً فقط.</p>
+
+          <p class="switch-line"><span data-i18n="noAccount">ليس لديك حساب؟</span> <button class="link-btn" id="goSignupBtn" type="button" data-i18n="createAccount">إنشاء حساب</button></p>
+        </form>
+
+        <!-- Signup -->
+        <form id="signupForm" style="display:none" novalidate>
+          <div class="form-section" data-i18n="secAccount">بيانات الحساب</div>
+          <div class="field">
+            <label for="signupName" id="signupNameLabel" data-i18n="name">الاسم</label>
+            <input id="signupName" type="text" autocomplete="name" placeholder="اسم السائق" data-i18n-ph="namePh" />
+          </div>
+          <div class="grid2">
+            <div class="field">
+              <label for="signupEmail" id="signupEmailLabel" data-i18n="email">البريد الإلكتروني</label>
+              <input id="signupEmail" type="email" autocomplete="email" placeholder="driver@email.com" />
+            </div>
+            <div class="field">
+              <label for="signupPhone" id="signupPhoneLabel" data-i18n="phone">رقم الهاتف</label>
+              <input id="signupPhone" type="tel" autocomplete="tel" placeholder="06..." />
+            </div>
+          </div>
+          <div class="field">
+            <label for="signupCardNumber" id="signupCardLabel" data-i18n="cardNumber">رقم البطاقة</label>
+            <input id="signupCardNumber" type="text" placeholder="ID / CIN" />
+          </div>
+          <div class="grid2">
+            <div class="field">
+              <label for="signupPassword" id="signupPassLabel" data-i18n="password">كلمة السر</label>
+              <input id="signupPassword" type="password" autocomplete="new-password" placeholder="••••••••" />
+            </div>
+            <div class="field">
+              <label for="signupPassword2" id="signupPass2Label" data-i18n="confirmPassword">تأكيد كلمة المرور</label>
+              <input id="signupPassword2" type="password" autocomplete="new-password" placeholder="••••••••" />
+            </div>
+          </div>
+
+          <div class="form-section" data-i18n="secVehicle">المركبة</div>
+          <div class="field">
+            <label for="vehicleType" data-i18n="vehicleType">نوع المركبة</label>
+            <select id="vehicleType">
+              <option value="" data-i18n="vehicleNone">—</option>
+              <option value="motorcycle" data-i18n="vtMotorcycle">دراجة نارية</option>
+              <option value="scooter" data-i18n="vtScooter">سكوتر</option>
+              <option value="bicycle" data-i18n="vtBicycle">دراجة هوائية</option>
+              <option value="car" data-i18n="vtCar">سيارة</option>
+            </select>
+          </div>
+          <div class="grid2">
+            <div class="field">
+              <label for="vehiclePlate" data-i18n="vehiclePlate">رقم اللوحة</label>
+              <input id="vehiclePlate" type="text" maxlength="20" autocomplete="off" />
+            </div>
+            <div class="field">
+              <label for="vehicleModel" data-i18n="vehicleModel">الطراز</label>
+              <input id="vehicleModel" type="text" maxlength="40" autocomplete="off" />
+            </div>
+          </div>
+
+          <div class="form-section" data-i18n="secDocs">الوثائق</div>
+          <div class="upload-grid">
+            <label class="upload-tile" for="profilePhoto">
+              <img id="prevProfile" class="preview" alt="" />
+              <svg class="ic" aria-hidden="true"><use href="#i-camera"/></svg>
+              <span id="profilePhotoLabel" data-i18n="profilePhotoLabel">صورة بروفايل (اختياري)</span>
+              <input id="profilePhoto" type="file" accept="image/*" />
+            </label>
+            <label class="upload-tile" for="faceWithBikeCard">
+              <img id="prevFace" class="preview" alt="" />
+              <svg class="ic" aria-hidden="true"><use href="#i-camera"/></svg>
+              <span id="imgFaceLabel" data-i18n="imgFaceLabel">صورة الوجه مع بطاقة الدراجة</span>
+              <input id="faceWithBikeCard" type="file" accept="image/*" />
+            </label>
+            <label class="upload-tile" for="idFront">
+              <img id="prevFront" class="preview" alt="" />
+              <svg class="ic" aria-hidden="true"><use href="#i-id-card"/></svg>
+              <span id="imgFrontLabel" data-i18n="imgFrontLabel">بطاقة التعريف (أمام)</span>
+              <input id="idFront" type="file" accept="image/*" />
+            </label>
+            <label class="upload-tile" for="idBack">
+              <img id="prevBack" class="preview" alt="" />
+              <svg class="ic" aria-hidden="true"><use href="#i-id-card"/></svg>
+              <span id="imgBackLabel" data-i18n="imgBackLabel">بطاقة التعريف (خلف)</span>
+              <input id="idBack" type="file" accept="image/*" />
+            </label>
+            <label class="upload-tile" for="licenseImage">
+              <img id="prevLicense" class="preview" alt="" />
+              <svg class="ic" aria-hidden="true"><use href="#i-id-card"/></svg>
+              <span id="imgLicenseLabel" data-i18n="imgLicenseLabel">رخصة السياقة (موصى بها)</span>
+              <input id="licenseImage" type="file" accept="image/*" />
+            </label>
+          </div>
+
+          <div class="hint err" id="authHint" role="alert"></div>
+          <button class="btn primary block lg" id="signupBtn" type="submit">
+            <span id="signupText" data-i18n="signup">تسجيل</span>
+          </button>
+          <p class="switch-line"><span data-i18n="haveAccount">لديك حساب بالفعل؟</span> <button class="link-btn" id="goLoginBtn" type="button" data-i18n="login">دخول</button></p>
+        </form>
+      </div>
+    </section>
+
+    <!-- ============ DASHBOARD (logged in) ============ -->
+    <section id="dashScreen" style="display:none">
+
+      <!-- Header: greeting on Home, page title elsewhere -->
+      <header class="app-header">
+        <div class="hdr-main" id="hdrHome">
+          <button class="avatar-btn" id="topAvatarBtn" type="button" aria-label="Profile">
+            <img id="topAvatarImg" src="/icons-driver/icon-192.png" alt="" />
+          </button>
+          <div class="hdr-id">
+            <div class="hdr-greet" id="dashGreet" data-i18n="greeting">مرحباً</div>
+            <div class="hdr-name" id="dashName">—</div>
+          </div>
+        </div>
+        <h1 class="hdr-title hidden" id="pageTitle"></h1>
+        <button class="icon-btn" id="notifBtn" type="button" aria-label="Notifications">
+          <svg class="ic"><use href="#i-bell"/></svg>
+          <span class="badge-dot hidden" id="notifBadge">0</span>
+        </button>
+      </header>
+
+      <!-- Pending approval banner -->
+      <div class="pending-banner hidden" id="pendingBox">
+        <svg class="ic" aria-hidden="true"><use href="#i-clock"/></svg>
+        <div class="pb-body">
+          <div class="pb-title" id="pendingTitle" data-i18n="pendingTitle">قيد الانتظار</div>
+          <div class="pb-msg" id="pendingMsg" data-i18n="pendingMsg">حسابك قيد المراجعة. انتظر قبول المشرف ثم أعد التحديث.</div>
+          <button class="btn small" id="refreshStatusBtn" type="button" data-i18n="refreshStatus">تحديث الحالة</button>
+        </div>
+      </div>
+
+      <!-- ===== HOME ===== -->
+      <div id="pageHome" class="page">
+
+        <section class="work-card is-offline" id="workCard">
+          <div class="work-top">
+            <span class="work-state"><span class="led"></span><span id="availLabelText">غير متصل</span></span>
+          </div>
+          <p class="work-desc" id="workDesc">فعّل الاتصال لتبدأ باستقبال الطلبات.</p>
+          <div class="track-chip" id="trackChip" data-state="lost" hidden></div>
+          <button class="work-btn" id="availBtn" type="button" aria-pressed="false">
+            <span class="switch" id="availSwitch" aria-hidden="true"></span>
+            <span id="availBtnText">ابدأ العمل</span>
+          </button>
+        </section>
+
+        <section class="earn-card">
+          <div class="earn-head">
+            <span class="earn-title" id="earnTodayLabel" data-i18n="earnToday">أرباح اليوم</span>
+            <svg class="ic" aria-hidden="true"><use href="#i-trend"/></svg>
+          </div>
+          <div class="earn-amount money" id="earnToday">0 MAD</div>
+          <div class="earn-done"><b id="earnDoneCount">0</b> <span id="earnDoneLabel" data-i18n="completedToday">طلبات مكتملة اليوم</span></div>
+          <div class="earn-split">
+            <div><span class="l" id="earnWeekLabel" data-i18n="earnWeek">أرباح الأسبوع</span><b class="money" id="earnWeek">0 MAD</b></div>
+            <div><span class="l" id="earnMonthLabel" data-i18n="earnMonth">أرباح الشهر</span><b class="money" id="earnMonth">0 MAD</b></div>
+          </div>
+        </section>
+
+        <section class="block hidden" id="homeCurrentBlock">
+          <div class="block-head">
+            <h2 id="homeCurrentTitle" data-i18n="currentTitle">طلباتي الحالية</h2>
+            <button class="link-btn" id="homeSeeAllBtn" type="button" data-i18n="seeAll">عرض الكل</button>
+          </div>
+          <div id="homeCurrentList"></div>
+        </section>
+
+        <section class="block">
+          <div class="block-head">
+            <h2 id="availableTitle">طلبات متاحة (<span id="availCount">0</span>)</h2>
+            <button class="icon-btn sm" id="refreshOrdersBtn" type="button" aria-label="Refresh"><svg class="ic"><use href="#i-refresh"/></svg></button>
+          </div>
+          <div id="availableList"></div>
+        </section>
+      </div>
+
+      <!-- ===== ORDERS (mine, active) ===== -->
+      <div id="pageOrders" class="page" style="display:none">
+        <section class="block">
+          <div class="block-head">
+            <h2 id="mineTitle">طلباتي الحالية (<span id="mineCount">0</span>)</h2>
+          </div>
+          <div id="mineList"></div>
+        </section>
+      </div>
+
+      <!-- ===== HISTORY ===== -->
+      <div id="pageHistory" class="page" style="display:none">
+        <section class="stat-row">
+          <div class="stat"><b class="money" id="histDelivered">0</b><span id="histDeliveredLabel" data-i18n="delivered">تم التسليم</span></div>
+          <div class="stat"><b class="money" id="histEarn">0 MAD</b><span id="histEarnLabel" data-i18n="feesEarned">رسوم التوصيل</span></div>
+          <div class="stat"><b class="money" id="histCanceled">0</b><span id="histCanceledLabel" data-i18n="canceled">ملغي</span></div>
+        </section>
+
+        <section class="block">
+          <div class="input-wrap search">
+            <svg class="ic lead" aria-hidden="true"><use href="#i-receipt"/></svg>
+            <input id="historySearch" type="search" placeholder="بحث برقم الطلب أو اسم الزبون" data-i18n-ph="searchPlaceholder" />
+          </div>
+          <div class="chips" id="hStatusChips">
+            <button class="chip active" data-hfilter="all" type="button" id="hfAll" data-i18n="all">الكل</button>
+            <button class="chip" data-hfilter="delivered" type="button" id="hfDelivered" data-i18n="delivered">تم التسليم</button>
+            <button class="chip" data-hfilter="canceled" type="button" id="hfCanceled" data-i18n="canceled">ملغي</button>
+          </div>
+          <div class="chips" id="hDateChips">
+            <button class="chip active" data-hdate="all" type="button" id="hdAll" data-i18n="all">الكل</button>
+            <button class="chip" data-hdate="today" type="button" id="hdToday" data-i18n="today">اليوم</button>
+            <button class="chip" data-hdate="yesterday" type="button" id="hdYesterday" data-i18n="yesterday">أمس</button>
+            <button class="chip" data-hdate="week" type="button" id="hdWeek" data-i18n="week">الأسبوع</button>
+            <button class="chip" data-hdate="month" type="button" id="hdMonth" data-i18n="month">الشهر</button>
+          </div>
+          <div id="historyList"></div>
+          <button class="btn ghost block hidden" id="historyMoreBtn" type="button" data-i18n="showMore">عرض المزيد</button>
+        </section>
+      </div>
+
+      <!-- ===== WALLET ===== -->
+      <div id="pageWallet" class="page" style="display:none">
+        <section class="wallet-hero">
+          <div class="wh-top">
+            <span class="l" id="walletBalanceLabel" data-i18n="walletBalanceLabel">الرصيد</span>
+            <button class="icon-btn sm on-dark" id="walletRefreshBtn" type="button" aria-label="Refresh"><svg class="ic"><use href="#i-refresh"/></svg></button>
+          </div>
+          <div class="wh-balance money" id="walletBalance">0 MAD</div>
+          <div class="wh-split">
+            <div><span class="l" id="walletAvailableLabel" data-i18n="walletAvailableLabel">متاح</span><b class="money" id="walletAvailable">0 MAD</b></div>
+            <div><span class="l" id="walletReservedLabel" data-i18n="walletReservedLabel">محجوز</span><b class="money" id="walletReserved">0 MAD</b></div>
+          </div>
+        </section>
+
+        <section class="block" id="topupBlock">
+          <div class="block-head"><h2 id="topupTitle" data-i18n="topupTitle">شحن المحفظة</h2></div>
+          <div class="card">
+            <div class="kv">
+              <span class="k" id="bankAccountLabel" data-i18n="bankAccountLabel">رقم الحساب البنكي</span>
+              <span class="v" id="bankAccountValue">—</span>
+            </div>
+            <div class="field hidden" id="topupMethodField">
+              <label for="topupMethod" id="topupMethodLabel">طريقة الدفع</label>
+              <select id="topupMethod"></select>
+            </div>
+            <div id="topupMethodInfo" class="hint" style="white-space:pre-line;direction:auto"></div>
+            <img id="topupQr" class="hidden" alt="QR" style="max-width:160px;border-radius:8px;margin:8px 0" />
+            <div class="field hidden" id="topupRefField">
+              <label for="topupRef" id="topupRefLabel">مرجع التحويل</label>
+              <input id="topupRef" type="text" maxlength="60" autocomplete="off" style="direction:ltr" />
+            </div>
+            <div class="field">
+              <label for="topupAmount" data-i18n="amount">المبلغ</label>
+              <input id="topupAmount" type="number" inputmode="decimal" step="0.01" placeholder="المبلغ" data-i18n-ph="amount" />
+            </div>
+            <label class="upload-tile wide" for="topupReceipt">
+              <svg class="ic" aria-hidden="true"><use href="#i-receipt"/></svg>
+              <span id="topupReceiptLabel" data-i18n="attachReceipt">إرفاق صورة الوصل</span>
+              <input id="topupReceipt" type="file" accept="image/*" />
+            </label>
+            <div class="hint" id="topupHint" role="alert"></div>
+            <button class="btn primary block lg" id="topupSendBtn" type="button" data-i18n="send">إرسال</button>
+          </div>
+        </section>
+
+        <section class="block">
+          <div class="block-head"><h2 id="walletHistoryTitle" data-i18n="walletHistoryTitle">الحركات المالية</h2></div>
+          <div id="walletHistoryList"></div>
+        </section>
+
+        <section class="block">
+          <div class="block-head"><h2 id="topupsListTitle" data-i18n="topupsListTitle">شحناتي</h2></div>
+          <div id="driverTopupsList"></div>
+        </section>
+      </div>
+
+      <!-- ===== PROFILE ===== -->
+      <div id="pageProfile" class="page" style="display:none">
+        <section class="profile-card">
+          <img id="driverProfileImg" class="profile-avatar" alt="" />
+          <div class="pc-body">
+            <div class="profile-name" id="driverProfileName">—</div>
+            <div class="muted pc-contact" id="driverProfileContact"></div>
+            <div class="profile-tags">
+              <span class="tag" id="driverProfileStatus"></span>
+              <span class="tag" id="driverProfileWalletTag"></span>
+            </div>
+          </div>
+        </section>
+
+        <div class="group-title" data-i18n="grpAccount">الحساب</div>
+        <section class="menu">
+          <button class="menu-row" id="rowAccountInfo" type="button">
+            <span class="mi"><svg class="ic"><use href="#i-id-card"/></svg></span>
+            <span class="ml" data-i18n="accountInfo">معلومات الحساب</span>
+            <svg class="ic chev flip"><use href="#i-chevron"/></svg>
+          </button>
+          <button class="menu-row" id="rowNotifications" type="button">
+            <span class="mi"><svg class="ic"><use href="#i-bell"/></svg></span>
+            <span class="ml" data-i18n="notifications">الإشعارات</span>
+            <svg class="ic chev flip"><use href="#i-chevron"/></svg>
+          </button>
+          <div class="menu-row static">
+            <span class="mi"><svg class="ic"><use href="#i-volume"/></svg></span>
+            <span class="ml" id="settingSoundLabel" data-i18n="settingSound">صوت الطلبات</span>
+            <button class="switch" id="soundSwitch" type="button" role="switch" aria-checked="false" aria-labelledby="settingSoundLabel"></button>
+          </div>
+        </section>
+
+        <div class="group-title" data-i18n="grpSettings">الإعدادات</div>
+        <section class="menu">
+          <div class="menu-row static">
+            <span class="mi"><svg class="ic"><use href="#i-globe"/></svg></span>
+            <span class="ml" id="settingLangLabel" data-i18n="settingLang">اللغة</span>
+            <div class="mini-seg" id="langSeg">
+              <button type="button" data-lang="ar">AR</button>
+              <button type="button" data-lang="en">EN</button>
+              <button type="button" data-lang="fr">FR</button>
+            </div>
+          </div>
+          <div class="menu-row static">
+            <span class="mi"><svg class="ic"><use href="#i-moon"/></svg></span>
+            <span class="ml" id="settingDarkLabel" data-i18n="settingDark">الوضع الداكن</span>
+            <button class="switch" id="darkSwitch" type="button" role="switch" aria-checked="false" aria-labelledby="settingDarkLabel"></button>
+          </div>
+        </section>
+
+        <div class="group-title" data-i18n="grpHelp">المساعدة</div>
+        <section id="ratingsCard" hidden aria-live="polite"></section>
+
+        <section class="menu">
+          <button class="menu-row" id="rowSupport" type="button">
+            <span class="mi"><svg class="ic"><use href="#i-headset"/></svg></span>
+            <span class="ml" data-i18n="helpSupport">المساعدة والدعم</span>
+            <svg class="ic chev flip"><use href="#i-chevron"/></svg>
+          </button>
+        </section>
+
+        <div class="profile-actions">
+          <button class="btn ghost block lg" id="profileLogoutBtn" type="button">
+            <svg class="ic"><use href="#i-logout"/></svg><span data-i18n="logout">تسجيل خروج</span>
+          </button>
+          <button class="link-btn danger" id="profileDeleteBtn" type="button" data-i18n="deleteAccount">حذف الحساب</button>
+        </div>
+      </div>
+
+      <!-- ===== SHEETS ===== -->
+      <div class="sheet-backdrop" id="notifSheetBackdrop">
+        <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="notifSheetTitle">
+          <div class="sheet-handle"></div>
+          <div class="sheet-header">
+            <div class="sheet-title" id="notifSheetTitle" data-i18n="notifications">الإشعارات</div>
+            <button class="icon-btn sm" id="notifSheetClose" type="button" aria-label="Close"><svg class="ic"><use href="#i-x"/></svg></button>
+          </div>
+          <div class="sheet-body" id="notifList"></div>
+        </div>
+      </div>
+
+      <div class="sheet-backdrop" id="orderSheetBackdrop">
+        <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="orderSheetTitle">
+          <div class="sheet-handle"></div>
+          <div class="sheet-header">
+            <div class="sheet-title" id="orderSheetTitle" data-i18n="orderDetails">تفاصيل الطلب</div>
+            <button class="icon-btn sm" id="orderSheetClose" type="button" aria-label="Close"><svg class="ic"><use href="#i-x"/></svg></button>
+          </div>
+          <div class="sheet-body" id="orderSheetBody"></div>
+        </div>
+      </div>
+
+      <div class="sheet-backdrop" id="accountSheetBackdrop">
+        <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="accountSheetTitle">
+          <div class="sheet-handle"></div>
+          <div class="sheet-header">
+            <div class="sheet-title" id="accountSheetTitle" data-i18n="accountInfo">معلومات الحساب</div>
+            <button class="icon-btn sm" id="accountSheetClose" type="button" aria-label="Close"><svg class="ic"><use href="#i-x"/></svg></button>
+          </div>
+          <div class="sheet-body">
+            <div class="card flat">
+              <div class="kv row"><span class="k" id="profileEmailLabel" data-i18n="email">Email</span><span class="v" id="profileEmail"></span></div>
+              <div class="kv row"><span class="k" id="profilePhoneLabel" data-i18n="phone">Phone</span><span class="v" id="profilePhone"></span></div>
+              <div class="kv row"><span class="k" id="profileCardLabel" data-i18n="cardNumber">Card Number</span><span class="v" id="profileCard"></span></div>
+              <div class="kv row"><span class="k" id="profileCreatedLabel" data-i18n="createdAt">Created</span><span class="v" id="profileCreated"></span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom navigation (becomes a side rail on wide screens) -->
+      <nav class="bottom-nav" aria-label="Main">
+        <button class="nav-item active" data-page="home" type="button">
+          <svg class="ic"><use href="#i-home"/></svg><span id="navHome" data-i18n="navHome">الرئيسية</span>
+        </button>
+        <button class="nav-item" data-page="orders" type="button">
+          <svg class="ic"><use href="#i-package"/></svg><span id="navOrders" data-i18n="navOrders">طلباتي</span>
+          <span class="nav-dot hidden" id="navOrdersDot"></span>
+        </button>
+        <button class="nav-item" data-page="history" type="button">
+          <svg class="ic"><use href="#i-clock"/></svg><span id="navHistory" data-i18n="navHistory">السجل</span>
+        </button>
+        <button class="nav-item" data-page="wallet" type="button">
+          <svg class="ic"><use href="#i-wallet"/></svg><span id="navWallet" data-i18n="navWallet">المحفظة</span>
+        </button>
+        <button class="nav-item" data-page="profile" type="button">
+          <svg class="ic"><use href="#i-user"/></svg><span id="navProfile" data-i18n="navProfile">البروفايل</span>
+        </button>
+      </nav>
+    </section>
+  </div>
+
+  <!-- ============ CHAT (fullscreen) ============ -->
+  <div class="chat-screen" id="orderChatModal">
+    <div class="chat-header">
+      <button class="icon-btn" id="closeOrderChatBtn" type="button" aria-label="Back"><svg class="ic flip"><use href="#i-chevron"/></svg></button>
+      <div class="who">
+        <div class="name" id="orderChatTitle">دردشة الطلب</div>
+        <div class="oid" id="orderChatSub"></div>
+      </div>
+      <button class="icon-btn" id="orderChatCallBtn" type="button" aria-label="Call"><svg class="ic"><use href="#i-phone"/></svg></button>
+    </div>
+    <div class="chat-body" id="orderChatBox"></div>
+    <div class="hint err" id="orderChatHint" style="padding:0 14px"></div>
+
+    <!-- image preview before send -->
+    <div class="chat-preview-bar hidden" id="chatImagePreviewBar">
+      <img id="chatImagePreviewImg" alt="" />
+      <div class="chat-preview-actions">
+        <button class="icon-btn" id="chatImageCancelBtn" type="button" aria-label="Cancel"><svg class="ic"><use href="#i-x"/></svg></button>
+        <button class="chat-send-btn" id="chatImageSendBtn" type="button" aria-label="Send"><svg class="ic flip"><use href="#i-send"/></svg></button>
+      </div>
+    </div>
+
+    <!-- recording / recorded audio bar -->
+    <div class="chat-record-bar hidden" id="chatRecordBar">
+      <span class="rec-dot" id="recDot"></span>
+      <span id="recTimer">00:00</span>
+      <span class="muted" id="recStatusText" style="font-size:12px;flex:1"></span>
+      <button class="icon-btn" id="recDeleteBtn" type="button" aria-label="Delete"><svg class="ic"><use href="#i-trash"/></svg></button>
+      <button class="icon-btn" id="recPlayBtn" type="button" aria-label="Play"><svg class="ic"><use href="#i-play"/></svg></button>
+      <button class="icon-btn accent" id="recStopBtn" type="button" aria-label="Stop"><svg class="ic"><use href="#i-stop"/></svg></button>
+      <button class="chat-send-btn" id="recSendBtn" type="button" aria-label="Send"><svg class="ic flip"><use href="#i-send"/></svg></button>
+    </div>
+
+    <div class="chat-input-row" id="chatInputRow">
+      <button class="icon-btn" id="chatAttachBtn" type="button" aria-label="Attach"><svg class="ic"><use href="#i-plus"/></svg></button>
+      <input id="orderChatInput" type="text" placeholder="اكتب رسالة..." />
+      <button class="icon-btn" id="chatMicBtn" type="button" aria-label="Voice"><svg class="ic"><use href="#i-mic"/></svg></button>
+      <button class="chat-send-btn" id="orderChatSendBtn" type="button" aria-label="Send"><svg class="ic flip"><use href="#i-send"/></svg></button>
+      <input id="chatImageFile" type="file" accept="image/*" class="hidden" />
+    </div>
+  </div>
+
+  <!-- attach action sheet -->
+  <div class="modal-backdrop" id="chatAttachSheet">
+    <div class="modal-card" style="max-width:300px">
+      <div class="row gap-8" style="justify-content:center">
+        <button class="attach-option" id="attachImageBtn" type="button">
+          <span class="attach-ic"><svg class="ic"><use href="#i-image"/></svg></span><span id="attachImageLabel">صورة</span>
+        </button>
+        <button class="attach-option" id="attachVoiceBtn" type="button">
+          <span class="attach-ic"><svg class="ic"><use href="#i-mic"/></svg></span><span id="attachVoiceLabel">صوت</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Confirm modal (accept / deliver / cancel / logout / delete) ============ -->
+  <div class="modal-backdrop" id="confirmModal">
+    <div class="modal-card" role="alertdialog" aria-modal="true" aria-labelledby="confirmTitle" aria-describedby="confirmMsg">
+      <h3 id="confirmTitle">تأكيد</h3>
+      <p id="confirmMsg"></p>
+      <div class="modal-actions">
+        <button class="btn ghost" id="confirmCancelBtn" type="button" data-i18n="back">رجوع</button>
+        <button class="btn primary" id="confirmOkBtn" type="button" data-i18n="confirm">تأكيد</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Full-screen image viewer ============ -->
+  <div class="img-viewer" id="imgViewer">
+    <button class="img-viewer-close" id="imgViewerClose" type="button" aria-label="Close"><svg class="ic"><use href="#i-x"/></svg></button>
+    <img id="imgViewerImg" src="" alt="" />
+  </div>
+
+  <!-- ============ Sound gate ============ -->
+  <div class="sound-gate" id="soundGate">
+    <div class="modal-card" style="text-align:center">
+      <div class="gate-ic"><svg class="ic"><use href="#i-volume"/></svg></div>
+      <p id="soundGateText" style="margin-bottom:16px">فعّل صوت الطلبات الجديدة حتى لا يفوتك أي طلب.</p>
+      <button class="btn primary block lg" id="soundGateBtn" type="button">تفعيل الصوت</button>
+    </div>
+  </div>
+
+  <!-- ============ Toasts ============ -->
+  <div class="toast-wrap" id="toastWrap" aria-live="polite"></div>
+
+
+  <!-- Dispatch offer (auto-assignment) -->
+  <div class="offer-backdrop" id="offerBackdrop" role="alertdialog" aria-modal="true" aria-labelledby="offerTitle">
+    <div class="offer-card">
+      <div class="offer-top"><b id="offerTitle">طلب جديد لك</b><span class="offer-secs" id="offerSecs">25</span></div>
+      <div class="offer-bar"><i id="offerBar"></i></div>
+      <div class="offer-row"><span id="offerFeeLbl">أجرة التوصيل</span><b class="money" id="offerFee">0</b></div>
+      <div class="offer-row"><span id="offerPickupLbl">المطعم</span><b id="offerPickup">—</b></div>
+      <div class="offer-dist" id="offerDist"></div>
+      <a class="offer-nav" id="offerNav" target="_blank" rel="noopener noreferrer" hidden>تنقّل إلى المطعم</a>
+      <div class="offer-actions">
+        <button class="offer-btn reject" id="offerReject" type="button">رفض</button>
+        <button class="offer-btn accept" id="offerAccept" type="button">قبول</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/shared/sync-queue.js?v=1"></script>
+  <script src="/driver/driver.js"></script>
+  <script src="/driver/offline-driver.js?v=1"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+  <script src="/shared/minimap.js?v=2"></script>
+  <script src="/driver/dispatch.js"></script>
+  <script src="/driver/extras.js"></script>
+</body>
+</html>

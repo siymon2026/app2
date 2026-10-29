@@ -1,0 +1,16 @@
+{
+  "id": "/driver/",
+  "name": "Siymon Driver",
+  "short_name": "Siymon Driver",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "/driver/?source=pwa",
+  "scope": "/driver/",
+  "display": "standalone",
+  "background_color": "#0F0F0F",
+  "theme_color": "#0F0F0F",
+  "icons": [
+    { "src": "/icons-driver/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icons-driver/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}
