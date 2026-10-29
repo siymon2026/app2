@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Restaurant</title>
+  <link rel="stylesheet" href="/brand.css" />
+    <link rel="stylesheet" href="/restaurant/restaurant.css">
+  <link rel="stylesheet" href="/pw-toggle.css">
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="topbar" style="grid-template-columns:1fr auto;">
+        <div class="brand">
+          <img class="logo-img" src="/icons/icon-192.png" alt="logo" />
+          <div>
+            <h1 id="brandTitle">siymon Restaurant</h1>
+            <p id="brandSub">Orders table</p>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="btn" id="btConnectBtn" type="button"><span id="btText">Connect BT</span></button>
+          <button class="btn ghost" id="langToggle" type="button">EN</button>
+          <button class="btn ghost" id="soundToggle" type="button">🔔</button>
+<button class="btn ghost icon-btn" id="themeToggle" type="button" title="Theme" aria-label="Theme"></button>
+          <button class="btn" id="logoutBtn" type="button">Logout</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="rest-wrap">
+    <div class="welcome panel-like">
+      <div class="welcome-pill" id="welcomePill">مرحباً بكم في siymon</div>
+      <div class="welcome-row">
+        <div>
+          <h2 id="welcomeTitle" style="margin:0">مرحباً بكم في siymon</h2>
+          <p class="muted" id="welcomeText" style="margin:6px 0 0 0">سجّل الدخول لعرض الطلبات الخاصة بمطعمك.</p>
+        </div>
+        <div class="row" style="gap:10px;justify-content:flex-end">
+          <button class="btn" id="refreshBtn" type="button">Refresh</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Auth card -->
+    <div class="panel-like" id="authCard" style="margin-top:14px;">
+      <h3 id="authTitle" style="margin:0 0 12px 0">Restaurant Login</h3>
+      <div class="grid2">
+        <div class="input-row">
+          <label id="loginIdLabel" for="loginId">Email or phone</label>
+          <input id="loginId" type="text" placeholder="restaurant@email.com / 06..." />
+        </div>
+        <div class="input-row">
+          <label id="loginPassLabel" for="loginPassword">Password</label>
+          <input id="loginPassword" type="password" placeholder="••••••••" />
+        </div>
+        <button class="btn primary" id="loginBtn" type="button">Login</button>
+      </div>
+      <div class="hint" id="authHint"></div>
+    </div>
+
+    <!-- Orders table -->
+    <div class="split" id="appPanel" style="margin-top:14px; display:none;">
+      <div>
+        <div class="panel-like" style="margin-bottom:12px">
+          <div class="tabs" style="margin-bottom:10px">
+            <button class="tab active" id="tabOrders" type="button">Orders</button>
+            <button class="tab" id="tabProducts" type="button">Products</button>
+          </div>
+
+          <div class="filter-row">
+            <div class="badge" id="restBadge"><span class="dot"></span><span id="restName">—</span></div>
+            <div class="search-wrap" style="flex:1">
+              <input id="searchInput" type="text" placeholder="Search" />
+            </div>
+          </div>
+          <div class="hint muted" id="tableHint"></div>
+        </div>
+
+        <!-- Orders view -->
+        <div id="ordersLeft">
+          <table class="table">
+            <thead>
+              <tr>
+                <th id="thId">ID</th>
+                <th id="thTime">Time</th>
+                <th id="thCustomer">Customer</th>
+                <th id="thTotal">Total</th>
+                <th id="thStatus">Status</th>
+                <th id="thActions">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="ordersBody"></tbody>
+          </table>
+        </div>
+
+        <!-- Products view -->
+        <div id="productsLeft" style="display:none">
+          <table class="table">
+            <thead>
+              <tr>
+                <th id="pthName">Name</th>
+                <th id="pthCat">Category</th>
+                <th id="pthPrice">Price</th>
+                <th id="pthAvail">Status</th>
+                <th id="pthAct">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="productsBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="panel-like">
+        <div id="ordersRight">
+          <h3 id="detailsTitle" style="margin:0 0 10px 0">Order details</h3>
+          <div id="detailsBox" class="muted">Select an order to view details.</div>
+        </div>
+
+        <div id="productsRight" style="display:none">
+          <h3 id="prodTitle" style="margin:0 0 10px 0">Add / Edit product</h3>
+          <div class="grid2">
+            <div class="input-row">
+              <label id="prodNameLabel" for="prodName">Name</label>
+              <input id="prodName" type="text" placeholder="Product name" />
+            </div>
+            <div class="input-row">
+              <label id="prodPriceLabel" for="prodPrice">Price</label>
+              <input id="prodPrice" type="number" step="0.01" placeholder="0" />
+            </div>
+
+            <div class="input-row">
+              <label id="prodCatLabel" for="prodCat">Category key</label>
+              <input id="prodCat" type="text" placeholder="moroccan / drinks ..." />
+            </div>
+            <div class="input-row">
+              <label id="prodCatNameLabel" for="prodCatName">Category title</label>
+              <input id="prodCatName" type="text" placeholder="Category" />
+            </div>
+
+            <div class="input-row" style="grid-column:1/-1">
+              <label id="prodImgLabel" for="prodImgFile">Meal image</label>
+              <input id="prodImgFile" type="file" accept="image/*" />
+              <img id="prodImgPrev" class="img-preview" alt="preview" style="display:none" />
+              <input id="prodImg" type="hidden" />
+              <div class="hint muted" id="prodImgHint"></div>
+            </div>
+
+            <div class="input-row" style="grid-column:1/-1">
+              <label id="prodDescLabel" for="prodDesc">Description</label>
+              <input id="prodDesc" type="text" placeholder="Description" />
+            </div>
+
+            <div class="input-row">
+              <label id="prodAvailLabel" for="prodAvail">Available</label>
+              <select id="prodAvail">
+                <option value="1">Yes</option>
+                <option value="0">No</option>
+              </select>
+            </div>
+            <div class="input-row" style="align-self:end">
+              <button class="btn good" id="saveProdBtn" type="button">Save</button>
+            </div>
+          </div>
+          <div class="hint" id="prodHint"></div>
+          <div class="hint muted" id="prodTip" style="margin-top:10px">Tip: product name/description are saved for all languages automatically.</div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Print modal -->
+  <div class="modal" id="printModal">
+    <div class="modal-card" style="max-width:720px">
+      <div class="row" style="justify-content:space-between;align-items:center;gap:10px">
+        <h3 id="printTitle" style="margin:0">Print</h3>
+        <button class="btn ghost" id="closePrintBtn" type="button">✕</button>
+      </div>
+      <div id="printBox" style="margin-top:12px"></div>
+      <div class="row-actions" style="justify-content:flex-end;margin-top:12px">
+        <button class="btn" id="doPrintBtn" type="button">Print</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+  <script src="/pw-toggle.js"></script>
+  <script src="/restaurant/restaurant.js?v=20261023"></script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>siymon | Wallet</title>
+<script src="/theme-boot.js?v=1"></script>
+<meta name="theme-color" content="#0F0F0F" />
+<link rel="stylesheet" href="/brand.css" />
+<link rel="stylesheet" href="/wallet/wallet.css?v=2" />
+</head>
+<body>
+<header class="w-head"><a href="/" class="w-back" id="wBack" aria-label="back">←</a><h1 id="wTitle">المحفظة</h1>
+<select id="wLang" aria-label="language"><option value="ar">العربية</option><option value="fr">Français</option><option value="en">English</option></select></header>
+<main class="w-main">
+  <section class="w-card w-balance"><span id="wBalLabel">الرصيد</span><b id="wBal">—</b></section>
+  <div id="wAuth" class="w-card hidden"></div>
+  <section class="w-card" id="wForm">
+    <h2 id="wTopTitle">شحن المحفظة</h2>
+    <label id="wMethodLabel" for="wMethod">طريقة الدفع</label>
+    <select id="wMethod"></select>
+    <div id="wInfo" class="w-info"></div>
+    <img id="wQr" class="hidden" alt="QR" />
+    <label id="wAmountLabel" for="wAmount">المبلغ</label>
+    <input id="wAmount" type="number" inputmode="decimal" step="0.01" min="1" />
+    <label id="wRefLabel" for="wRef">مرجع التحويل</label>
+    <input id="wRef" type="text" maxlength="60" autocomplete="off" dir="ltr" />
+    <label id="wRcptLabel" for="wRcpt">صورة الوصل</label>
+    <input id="wRcpt" type="file" accept="image/*" />
+    <div id="wMsg" class="w-msg" role="alert"></div>
+    <button id="wSend" class="w-btn" type="button">إرسال</button>
+  </section>
+  <section class="w-card"><h2 id="wReqTitle">طلبات الشحن</h2><div id="wReqs"></div></section>
+  <section class="w-card"><h2 id="wHistTitle">الحركات</h2><div id="wHist"></div></section>
+</main>
+<script src="/wallet/wallet.js"></script>
+</body>
+</html>

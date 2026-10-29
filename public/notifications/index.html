@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <script src="/theme-boot.js?v=1"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>siymon | الإشعارات</title>
+
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="theme-color" content="#0F0F0F" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <meta name="apple-mobile-web-app-title" content="siymon" />
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="/brand.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500;600;700;800&family=Cairo:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/orders/orders.css?v=36" /><link rel="stylesheet" href="/offline.css?v=37" />
+    <link rel="stylesheet" href="/notif-center.css?v=36" />
+    <link rel="stylesheet" href="/push-prompt.css?v=36" />
+    <link rel="stylesheet" href="/subnav.css?v=36" />
+    <script src="/siymon-page.js?v=36"></script>
+    <script src="/notif-logic.js?v=36"></script>
+    <script src="/push-prompt.js?v=36" defer></script>
+    <script src="/offline.js?v=37"></script>
+    <script src="/subnav.js?v=36" defer></script>
+  </head>
+
+  <body class="subpage" data-nav="bell">
+    <header>
+      <div class="wrap">
+        <div class="topbar auth-topbar">
+          <div class="brand">
+            <span class="logo-ring">
+              <img class="logo-img" src="/icons/icon-192.png" alt="siymon logo" />
+            </span>
+            <div>
+              <h1 id="brandTitle">siymon</h1>
+              <p id="brandSub">الإشعارات</p>
+            </div>
+          </div>
+
+          <div class="actions">
+            <a class="btn" id="goHome" href="/" data-back>الرجوع</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <section class="nc" id="ncList">
+        <div class="nc-head">
+          <div>
+            <h2><span id="pageTitle">الإشعارات</span><span class="nc-count" id="ncCount" hidden></span></h2>
+            <p id="pageSub"></p>
+          </div>
+          <button class="nc-link" id="markAll" type="button" hidden></button>
+        </div>
+        <div class="nc-push" id="pushRow" hidden></div>
+        <div class="nc-chips" id="ncChips" role="group" hidden></div>
+        <div id="notificationsList" class="nc-list" aria-live="polite"></div>
+      </section>
+    </main>
+
+    <div class="nd-root" id="ndRoot" hidden>
+      <div class="nd-back" id="ndBack"></div>
+      <div class="nd-sheet" role="dialog" aria-modal="true" aria-labelledby="ndTitle" id="ndSheet" tabindex="-1">
+        <div class="nd-grab" aria-hidden="true"></div>
+        <div class="nd-bar">
+          <button class="nd-x" id="ndClose" type="button" aria-label="الرجوع">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>
+          </button>
+          <span class="nd-kind"><span class="nd-ic" id="ndIc"></span><span id="ndKind"></span></span>
+        </div>
+        <h3 class="nd-title" id="ndTitle"></h3>
+        <img class="nd-img" id="ndImg" alt="" hidden />
+        <p class="nd-msg" id="ndMsg"></p>
+        <div class="nd-rows" id="ndRows"></div>
+        <div id="ndAct"></div>
+      </div>
+    </div>
+
+    <footer>
+      <div class="wrap">
+        <span id="footerText">© siymon</span>
+      </div>
+    </footer>
+
+    <script src="/notifications/notifications.js?v=36"></script>
+  </body>
+</html>

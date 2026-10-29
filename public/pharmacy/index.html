@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <script src="/theme-boot.js?v=1"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>siymon | الصيدلية</title>
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="theme-color" content="#0F0F0F" />
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+    <link rel="stylesheet" href="/brand.css" />
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/orders/orders.css?v=36" />
+    <link rel="stylesheet" href="/chat-ui.css?v=36" />
+    <link rel="stylesheet" href="/page.css?v=36" />
+    <link rel="stylesheet" href="/subnav.css?v=36" />
+    <link rel="stylesheet" href="/pharmacy/pharmacy.css?v=1" />
+    <link rel="stylesheet" href="/offline.css?v=37" />
+    <script src="/offline.js?v=37"></script>
+    <script src="/siymon-page.js?v=36"></script>
+    <script src="/subnav.js?v=36" defer></script>
+  </head>
+  <body class="chat-page" data-nav="user">
+    <div class="cc-modal cc-page" id="phPage">
+      <div class="modal-card cc-card ph-card" role="main" aria-labelledby="phTitle">
+        <header class="cc-head">
+          <a class="cc-iconbtn cc-back" id="goHome" href="/" data-back aria-label="Back">
+            <svg class="cc-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6" /></svg>
+          </a>
+          <span class="cc-avatar" aria-hidden="true">💊</span>
+          <div class="cc-who"><b id="phTitle"></b><small id="phSub"></small></div>
+        </header>
+        <div class="ph-tabs" role="tablist">
+          <button type="button" id="tabNew" role="tab" class="on"></button>
+          <button type="button" id="tabMine" role="tab"></button>
+        </div>
+        <div class="ph-body" id="phBody" aria-live="polite"></div>
+        <div class="hint cc-hint" id="phHint" role="alert"></div>
+      </div>
+    </div>
+    <script src="/pharmacy/pharmacy.js?v=1"></script>
+  </body>
+</html>

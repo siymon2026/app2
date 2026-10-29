@@ -1,0 +1,35 @@
+/* Customer support centre (spec 16). Brand palette only; light/dark through the page variables. */
+.sc { max-width: 680px; margin: 0 auto; display: grid; gap: 16px; text-align: start; }
+.sc h1 { margin: 0 0 4px; color: var(--brand-text, #337418); font-size: 1.5rem; }
+.sc .lead { margin: 0; color: var(--muted); }
+.sc .card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 18px; }
+.sc h2 { margin: 0 0 10px; font-size: 1.1rem; }
+.sc .row { display: flex; flex-wrap: wrap; gap: 8px; }
+.sc a.chan, .sc button.act { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 16px; border-radius: 12px; border: 1px solid var(--line); background: var(--soft); color: var(--text); font: inherit; font-weight: 700; text-decoration: none; cursor: pointer; }
+.sc button.act.primary { background: #5DD62C; border-color: #5DD62C; color: #0F0F0F; }
+.sc button.act.danger { border-color: #c0392b; color: #c0392b; background: transparent; }
+.sc button:disabled { opacity: .55; cursor: not-allowed; }
+.sc .hours { font-size: .85rem; color: var(--muted); }
+.sc .list { display: grid; gap: 10px; }
+.sc .item { display: grid; gap: 4px; padding: 12px; border: 1px solid var(--line); border-radius: 12px; background: transparent; cursor: pointer; text-align: start; font: inherit; color: inherit; }
+.sc .item:focus-visible, .sc a.chan:focus-visible, .sc button.act:focus-visible { outline: 3px solid #5DD62C; outline-offset: 2px; }
+.sc .item b { font-size: .95rem; }
+.sc .muted { color: var(--muted); font-size: .85rem; }
+.sc .badge { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: .78rem; font-weight: 700; background: var(--soft); color: #337418; }
+html[data-theme="dark"] .sc .badge { color: #5DD62C; }
+.sc .badge.warn { background: #fff3cd; color: #7a5b00; }
+html[data-theme="dark"] .sc .badge.warn { background: rgba(255, 193, 7, .16); color: #ffd666; }
+.sc .badge.done { background: #e6e6e6; color: #333; }
+html[data-theme="dark"] .sc .badge.done { background: rgba(255, 255, 255, .12); color: #ddd; }
+.sc .tl { display: grid; gap: 8px; margin: 10px 0; padding: 0; list-style: none; }
+.sc .tl li { padding: 8px 10px; border-radius: 10px; background: var(--soft); }
+.sc .tl .who { font-size: .78rem; color: var(--muted); }
+.sc .field { display: grid; gap: 6px; margin-bottom: 10px; }
+.sc .field label { font-weight: 700; font-size: .9rem; }
+.sc select, .sc textarea { width: 100%; box-sizing: border-box; font: inherit; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--card); color: var(--text); }
+.sc .msg { min-height: 1.2em; font-size: .9rem; color: #c0392b; }
+.sc .msg.ok { color: #337418; }
+.sc .empty { text-align: center; color: var(--muted); padding: 14px 0; }
+.sc .skeleton { height: 54px; border-radius: 12px; background: linear-gradient(90deg, var(--soft), transparent, var(--soft)); background-size: 200% 100%; animation: scsk 1.2s linear infinite; }
+@keyframes scsk { to { background-position: -200% 0; } }
+@media (prefers-reduced-motion: reduce) { .sc .skeleton { animation: none; } }
