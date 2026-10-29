@@ -1,0 +1,20 @@
+/* SIYMON brand tokens — black & green identity. Single source of truth. */
+:root{
+  --color-bg:#0F0F0F;
+  --color-surface:#202020;
+  --color-primary:#5DD62C;
+  --color-primary-dark:#337418;
+  --color-text:#F8F8F8;
+  --color-text-muted:#A8A8A8;
+  --color-border:rgba(248,248,248,.12);
+  --color-primary-hover:#4DBF20;
+  --color-primary-press:#337418;
+  --color-primary-tint:rgba(93,214,44,.14);
+  --color-focus:rgba(93,214,44,.45);
+  --color-on-primary:#0F0F0F;
+  --on-brand:#0F0F0F;
+}
+
+/* Brand-coloured TEXT: bright green on dark, dark green on light (contrast-safe) */
+:root{--brand-text:#5DD62C}
+html:not([data-theme="dark"]){--brand-text:#337418}

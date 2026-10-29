@@ -1,0 +1,35 @@
+/* siymon — full-screen "no internet" state (shared by every customer page). Theme follows html[data-theme]. */
+.so-root{--so-bg:#F6F8F4;--so-ink:#14211A;--so-sub:#5b6760;--so-green:#5DD62C;--so-green-d:#2f8a12;--so-blob:rgba(93,214,44,.16);--so-cloud:rgba(93,214,44,.2);--so-btn-bg:#5DD62C;--so-btn-fg:#0F0F0F;
+  position:fixed;inset:0;z-index:2147483000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;text-align:center;
+  padding:max(24px,env(safe-area-inset-top)) 24px max(24px,env(safe-area-inset-bottom));background:var(--so-bg);color:var(--so-ink);
+  font-family:"Cairo","Segoe UI","Noto Sans Arabic","Geeza Pro",Tahoma,system-ui,sans-serif;-webkit-font-smoothing:antialiased;
+  opacity:0;visibility:hidden;transition:opacity .22s ease,visibility 0s linear .22s}
+html[data-theme="dark"] .so-root{--so-bg:#0F0F0F;--so-ink:#F8F8F8;--so-sub:#9aa3a0;--so-green-d:#5DD62C;--so-blob:rgba(93,214,44,.1);--so-cloud:rgba(93,214,44,.12)}
+.so-root.on{opacity:1;visibility:visible;transition:opacity .22s ease}
+.so-art{width:min(330px,82vw);height:auto;margin-bottom:6px;overflow:visible}
+.so-art .ink{stroke:var(--so-ink)}.so-art .inkf{fill:var(--so-ink)}
+.so-art .gf{fill:var(--so-green)}.so-art .gs{stroke:var(--so-green)}
+.so-art .blob{fill:var(--so-blob)}.so-art .cloud{fill:var(--so-cloud)}
+.so-art .bob{animation:so-bob 3.6s ease-in-out infinite;transform-origin:center;transform-box:fill-box}
+.so-art .spark{animation:so-spark 1.6s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+.so-title{margin:18px 0 8px;font-size:clamp(22px,6.2vw,28px);font-weight:800;line-height:1.35}
+.so-hint{margin:0;font-size:clamp(15px,4.2vw,17px);color:var(--so-sub);line-height:1.7;max-width:320px}
+.so-last{margin:6px 0 0;font-size:13px;color:var(--so-sub);opacity:.85}
+.so-btn{margin-top:26px;min-width:210px;height:52px;padding:0 30px;border:0;border-radius:999px;background:var(--so-btn-bg);color:var(--so-btn-fg);
+  font:inherit;font-size:17px;font-weight:800;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  box-shadow:0 8px 22px rgba(93,214,44,.28);-webkit-tap-highlight-color:transparent;transition:transform .12s ease,opacity .2s}
+.so-btn:active{transform:scale(.97)}
+.so-btn:focus-visible{outline:3px solid var(--so-ink);outline-offset:3px}
+.so-btn[disabled]{opacity:.75;cursor:progress}
+.so-spin{width:18px;height:18px;border-radius:50%;border:3px solid rgba(15,15,15,.25);border-top-color:#0F0F0F;animation:so-rot .8s linear infinite;display:none}
+.so-btn.busy .so-spin{display:inline-block}
+.so-msg{min-height:24px;margin:14px 0 0;font-size:14px;color:var(--so-sub)}
+.so-msg.err{color:#d6452c}
+html[data-theme="dark"] .so-msg.err{color:#ff8a73}
+.so-root.shake .so-btn{animation:so-shake .38s}
+body.so-lock{overflow:hidden}
+@keyframes so-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+@keyframes so-spark{0%,100%{opacity:.25;transform:scale(.85)}50%{opacity:1;transform:scale(1.1)}}
+@keyframes so-rot{to{transform:rotate(360deg)}}
+@keyframes so-shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+@media (prefers-reduced-motion:reduce){.so-root,.so-root.on{transition:none}.so-art .bob,.so-art .spark,.so-btn,.so-root.shake .so-btn{animation:none}}

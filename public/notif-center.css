@@ -1,0 +1,89 @@
+/* siymon — notification center (list + details sheet). Uses the tokens of orders.css, so light/dark follow the app. */
+.nc{padding:18px 0 8px}
+.nc-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:14px}
+.nc-head h2{margin:0;font-size:24px;font-weight:800;line-height:1.3;display:flex;align-items:center;gap:10px;color:var(--ink)}
+.nc-head p{margin:4px 0 0;font-size:14.5px;color:var(--muted)}
+.nc-count{min-width:26px;height:26px;padding:0 8px;border-radius:13px;background:var(--brand);color:#0F0F0F;font-size:14px;font-weight:800;line-height:26px;text-align:center}
+.nc-link{flex:none;margin-top:2px;min-height:40px;padding:0 14px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--ink);font:inherit;font-size:13.5px;font-weight:700;cursor:pointer;white-space:nowrap;-webkit-tap-highlight-color:transparent}
+.nc-link:active{transform:scale(.97)}
+.nc button:focus-visible,.nd-sheet button:focus-visible,.nd-sheet a:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+
+.nc-chips{display:flex;gap:8px;overflow-x:auto;padding:2px 0 12px;margin:0 -2px;scrollbar-width:none}
+.nc-chips::-webkit-scrollbar{display:none}
+.nc-chip{flex:none;min-height:38px;padding:0 16px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--muted);font:inherit;font-size:14px;font-weight:700;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.nc-chip.on{background:var(--brand);border-color:var(--brand);color:#0F0F0F}
+
+.nc-push{display:flex;align-items:center;gap:12px;margin:0 0 12px;padding:12px 14px;border:1px dashed var(--line);border-radius:16px;background:var(--brand-tint);color:var(--ink);font-size:14px;line-height:1.6}
+.nc-push span{flex:1}
+.nc-push button{flex:none;min-height:40px;padding:0 16px;border:0;border-radius:999px;background:var(--brand);color:#0F0F0F;font:inherit;font-size:14px;font-weight:800;cursor:pointer}
+.nc-push button.ghost{background:none;border:1px solid var(--line);color:var(--ink);font-weight:700}
+.nc-push.quiet{background:none;border-style:solid;color:var(--muted)}
+.nc-push.err{border-color:#d6452c}
+
+.nc-list{display:flex;flex-direction:column;gap:10px;padding-bottom:6px}
+.nc-item{position:relative;display:flex;align-items:flex-start;gap:12px;width:100%;box-sizing:border-box;padding:12px 14px;text-align:start;
+  border:1px solid var(--line);border-radius:18px;background:var(--card);color:var(--ink);font:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent;
+  transition:transform .12s ease,background .2s,border-color .2s;animation:nc-in .26s ease both}
+.nc-item:active{transform:scale(.985)}
+.nc-item.unread{background:var(--brand-tint);border-color:rgba(93,214,44,.55)}
+.nc-ic{flex:none;width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:var(--brand-tint);color:#337418}
+html[data-theme="dark"] .nc-ic{color:#5DD62C;background:rgba(93,214,44,.14)}
+.nc-item.unread .nc-ic{background:var(--brand);color:#0F0F0F}
+.nc-ic svg,.nd-ic svg{width:23px;height:23px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.nc-ic.k-canceled{color:#b3261e;background:rgba(179,38,30,.1)}
+.nc-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.nc-title{font-size:15.5px;font-weight:800;line-height:1.45;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nc-sum{font-size:14px;line-height:1.55;color:var(--muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
+.nc-meta{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin-top:2px;font-size:12.5px;color:var(--muted)}
+.nc-meta .nc-unr{color:#337418;font-weight:800}
+html[data-theme="dark"] .nc-meta .nc-unr{color:#5DD62C}
+.nc-meta bdi{direction:ltr;unicode-bidi:isolate;font-variant-numeric:tabular-nums}
+
+.nc-empty{display:flex;flex-direction:column;align-items:center;text-align:center;padding:42px 16px 30px;color:var(--muted)}
+.nc-empty svg{width:150px;height:auto;margin-bottom:10px}
+.nc-empty b{font-size:19px;color:var(--ink);margin-bottom:6px}
+.nc-empty span{font-size:14.5px;line-height:1.7;max-width:280px}
+.nc-state{display:grid;gap:10px;justify-items:center;padding:28px 12px;text-align:center;color:var(--muted)}
+.nc-state button{min-height:42px;padding:0 20px;border:0;border-radius:999px;background:var(--brand);color:#0F0F0F;font:inherit;font-weight:800;cursor:pointer}
+.nc-skel{height:76px;border-radius:18px;background:linear-gradient(90deg,var(--card) 25%,var(--brand-tint) 50%,var(--card) 75%);background-size:200% 100%;border:1px solid var(--line);animation:nc-sh 1.3s linear infinite}
+
+/* details bottom sheet */
+.nd-root{position:fixed;inset:0;z-index:60;display:flex;align-items:flex-end;justify-content:center}
+.nd-root[hidden]{display:none}
+.nd-back{position:absolute;inset:0;background:rgba(0,0,0,.5);opacity:0;transition:opacity .2s}
+.nd-sheet{position:relative;width:min(560px,100%);max-height:88dvh;overflow:auto;overscroll-behavior:contain;box-sizing:border-box;
+  padding:10px 20px max(22px,env(safe-area-inset-bottom));background:var(--card);color:var(--ink);border-radius:26px 26px 0 0;
+  box-shadow:0 -14px 40px rgba(0,0,0,.3);transform:translateY(100%);transition:transform .26s cubic-bezier(.2,.9,.25,1)}
+.nd-root.on .nd-back{opacity:1}.nd-root.on .nd-sheet{transform:none}
+@media (min-width:600px){.nd-root{align-items:center}.nd-sheet{border-radius:26px;padding-bottom:24px}}
+.nd-grab{width:44px;height:5px;border-radius:3px;background:var(--line);margin:0 auto 8px}
+.nd-bar{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.nd-x{flex:none;width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:none;color:var(--ink);display:grid;place-items:center;cursor:pointer}
+.nd-x svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+html[dir="ltr"] .nd-x svg{transform:scaleX(-1)}
+.nd-kind{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;background:var(--brand-tint);font-size:13px;font-weight:800;color:#337418}
+html[data-theme="dark"] .nd-kind{color:#5DD62C}
+.nd-ic{width:20px;height:20px;display:grid;place-items:center}.nd-ic svg{width:18px;height:18px}
+.nd-title{margin:4px 0 10px;font-size:21px;font-weight:800;line-height:1.5;overflow-wrap:anywhere}
+.nd-msg{margin:0 0 14px;font-size:16px;line-height:1.85;white-space:pre-wrap;overflow-wrap:anywhere}
+.nd-img{display:block;width:100%;max-height:240px;object-fit:cover;border-radius:16px;margin:0 0 14px}
+.nd-rows{margin:0 0 16px;border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.nd-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;font-size:14.5px}
+.nd-row+.nd-row{border-top:1px solid var(--line)}
+.nd-row span{color:var(--muted)}.nd-row b{font-weight:800;text-align:end;overflow-wrap:anywhere}
+.nd-row bdi{direction:ltr;unicode-bidi:isolate;font-variant-numeric:tabular-nums}
+.nd-st{display:inline-block;padding:3px 12px;border-radius:999px;background:var(--brand-tint);color:#337418;font-size:13px}
+html[data-theme="dark"] .nd-st{color:#5DD62C}
+.nd-st.bad{background:rgba(179,38,30,.12);color:#b3261e}
+.nd-go{display:flex;align-items:center;justify-content:center;width:100%;height:52px;border:0;border-radius:999px;background:var(--brand);color:#0F0F0F;font:inherit;font-size:16.5px;font-weight:800;text-decoration:none;cursor:pointer;box-shadow:0 8px 20px rgba(93,214,44,.28)}
+.nd-go:active{transform:scale(.98)}
+.nd-note{margin:10px 0 0;font-size:13px;color:var(--muted);text-align:center}
+
+@keyframes nc-in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@keyframes nc-sh{to{background-position:-200% 0}}
+@media (prefers-reduced-motion:reduce){.nc-item{animation:none}.nd-back,.nd-sheet{transition:none}.nc-skel{animation:none}}
+
+/* the `hidden` attribute must win over the display rules above */
+.nc [hidden],.nd-sheet [hidden]{display:none!important}
+.nd-msg bdi,.nc-sum bdi{direction:ltr;unicode-bidi:isolate}
+.nd-msg bdi,.nc-sum bdi,.nd-row bdi,.nc-meta bdi{white-space:nowrap}

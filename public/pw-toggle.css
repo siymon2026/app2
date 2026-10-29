@@ -1,0 +1,41 @@
+/* Password show/hide toggle (eye icon) */
+.pw-field{
+  position:relative;
+  width:100%;
+  display:block;
+}
+
+.pw-field > input{
+  padding-inline-end: 46px !important;
+}
+
+.pw-toggle{
+  position:absolute;
+  top:50%;
+  transform: translateY(-50%);
+  inset-inline-end: 10px;
+  width:36px;
+  height:36px;
+  border:0;
+  background:transparent;
+  color:inherit;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  opacity:.85;
+  border-radius:10px;
+}
+
+.pw-toggle:hover{ opacity:1; }
+
+.pw-toggle:focus{
+  outline:2px solid rgba(120,120,120,.45);
+  outline-offset:2px;
+}
+
+.pw-toggle svg{
+  width:20px;
+  height:20px;
+  fill:currentColor;
+}

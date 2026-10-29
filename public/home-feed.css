@@ -1,0 +1,91 @@
+/* Siymon customer home feed (Feedo-inspired). Scoped to body.home; colors come from home.css variables. */
+body.feed-mode #restCard,body.feed-mode #offersBanner,body.feed-mode .statusbar,body.feed-mode #restTitle,
+body.feed-mode #restaurantChips,body.feed-mode #categoryChips,body.feed-mode .layout{display:none!important}
+body.store-mode #feedHome{display:none}
+.fh-back{display:none;align-items:center;gap:6px;margin:12px 0 0;padding:8px 14px;border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:999px;font:inherit;font-weight:700;cursor:pointer}
+body.store-mode .fh-back{display:inline-flex}
+.fh-back svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.2}
+[dir="rtl"] .fh-back svg{transform:scaleX(-1)}
+.fh-sbtn{flex:0 0 auto;width:40px;height:40px;border-radius:50%;border:0;background:var(--brand);color:#0F0F0F;display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
+.fh-sbtn svg{width:20px;height:20px;fill:currentColor}
+.fh-sbtn:focus-visible{outline:2px solid var(--text);outline-offset:2px}
+#feedHome{margin-top:6px}
+.fh-row{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x proximity;padding:4px 2px 12px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.fh-row::-webkit-scrollbar{display:none}
+.fh-row>*{scroll-snap-align:start;flex:0 0 auto}
+.fh-cats{margin:6px 0 4px}
+.fh-chip{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:12px;font:inherit;font-weight:700;font-size:14px;cursor:pointer;white-space:nowrap}
+.fh-chip img{width:26px;height:26px;border-radius:50%;object-fit:cover}
+.fh-chip[aria-pressed="true"]{background:var(--brand);border-color:var(--brand);color:#0F0F0F}
+.fh-chip:focus-visible,.fh-icard:focus-visible,.fh-scard:focus-visible,.fh-slide:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+.fh-banners .fh-slide{width:min(86vw,420px);height:150px;border-radius:18px;overflow:hidden;position:relative;border:0;padding:0;background:var(--soft);cursor:pointer}
+.fh-slide img{width:100%;height:100%;object-fit:cover;display:block}
+.fh-slide .cap{position:absolute;inset-inline:0;bottom:0;padding:24px 14px 10px;color:#fff;text-align:start;background:linear-gradient(transparent,rgba(0,0,0,.65));font-weight:800}
+.fh-slide .cap small{display:block;font-weight:500;opacity:.9}
+.fh-sec{margin-top:14px}
+.fh-sec>h2{margin:0 0 8px;font-size:19px;font-weight:800;display:flex;justify-content:space-between;align-items:baseline}
+.fh-sec>h2 .cnt{font-size:13px;color:var(--muted);font-weight:500}
+/* item cards */
+.fh-icard{position:relative;border:0;padding:0;background:none;text-align:start;color:var(--text);font:inherit;cursor:pointer;width:170px}
+.fh-icard .im{position:relative;border-radius:18px;overflow:hidden;height:190px;background:var(--soft)}
+.fh-icard.wide{width:230px}.fh-icard.wide .im{height:130px}
+.fh-icard .im img.pic{width:100%;height:100%;object-fit:cover;display:block}
+.fh-icard.tall .im::after{content:"";position:absolute;inset:0;background:linear-gradient(transparent 45%,rgba(0,0,0,.72))}
+.fh-icard .ov{position:absolute;inset-inline:10px;bottom:8px;color:#fff;z-index:1;font-weight:800}
+.fh-icard .ov small{display:block;font-weight:600;opacity:.95}
+.fh-icard .logo{position:absolute;top:8px;inset-inline-start:8px;width:34px;height:34px;border-radius:50%;border:2px solid #fff;object-fit:cover;background:var(--brand);z-index:1}
+.fh-icard .disc,.fh-scard .disc{position:absolute;top:8px;inset-inline-end:8px;background:var(--brand);color:#0F0F0F;font-size:12px;font-weight:800;padding:2px 8px;border-radius:6px;z-index:1}
+.fh-icard .tx{padding:8px 2px 0}
+.fh-icard .tx b{display:block;font-size:15px;line-height:1.3}
+.fh-icard .tx span{font-size:13px;color:var(--muted)}
+.fh-price{color:var(--brand-text,#5DD62C);font-weight:800}
+.fh-price s,.old-price{color:var(--muted);font-weight:500;font-size:.85em;margin-inline-start:4px}
+/* store cards */
+.fh-scard{position:relative;display:block;width:100%;border:1px solid var(--line);background:var(--card);border-radius:18px;overflow:hidden;text-align:start;color:var(--text);font:inherit;padding:0;cursor:pointer;box-shadow:var(--sh)}
+.fh-row .fh-scard{width:260px}
+.fh-scard .cv{height:110px;background:linear-gradient(135deg,var(--brand),#5DD62C);position:relative}
+.fh-scard .cv img{width:100%;height:100%;object-fit:cover;display:block}
+.fh-scard .cv img.lg{position:absolute;inset-inline-start:12px;bottom:-22px;width:46px;height:46px;border-radius:50%;border:3px solid var(--card);object-fit:cover;background:var(--brand);z-index:1}
+.fh-scard .bd{padding:28px 12px 12px}
+.fh-scard .bd b{font-size:16px}
+.fh-scard .bd p{margin:2px 0 8px;color:var(--muted);font-size:13px}
+.fh-meta{display:flex;flex-wrap:wrap;gap:6px 12px;font-size:12.5px;color:var(--muted)}
+.fh-meta .free{color:var(--ok);font-weight:700}
+.fh-state{position:absolute;top:8px;inset-inline-start:8px;font-size:12px;font-weight:800;padding:2px 10px;border-radius:999px;background:#fff;color:var(--ok);z-index:1}
+.fh-scard.closed .cv,.fh-icard.closed .im{filter:grayscale(.85)}
+.fh-scard.closed .fh-state,.fh-state.closed{color:#b91c1c}
+.fh-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+.fh-note{padding:22px 12px;text-align:center;color:var(--muted)}
+.fh-note button{margin-top:10px}
+.fh-skel{height:140px;border-radius:18px;margin:10px 0;background:linear-gradient(90deg,var(--soft),var(--card),var(--soft));background-size:200% 100%;animation:fhsk 1.2s linear infinite}
+@keyframes fhsk{to{background-position:-200% 0}}
+@media (prefers-reduced-motion:reduce){.fh-skel{animation:none}}
+.price-pill .old-price{color:#fff;opacity:.75}
+@media (min-width:900px){.fh-icard{width:200px}.fh-icard.wide{width:260px}.fh-banners .fh-slide{width:520px;height:180px}}
+
+/* ---- search suggestions + results (search-client.js) ---- */
+.sg-box{position:absolute;inset-inline:0;top:calc(100% + 6px);z-index:60;background:var(--card,#1b1b1b);color:var(--text);border:1px solid var(--line,rgba(255,255,255,.12));border-radius:16px;box-shadow:0 12px 32px rgba(0,0,0,.35);max-height:min(70vh,440px);overflow:auto;padding:6px}
+.sg-box[hidden]{display:none}
+.sg-h{font-size:12px;color:var(--muted);padding:8px 10px 4px}
+.sg-row{display:flex;align-items:center;gap:10px;width:100%;border:0;background:none;color:inherit;font:inherit;text-align:start;padding:8px 10px;border-radius:12px;cursor:pointer}
+.sg-row:hover,.sg-row.on{background:rgba(93,214,44,.14)}
+.sg-row.off{opacity:.65}
+.sg-img,.sg-ico{width:40px;height:40px;border-radius:10px;object-fit:cover;flex:0 0 40px;display:grid;place-items:center;background:rgba(255,255,255,.06)}
+.sg-main{flex:1;min-width:0;display:grid}
+.sg-main b{font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sg-main small{font-size:12px;color:var(--muted)}
+.sg-r{display:grid;justify-items:end;gap:2px;flex:0 0 auto}
+.sg-price b{font-size:13px}
+.sg-price s{font-size:11px;color:var(--muted);margin-inline-start:4px}
+.sg-b{font-size:11px;padding:1px 8px;border-radius:99px;border:1px solid var(--line,rgba(255,255,255,.2))}
+.sg-b.na,.sg-b.closed{color:#e57373;border-color:#e57373}
+.sg-b.low{color:#f0b429;border-color:#f0b429}
+.sg-none{padding:14px;text-align:center;color:var(--muted)}
+.sg-ask,.fh-ask{display:block;text-align:center;margin:6px;padding:10px;border-radius:12px;background:var(--brand,#5DD62C);color:#0f0f0f;font-weight:800;text-decoration:none}
+.sg-all{display:block;width:100%;border:0;background:none;color:var(--brand,#5DD62C);padding:10px;font:inherit;font-weight:700;cursor:pointer}
+.fh-rcard{display:flex;align-items:center;gap:10px;width:100%;border:1px solid var(--line,rgba(255,255,255,.12));border-radius:14px;padding:10px;background:none;color:inherit;font:inherit;text-align:start;cursor:pointer;margin-bottom:8px}
+.fh-rcard.off{opacity:.7}
+.fh-rcard .pic{width:56px;height:56px;border-radius:12px;object-fit:cover;flex:0 0 56px;background:rgba(255,255,255,.06)}
+.fh-rcard .tx{flex:1;min-width:0;display:grid;gap:2px}
+.fh-rcard .tx small{color:var(--muted)}
+.fh-rcard .ask{display:inline-block;margin-top:4px;font-size:12px;font-weight:800;color:var(--brand,#5DD62C)}
