@@ -146,17 +146,17 @@
         "fr": "Application CIH Bank",
         "en": "CIH Bank app"
       },
-      "enabled": true,
+      "enabled": false,
       "contexts": {
         "checkout": false,
-        "customerTopup": true,
+        "customerTopup": false,
         "driverTopup": false
       },
       "details": {
         "default": {
-          "holderName": "SIYMON SARL",
-          "bankName": "CIH",
-          "rib": "007780000012345678901234",
+          "holderName": "",
+          "bankName": "",
+          "rib": "",
           "iban": "",
           "accountNumber": "",
           "paymentIdentifier": "",
@@ -182,7 +182,7 @@
         "fr": "",
         "en": ""
       },
-      "version": 30
+      "version": 31
     },
     {
       "id": "credit_agricole",

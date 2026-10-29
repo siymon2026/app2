@@ -1,6 +1,121 @@
 {
   "tokens": [
     {
+      "id": "MVTTUM08-6980C5",
+      "userType": "admin",
+      "userId": "legacy",
+      "role": "admin",
+      "restaurantId": null,
+      "tokenHash": "e26529da612902f62d1e75f62a4711eadc1865fc0cfa86edabf1fa3e55508926",
+      "createdAt": "2026-10-29T17:38:38.696Z",
+      "expiresAt": "2026-11-28T17:38:38.696Z",
+      "revokedAt": null,
+      "replacedBy": null,
+      "meta": {
+        "legacy": true,
+        "ip": "::ffff:127.0.0.1",
+        "ua": "Python-urllib/3.11"
+      }
+    },
+    {
+      "id": "MVTTU5IQ-12EC26",
+      "userType": "admin",
+      "userId": "MVTTU5EB-6D81B0",
+      "role": "admin",
+      "restaurantId": null,
+      "tokenHash": "7bc873aaab87a75c9050bb4b9ba9ce0d24797c85e0c336ce28377d2325df8f87",
+      "createdAt": "2026-10-29T17:38:17.330Z",
+      "expiresAt": "2026-11-28T17:38:17.330Z",
+      "revokedAt": null,
+      "replacedBy": null,
+      "meta": {
+        "ip": "::ffff:127.0.0.1",
+        "ua": "Python-urllib/3.11"
+      }
+    },
+    {
+      "id": "MVTTU5BK-B114D7",
+      "userType": "driver",
+      "userId": "MVTTU56X-C2FE18",
+      "role": "driver",
+      "restaurantId": null,
+      "tokenHash": "ffcc97e104e1f5e6c2ab712fdc990e009bf5270c62718e8f32bc5ac5cc31bb5d",
+      "createdAt": "2026-10-29T17:38:17.072Z",
+      "expiresAt": "2026-11-28T17:38:17.072Z",
+      "revokedAt": null,
+      "replacedBy": null,
+      "meta": {
+        "ip": "::ffff:127.0.0.1",
+        "ua": "Python-urllib/3.11"
+      }
+    },
+    {
+      "id": "MVTTU594-F6E5DF",
+      "userType": "driver",
+      "userId": "MVTTU56X-C2FE18",
+      "role": "driver",
+      "restaurantId": null,
+      "tokenHash": "ad72c0e5e7f7e56e6867d4266cce240b5cf366b4b2d3ecb8b34e3b1cb1da0c1d",
+      "createdAt": "2026-10-29T17:38:16.984Z",
+      "expiresAt": "2026-11-28T17:38:16.984Z",
+      "revokedAt": null,
+      "replacedBy": null,
+      "meta": {
+        "ip": "::ffff:127.0.0.1",
+        "ua": "Python-urllib/3.11"
+      }
+    },
+    {
+      "id": "MVTTU4ZH-5933D6",
+      "userType": "customer",
+      "userId": "MVTTU4WY-AB8E25",
+      "role": "customer",
+      "restaurantId": null,
+      "tokenHash": "4135a8d2a2957a31d68ec88d4358861912513e7e96231a7342c8a64e3b3669f9",
+      "createdAt": "2026-10-29T17:38:16.637Z",
+      "expiresAt": "2026-11-28T17:38:16.637Z",
+      "revokedAt": null,
+      "replacedBy": null,
+      "meta": {
+        "ip": "::ffff:127.0.0.1",
+        "ua": "Python-urllib/3.11"
+      }
+    },
+    {
+      "id": "MVTTU4WG-A89B12",
+      "userType": "admin",
+      "userId": "legacy",
+      "role": "admin",
+      "restaurantId": null,
+      "tokenHash": "66dae38f931c6ee4ad2cb9ec8f92b83e8084deb28e7a314604f11d6035bb79d0",
+      "createdAt": "2026-10-29T17:38:16.528Z",
+      "expiresAt": "2026-11-28T17:38:16.528Z",
+      "revokedAt": null,
+      "replacedBy": null,
+      "meta": {
+        "legacy": true,
+        "ip": "::ffff:127.0.0.1",
+        "ua": "Python-urllib/3.11"
+      }
+    },
+    {
+      "id": "MVTTTLGA-2456CE",
+      "userType": "admin",
+      "userId": "legacy",
+      "role": "admin",
+      "restaurantId": null,
+      "tokenHash": "820726175285601124fe48043ef1f62b6a24adb01a58d2cf6e1ddc0834fa20b1",
+      "createdAt": "2026-10-29T17:37:51.322Z",
+      "expiresAt": "2026-11-28T17:37:51.322Z",
+      "revokedAt": null,
+      "replacedBy": null,
+      "meta": {
+        "legacy": true,
+        "ip": "::ffff:127.0.0.1",
+        "ua": "Python-urllib/3.11"
+      }
+    },
+    {
       "id": "MVTSUMU5-DF5EA8",
       "userType": "admin",
       "userId": "MVTSUMPO-5B6011",

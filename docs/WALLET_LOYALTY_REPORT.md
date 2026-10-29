@@ -24,6 +24,8 @@
 | `tests/loyalty.test.js` | 18 اختبارًا لقواعد النقاط والدفتر |
 | `tests/wallet-service.test.js` | 11 اختبارًا للسياسة والحركات والدفتر |
 | `tests/finance-e2e.py` | 65 فحصًا حقيقيًا عبر HTTP على خادم شغّال (لا محاكاة) |
+| `tests/run-finance-e2e.sh` | يشغّل الاختبار على نسخة معزولة (`DATA_DIR` مؤقت) دون لمس بياناتك |
+| `tests/cleanup-e2e-data.py` | إزالة آثار الاختبارات من مجلد بيانات حقيقي (بنسخة احتياطية) |
 
 ### ملفات معدّلة (21 ملفًا)
 `server.js` · `lib/wallet-ledger.js` · `lib/topups.js` · `lib/order-payment.js` · `lib/order-state.js` · `lib/admin-roles.js` · `lib/store-routes.js` · `public/wallet/{index.html,wallet.css,wallet.js}` · `public/index.html` · `public/app.js` · `public/styles.css` · `public/orders/orders.js` · `public/store/store.js` · `public/admin/{index.html,admin.js,admin-nav.js,admin-perms.js}` · `tests/order-payment.test.js` · `tests/service-zones-wiring.test.js`
@@ -83,14 +85,21 @@
 ## 5. الاختبارات
 
 ```
-cd app2 && npm test                    →  573 اختبارًا / 573 ناجح / 0 فاشل  (~11 ثانية)
-PORT=8099 JWT_SECRET=devsecret \
-  ADMIN_PASSWORD=admin123 node server.js &
-python3 tests/finance-e2e.py           →  65 فحصًا / 65 ناجح / 0 فاشل
+cd app2 && npm test          →  573 اختبارًا / 573 ناجح / 0 فاشل  (~11 ثانية)
+./tests/run-finance-e2e.sh   →  65 فحصًا / 65 ناجح / 0 فاشل  (على نسخة معزولة)
 ```
 
-(يعمل السكربت على خادم نظيف بمتغيّر `ADMIN_PASSWORD`، وينشئ عند أول تشغيل حساب `system_admin`
-حقيقيًا `e2e.admin@siymon.test` حتى تبقى التشغيلات التالية قابلة للتكرار.)
+**مهم:** `tests/run-finance-e2e.sh` يشغّل خادمًا على **مجلد بيانات مؤقت** (`DATA_DIR`)، فلا يلمس
+بياناتك الحقيقية (الأرصدة، الدفتر، حسابات المشرفين، سجل التدقيق) ويحذف المجلد عند الانتهاء.
+لا تشغّل `tests/finance-e2e.py` مباشرة على خادمك الحقيقي: فهو ينشئ زبائن/طلبات/حساب محاسب
+(وهذا يمنع بعدها تسجيل الدخول بالكلمة القديمة وحدها، لأن النظام يتطلب بريدًا مع الكلمة عند
+وجود أي حساب مشرف).
+
+إن شغّلته على نسخة حقيقية بالخطأ، فأداة الإصلاح:
+```
+python3 tests/cleanup-e2e-data.py --data data --dry-run   # معاينة
+python3 tests/cleanup-e2e-data.py --data data             # تنظيف (مع نسخة احتياطية)
+```
 
 **ما يغطيه `finance-e2e.py` (خادم حقيقي + ملفات البيانات الحقيقية):**
 شحن معلّق لا يغيّر الرصيد → موافقة تُضيف مرة واحدة → موافقة ثانية مرفوضة → مطابقة الدفتر → إعدادات البرنامج + معاينة مسودة → طلب مدفوع من المحفظة → إعادة الطلب بنفس المفتاح لا تخصم مرتين → ظهور المحفظة كطريقة دفع للزبون المسجّل فقط → رصيد غير كافٍ (رسالة مُهيكلة + available/required/shortfall + AR/FR/EN + لا خصم جزئي + لا طلب وهمي) → دورة الطلب كاملة (متجر يقبل ويُسلّم → سائق معتمد يُعيَّن → رمز الاستلام من المتجر → رمز التسليم من الزبون) → كسب النقاط مرة واحدة → تحويل نقاط → معرفة تفرّد التحويل → استرجاع طلب مُسلَّم (إعادة الرصيد + سحب النقاط + منع الاسترجاع المزدوج) → إلغاء قبل القبول (استرجاع مرة واحدة) → تزامن طلبين يتجاوزان الرصيد (لا رصيد سالب) → مصفوفة الصلاحيات (محاسب يعدّل ولا يغيّر القواعد/الحدود، رمز مزوّر مرفوض).

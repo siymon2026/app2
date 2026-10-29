@@ -14,6 +14,7 @@ refund (wallet + points reversal, no double refund), cancellation refund,
 concurrent double-spend, and the admin permission matrix.
 """
 import json
+import os
 import sys
 import threading
 import time
@@ -21,9 +22,15 @@ import urllib.error
 import urllib.request
 
 BASE = "http://127.0.0.1:8099"
+ADMIN_EMAIL = ""
+ADMIN_PASSWORD = ""
 for i, a in enumerate(sys.argv):
     if a == "--base" and i + 1 < len(sys.argv):
         BASE = sys.argv[i + 1]
+    if a == "--admin-email" and i + 1 < len(sys.argv):
+        ADMIN_EMAIL = sys.argv[i + 1]
+    if a == "--admin-password" and i + 1 < len(sys.argv):
+        ADMIN_PASSWORD = sys.argv[i + 1]
 
 PNG = (
     "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4n"
@@ -58,30 +65,34 @@ def unique(prefix):
     return "%s%d" % (prefix, int(time.time() * 1000) % 10 ** 10)
 
 
-ADMIN_CRED = {"email": "e2e.admin@siymon.test", "phone": "0600000001", "password": "E2ePassw0rd123"}
-
-
 def admin_token():
-    """Legacy ADMIN_PASSWORD login only works while no admin account exists. This
-    helper logs in, and (when it is the first run) creates a real full admin so that
-    later runs still work after restricted staff accounts have been added."""
-    st, a = req("POST", "/api/admin/login", {"password": "admin123"})
+    """Log in as the operator's admin.
+
+    This script must NEVER change the operator's admin accounts: it only uses the
+    legacy ADMIN_PASSWORD (which works while the instance has no admin account), or
+    the credentials given with --admin-email/--admin-password."""
+    st, a = req("POST", "/api/admin/login", {"password": os.environ.get("ADMIN_PASSWORD", "admin123")})
     if st == 200:
-        # make the environment repeatable: a real system_admin account
-        req("POST", "/api/admin/signup", {
-            "email": ADMIN_CRED["email"], "phone": ADMIN_CRED["phone"],
-            "password": ADMIN_CRED["password"], "password2": ADMIN_CRED["password"],
-        }, {"X-Admin-Token": a["token"]})
-        return a["token"]
-    st, a = req("POST", "/api/admin/login", {"email": ADMIN_CRED["email"], "password": ADMIN_CRED["password"]})
-    return a.get("token") if st == 200 else None
+        return a.get("token")
+    if ADMIN_EMAIL and ADMIN_PASSWORD:
+        st, a = req("POST", "/api/admin/login", {"email": ADMIN_EMAIL, "password": ADMIN_PASSWORD})
+        if st == 200:
+            return a.get("token")
+    return None
 
 
 def main():
     token = admin_token()
     if not token:
-        print("cannot log in as admin: set ADMIN_PASSWORD=admin123 on a fresh data dir, "
-              "or create the system admin %s" % ADMIN_CRED["email"])
+        print(
+            "cannot log in as admin.\n"
+            "This instance already has admin accounts, so the password-only login is closed.\n"
+            "Run the script against an isolated instance (recommended):\n"
+            "    ./tests/run-finance-e2e.sh\n"
+            "or pass real credentials:\n"
+            "    python3 tests/finance-e2e.py --admin-email you@example.com --admin-password '...'\n"
+            "It never creates or modifies admin accounts."
+        )
         return 2
     AT = {"X-Admin-Token": token}
 

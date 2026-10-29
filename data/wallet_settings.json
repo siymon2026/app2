@@ -3,7 +3,7 @@
     "enabled": true,
     "currency": "MAD",
     "minTopup": 10,
-    "maxTopup": 5000,
+    "maxTopup": 20000,
     "feePercent": 0,
     "feeFixed": 0,
     "presets": [
@@ -12,8 +12,8 @@
       200,
       500
     ],
-    "version": 60,
-    "updatedAt": "2026-10-29T17:10:39.406Z",
-    "updatedBy": "MVTSSFSK-0AD4AC"
+    "version": 63,
+    "updatedAt": "2026-10-29T17:38:16.660Z",
+    "updatedBy": "legacy"
   }
 }

@@ -824,7 +824,14 @@ function auditWriteRequests(req, res, next) {
 
 const ROOT = __dirname;
 const PUBLIC_DIR = path.join(ROOT, "public");
-const DATA_DIR = path.join(ROOT, "data");
+/**
+ * Where the JSON store lives. Defaults to ./data (production behaviour unchanged);
+ * set DATA_DIR to run an isolated instance (tests, staging, a second environment)
+ * without ever touching the real balances, audit log or admin accounts.
+ */
+const DATA_DIR = process.env.DATA_DIR
+  ? path.resolve(ROOT, process.env.DATA_DIR)
+  : path.join(ROOT, "data");
 
 const ORDERS_FILE = path.join(DATA_DIR, "orders.json");
 const ADMINS_FILE = path.join(DATA_DIR, "admins.json");
