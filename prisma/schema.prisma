@@ -1,0 +1,192 @@
+// Prisma schema (PostgreSQL)
+// الهدف: تجهيز انتقال تدريجي من JSON إلى PostgreSQL بدون كسر النسخة الحالية.
+// ملاحظة: السيرفر الحالي مازال يشتغل بـ JSON؛ هذا مجرد أساس للمرحلة 1.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Restaurant {
+  id                   String   @id
+  nameAr               String
+  nameEn               String
+  nameFr               String
+  phone                String?  
+  address              String?
+  isActive             Boolean  @default(true)
+
+  ownerId              String?
+  subscriptionPlan     String   @default("Basic")
+  subscriptionStatus   String   @default("active")
+  subscriptionRenewsAt DateTime?
+  subscriptionProvider String?
+  subscriptionMeta     Json?
+
+  loginEmail           String?
+  loginPhone           String?
+  passwordHash         String?
+
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  users                RestaurantUser[]
+  orders               Order[]
+  menuItems            MenuItem[]
+}
+
+model RestaurantUser {
+  id            String   @id
+  restaurantId  String
+  restaurant    Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+
+  email         String?
+  phone         String?
+  role          String   // owner | manager | cashier
+  isActive      Boolean  @default(true)
+  passwordHash  String
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([restaurantId])
+}
+
+model Admin {
+  id           String   @id
+  email        String   @unique
+  phone        String?
+  passwordHash String
+  role         String   @default("super_admin")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Customer {
+  id           String   @id
+  firstName    String
+  lastName     String
+  email        String?  @unique
+  phone        String?
+  passwordHash String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  orders       Order[]
+}
+
+model Driver {
+  id           String   @id
+  email        String?  @unique
+  phone        String?
+  name         String
+  cardNumber   String?
+  passwordHash String
+  status       String   @default("pending")
+  walletBalance Float   @default(0)
+  walletHistory Json?
+
+  // optional: tie driver to a restaurant for SaaS
+  restaurantId String?
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  orders       Order[]
+  @@index([restaurantId])
+}
+
+model Order {
+  id           String   @id
+  restaurantId String
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+
+  customerId   String?
+  customer     Customer? @relation(fields: [customerId], references: [id])
+
+  driverId     String?
+  driver       Driver?   @relation(fields: [driverId], references: [id])
+
+  status       String   @default("new")
+  currency     String?
+
+  subtotal     Float    @default(0)
+  deliveryFee  Float    @default(0)
+  total        Float    @default(0)
+
+  customerName String?
+  customerPhone String?
+  customerAddr String?
+  customerNotes String?
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  items        OrderItem[]
+
+  @@index([restaurantId, createdAt])
+}
+
+model OrderItem {
+  id       String @id @default(cuid())
+  orderId  String
+  order    Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  itemId   String?
+  name     String
+  qty      Int
+  price    Float
+}
+
+model MenuItem {
+  id           String @id
+  restaurantId String
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+
+  cat          String?
+  catLabel     Json?
+  name         Json?
+  desc         Json?
+  img          String?
+  price        Float  @default(0)
+  isAvailable  Boolean @default(true)
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([restaurantId])
+}
+
+model RefreshToken {
+  id           String   @id
+  tokenHash    String   @unique
+  userType     String
+  userId       String
+  role         String
+  restaurantId String?
+
+  createdAt    DateTime @default(now())
+  expiresAt    DateTime
+  revokedAt    DateTime?
+  replacedBy   String?
+  meta         Json?
+}
+
+model AuditLog {
+  id           String   @id
+  at           DateTime @default(now())
+  actorType    String
+  actorId      String?
+  restaurantId String?
+  method       String
+  path         String
+  status       Int
+  ms           Int
+  ip           String?
+  ua           String?
+  bodyKeys     Json?
+}
