@@ -16,9 +16,9 @@
 
   /* ---------- strings owned by the sidebar (everything else mirrors admin.js) ---------- */
   var T = {
-    ar: { menu: "القائمة", home: "الطلبات", group: "الأعمال", search: "بحث…", light: "فاتح", dark: "داكن", collapse: "طي القائمة", expand: "توسيع القائمة", open: "القائمة", logout: "تسجيل الخروج", nav: "التنقل", zones: "مناطق الخدمة" },
-    fr: { menu: "Menu", home: "Commandes", group: "Activité", search: "Rechercher…", light: "Clair", dark: "Sombre", collapse: "Réduire", expand: "Agrandir", open: "Menu", logout: "Déconnexion", nav: "Navigation", zones: "Zones de service" },
-    en: { menu: "Menu", home: "Orders", group: "Business", search: "Search…", light: "Light", dark: "Dark", collapse: "Collapse", expand: "Expand", open: "Menu", logout: "Logout", nav: "Navigation", zones: "Service zones" }
+    ar: { menu: "القائمة", home: "الطلبات", group: "الأعمال", search: "بحث…", light: "فاتح", dark: "داكن", collapse: "طي القائمة", expand: "توسيع القائمة", open: "القائمة", logout: "تسجيل الخروج", nav: "التنقل", zones: "مناطق الخدمة", audit: "سجل التدقيق", staff: "الموظفون والصلاحيات", promos: "أكواد الخصم", payments: "طرق الدفع", loyalty: "نقاط الوفاء", storeEnter: "دخول متجر", loading: "جارٍ تحميل القسم…" },
+    fr: { menu: "Menu", home: "Commandes", group: "Activité", search: "Rechercher…", light: "Clair", dark: "Sombre", collapse: "Réduire", expand: "Agrandir", open: "Menu", logout: "Déconnexion", nav: "Navigation", zones: "Zones de service", audit: "Journal d’audit", staff: "Équipe et rôles", promos: "Codes promo", payments: "Moyens de paiement", loyalty: "Points de fidélité", storeEnter: "Entrer en boutique", loading: "Chargement de la section…" },
+    en: { menu: "Menu", home: "Orders", group: "Business", search: "Search…", light: "Light", dark: "Dark", collapse: "Collapse", expand: "Expand", open: "Menu", logout: "Logout", nav: "Navigation", zones: "Service zones", audit: "Audit log", staff: "Staff & roles", promos: "Discount codes", payments: "Payment methods", loyalty: "Loyalty points", storeEnter: "Enter store", loading: "Loading section…" }
   };
   function L() { return T[(html.lang || "ar").slice(0, 2)] || T.en; }
   function isMobile() { return mqMobile.matches; }
@@ -92,108 +92,177 @@
     new MutationObserver(applyLabels).observe(html, { attributes: true, attributeFilter: ["lang"] });
   }
 
-  /* ---------- routing (hash router) ---------- */
-  // route -> sidebar item key.  "" is the Orders view (home).
-  var ROUTE_OF = { home: "", drivers: "drivers", dispatch: "dispatch", customers: "customers", support: "support", storeSupport: "store-support", exceptions: "exceptions", system: "system", feedback: "feedback", reports: "reports", notifications: "notifications",
-                   settings: "settings", topups: "topups", menuManage: "menu", subRest: "menu/restaurants", subMeals: "menu/meals" };
+  /* ---------- routing (the same hash router used by Orders) ---------- */
+  var ROUTE_OF = { home: "", drivers: "drivers", dispatch: "dispatch", customers: "customers", support: "support", storeSupport: "store-support", exceptions: "exceptions", system: "system", audit: "audit", feedback: "feedback", reports: "reports", notifications: "notifications",
+                   settings: "settings", topups: "topups", menuManage: "menu", subRest: "menu/restaurants", subMeals: "menu/meals", zones: "zones", storeEnter: "store-enter", portal: "portal", staff: "staff", promos: "promos", payments: "payments", loyalty: "loyalty" };
   var ROUTE_KEY = {}; Object.keys(ROUTE_OF).forEach(function (k) { ROUTE_KEY[ROUTE_OF[k]] = k; });
-  // page container -> the global admin.js function that closes it (keeps polling timers / state resets working)
+  // Close through each page's own function so its polling and other state are cleaned up.
   var PAGE_FN = { settingsModal: "showSettings", menuModal: "showMenu", driversModal: "showDrivers", dispatchModal: "showDispatch", customersModal: "showCustomers",
-                  supportModal: "showSupport", storeSupportModal: "showStoreSupport", exceptionsModal: "showExceptions", systemModal: "showSystem", feedbackModal: "showFeedback", reportsModal: "showReports", notificationsModal: "showNotificationsModal", topupsModal: "showTopups" };
-  var pending = null;        // {key} while a page is being opened (admin.js loads its data before showing it)
-  var lastOpened = null, shownId = null;
+                  supportModal: "showSupport", storeSupportModal: "showStoreSupport", exceptionsModal: "showExceptions", systemModal: "showSystem", feedbackModal: "showFeedback", reportsModal: "showReports", notificationsModal: "showNotificationsModal", topupsModal: "showTopups",
+                  zonesModal: "showZones", storeEnterModal: "showStoreEnter", portalModal: "showPortal", staffModal: "showStaff", promosModal: "showPromos", paymentsModal: "showPayments", loyaltyModal: "showLoyalty" };
+  var pending = null;              // the requested page while its original handler loads data
+  var started = Object.create(null); // outstanding async source handlers
+  var abandoned = Object.create(null); // timed-out handlers may still complete later
+  var lastOpened = null, shownId = null, appliedKey = null;
 
   function routeKey() {
     var h = (location.hash || "").replace(/^#\/?/, "").split("?")[0].replace(/\/+$/, "").toLowerCase();
     return Object.prototype.hasOwnProperty.call(ROUTE_KEY, h) ? ROUTE_KEY[h] : "home";
   }
-  function pageKey(k) { return (k === "subRest" || k === "subMeals") ? "menuManage" : k; }   // sub routes belong to the Menu page
+  function pageKey(k) { return (k === "subRest" || k === "subMeals") ? "menuManage" : k; }
   function pageItems() { return $$(".sb-item[data-modal]"); }
   function pageItem(key) { return pageItems().filter(function (i) { return i.getAttribute("data-key") === pageKey(key); })[0] || null; }
-  function openPages() { return $$(".modal.page-view").filter(function (m) { return m.classList.contains("show"); }); }
+  function openPages() { return $$("#adminPages .modal.page-view.show"); }
   function hasToken() { try { return !!localStorage.getItem(TOKEN_KEY); } catch (e) { return true; } }
   function authOpen() { var a = $("authModal"); return !!(a && a.classList.contains("show")); }
   function closePage(m) {
+    started[m.id] = false;
     var fn = window[PAGE_FN[m.id]];
     if (typeof fn === "function") fn(false); else m.classList.remove("show");
   }
   function setActive(el) {
+    var key = routeKey(), sub = key === "subRest" || key === "subMeals";
     $$(".sb-item").forEach(function (b) {
       var on = b === el; b.classList.toggle("active", on);
+      if (on && !sub) b.setAttribute("aria-current", "page"); else b.removeAttribute("aria-current");
+    });
+    $$(".sb-subitem").forEach(function (b) {
+      var on = sub && b.getAttribute("data-key") === key; b.classList.toggle("active", on);
       if (on) b.setAttribute("aria-current", "page"); else b.removeAttribute("aria-current");
     });
   }
-
-  // navigate to a sidebar key (changes the URL, so history / back / direct links all work)
-  function go(key) {
-    if (key !== "home" && window.adminPerms && window.adminPerms.perms() && !window.adminPerms.canNav(key)) return;   // not allowed for this role
-    var r = ROUTE_OF[key]; if (r == null) r = "";
-    pending = key === "home" ? null : { key: key };
-    if (routeKey() === key) applyRoute(); else location.hash = "#/" + r;
+  function selectRouteTab(key) {
+    var tab = null, activeClass = "active";
+    if (key === "subRest" || key === "subMeals") {
+      var parent = pageItem(key); if (parent) parent.setAttribute("aria-expanded", "true");
+      $("sbSubMenu").hidden = false;
+      var sub = $$(".sb-subitem").filter(function (b) { return b.getAttribute("data-key") === key; })[0];
+      tab = sub && $(sub.getAttribute("data-tab"));
+    } else if (key === "audit" || key === "system") {
+      tab = $(key === "audit" ? "sysTabA" : "sysTabS"); activeClass = "pri";
+    }
+    if (tab && !tab.hidden && !tab.classList.contains(activeClass)) tab.click();
   }
 
-  // make the screen match the current URL
+  function go(key) {
+    if (!Object.prototype.hasOwnProperty.call(ROUTE_OF, key)) return;
+    if (key !== "home" && window.adminPerms && window.adminPerms.perms() && !window.adminPerms.canNav(key)) return;
+    // Set the intent synchronously: an older async page must not win while hashchange is queued.
+    pending = key === "home" ? null : { key: key };
+    if (routeKey() === key) applyRoute(); else location.hash = "#/" + ROUTE_OF[key];
+  }
+
   function applyRoute() {
-    var key = routeKey();
-    if (key === "home") { pending = null; openPages().forEach(closePage); return; }
-    if (!hasToken() || authOpen()) return;                 // sign in first; the route is applied once the login closes
+    var key = routeKey(); appliedKey = key;
+    if (key === "home") {
+      pending = null; openPages().forEach(closePage); reconcile(); return;
+    }
+    if (!hasToken() || authOpen()) return; // apply the bookmarked route after login
     var P = window.adminPerms;
-    if (P) {                                                // a typed / bookmarked #/route must obey the same permissions as the sidebar
-      var perms = P.perms();
-      if (!perms) { P.ready().then(function () { if (P.perms()) applyRoute(); }); return; }   // wait until we know the role
-      if (!P.canNav(key)) { pending = null; location.replace(location.pathname + location.search + "#/"); return; }
+    if (P) {
+      if (!P.perms()) {
+        pending = { key: key };
+        P.ready().then(function () { if (P.perms()) applyRoute(); });
+        return;
+      }
+      if (!P.canNav(key)) { pending = null; openPages().forEach(closePage); location.replace(location.pathname + location.search + "#/"); return; }
     }
     var it = pageItem(key), m = it && $(it.getAttribute("data-modal"));
     if (!it || !m) return;
     var already = m.classList.contains("show");
-    if (already) {
-      pending = null;
-      openPages().forEach(function (o) { if (o !== m) closePage(o); });
-    } else {
-      var mine = pending = { key: key };
-      var src = $(it.getAttribute("data-src")); if (src) src.click();      // original handler: auth check + load data + show
-      setTimeout(function () { if (pending === mine) { pending = null; reconcile(); } }, 8000);   // load failed / was refused
+    pending = already ? null : { key: key, id: m.id };
+    // Leave the old page via its cleanup hook, not as a second overlay.
+    openPages().forEach(function (o) { if (o !== m) closePage(o); });
+    if (already) { selectRouteTab(key); reconcile(); return; }
+    reconcile();
+    if (!started[m.id]) {
+      started[m.id] = true;
+      var src = $(it.getAttribute("data-src"));
+      if (src) src.click();
     }
-    if (key === "subRest" || key === "subMeals") {
-      var sub = $$(".sb-subitem").filter(function (b) { return b.getAttribute("data-key") === key; })[0];
-      var tab = sub && $(sub.getAttribute("data-tab"));
-      if (tab) { if (already) tab.click(); else setTimeout(function () { if (routeKey() === key) tab.click(); }, 60); }
-    }
+    var id = m.id, request = pending;
+    setTimeout(function () {
+      if (pending === request && request.id === id && routeKey() === request.key) {
+        // A handler may never complete. Permit a retry but still reject its late
+        // response if the user has moved to another section.
+        started[id] = false; abandoned[id] = true;
+        pending = null; reconcile();
+      }
+    }, 8000);
   }
 
-  // keep layout, sidebar highlight and URL consistent with whichever page is actually open
   function reconcile() {
-    var open = openPages();
-    if (open.length > 1) {                                  // only one page at a time: the latest one wins
+    // A history/hash change can precede its hashchange event. Apply that new
+    // intent before interpreting a still-visible old page as a new navigation.
+    if (appliedKey !== routeKey()) { applyRoute(); return; }
+    var desired = pageItem(routeKey()), open = openPages();
+    // Fail closed on logout/permission refresh, including late callbacks from
+    // the previous account. An abandoned response is not a new navigation.
+    var P = window.adminPerms;
+    open.forEach(function (m) {
+      var source = desired && desired.getAttribute("data-modal") === m.id ? desired :
+        pageItems().filter(function (i) { return i.getAttribute("data-modal") === m.id; })[0];
+      if (!hasToken() || authOpen() || (P && (!P.perms() || !source || !P.canNav(source.getAttribute("data-key")))) ||
+          ((started[m.id] || abandoned[m.id]) && (!desired || desired.getAttribute("data-modal") !== m.id))) closePage(m);
+    });
+    open = openPages();
+    if (pending && pending.id) {
+      open.forEach(function (m) { if (m.id !== pending.id) closePage(m); });
+      open = openPages();
+      if (open.some(function (m) { return m.id === pending.id; })) pending = null;
+    }
+    if (open.length > 1) {
       var keep = open.filter(function (m) { return m.id === lastOpened; })[0] || open[open.length - 1];
-      open.forEach(function (m) { if (m !== keep) closePage(m); });
-      open = [keep];
+      open.forEach(function (m) { if (m !== keep) closePage(m); }); open = [keep];
     }
     var cur = open[0] || null, item = null;
-    body.classList.toggle("page-active", !!cur);
+    body.classList.toggle("page-active", !!cur || !!(pending && pending.id));
+    $("adminPageLoading").hidden = !(pending && pending.id && !cur);
     if (cur) {
-      pending = null;
-      item = pageItems().filter(function (i) { return i.getAttribute("data-modal") === cur.id; })[0] || null;
+      started[cur.id] = false;
+      item = desired && desired.getAttribute("data-modal") === cur.id ? desired : pageItems().filter(function (i) { return i.getAttribute("data-modal") === cur.id; })[0] || null;
       var key = item ? item.getAttribute("data-key") : "home";
-      if (pageKey(routeKey()) !== key) location.hash = "#/" + ROUTE_OF[key];   // opened by something else (e.g. a notification)
+      if (pageKey(routeKey()) !== key) location.hash = "#/" + ROUTE_OF[key]; // opened by an existing internal action
+      else selectRouteTab(routeKey());
       if (shownId !== cur.id) { shownId = cur.id; window.scrollTo(0, 0); }
+    } else if (pending) {
+      item = pageItem(pending.key);
     } else {
       shownId = null;
-      // the page closed itself (its ✕ button) -> back to Orders
-      if (!pending && !authOpen() && hasToken() && routeKey() !== "home") location.hash = "#/";
+      if (!authOpen() && hasToken() && routeKey() !== "home") location.hash = "#/";
     }
     setActive(item || $("sbHome"));
   }
 
+  // Keep the existing standalone zone manager intact and preserve an unsaved draft while changing sections.
+  function signalZones() {
+    var frame = $("zonesFrame");
+    if (frame && frame.contentWindow) frame.contentWindow.postMessage({ type: "siymon:zones-visible" }, location.origin);
+  }
+  window.showZones = function (show) {
+    var m = $("zonesModal"); m.classList.toggle("show", !!show);
+    if (!show) return;
+    var frame = $("zonesFrame");
+    if (!frame) {
+      frame = doc.createElement("iframe"); frame.id = "zonesFrame"; frame.className = "admin-embedded-page";
+      frame.title = L().zones; frame.src = "/admin/zones/?embedded=1";
+      frame.addEventListener("load", function () { setTimeout(signalZones, 50); }); m.appendChild(frame);
+    }
+    setTimeout(signalZones, 50);
+  };
+  $("zonesBtn").addEventListener("click", function () {
+    if (window.adminPerms && !window.adminPerms.canNav("zones")) return;
+    window.showZones(true);
+  });
+
   function bindNav() {
     $$(".sb-item").forEach(function (it) {
-      if (it.tagName === "A") { it.addEventListener("click", function () { if (isMobile()) openDrawer(false); }); return; }
       it.addEventListener("click", function () {
         var key = it.getAttribute("data-key");
         if (key === "home") { go("home"); window.scrollTo({ top: 0, behavior: "smooth" }); if (isMobile()) openDrawer(false); return; }
         if (it.classList.contains("sb-parent") && !body.classList.contains("sb-collapsed") || (it.classList.contains("sb-parent") && isMobile())) {
           var open = it.getAttribute("aria-expanded") !== "true";
-          it.setAttribute("aria-expanded", String(open)); $("sbSubMenu").hidden = !open; return;
+          it.setAttribute("aria-expanded", String(open)); $("sbSubMenu").hidden = !open;
         }
         go(key);
         if (isMobile()) openDrawer(false);
@@ -223,16 +292,14 @@
     $("sbSearch").addEventListener("input", function () {
       var q = this.value.trim().toLowerCase();
       $$(".sb-item[data-key]").forEach(function (it) {
-        if (it.id === "sbHome" || true) {
-          var t = (it.querySelector(".sb-text") ? it.querySelector(".sb-text").textContent : "").toLowerCase();
-          it.style.display = !q || t.indexOf(q) !== -1 ? "" : "none";
-        }
+        var t = (it.querySelector(".sb-text") ? it.querySelector(".sb-text").textContent : "").toLowerCase();
+        it.style.display = !q || t.indexOf(q) !== -1 ? "" : "none";
       });
       $$(".sb-label, .sb-sep").forEach(function (l) { l.style.display = q ? "none" : ""; });
-      if (q) { $("sbSubMenu").hidden = true; }
+      if (q) { $("sbSubMenu").hidden = true; var parent = document.querySelector('.sb-parent[data-key="menuManage"]'); if (parent) parent.setAttribute("aria-expanded", "false"); }
     });
     $("sbSearch").addEventListener("keydown", function (e) {
-      if (e.key === "Enter") { var first = $$(".sb-item[data-key]").filter(function (i) { return i.style.display !== "none"; })[0]; if (first) first.click(); }
+      if (e.key === "Enter") { var first = $$(".sb-item[data-key]").filter(function (i) { return i.style.display !== "none" && getComputedStyle(i).display !== "none"; })[0]; if (first) first.click(); }
     });
     $("sbHome").addEventListener("click", function () {});
   }
@@ -290,14 +357,23 @@
     fetch("/api/admin/me", { headers: { "X-Admin-Token": tok } })
       .then(function (r) { return r.ok ? r.json() : null; })
       .then(function (d) {
-        if (!d) return;
+        // A delayed /me response must never restore a previous account's identity.
+        try { if (!d || !tok || localStorage.getItem(TOKEN_KEY) !== tok || authOpen()) return; } catch (e) { return; }
         var mail = d.email || "", name = d.name || (mail ? mail.split("@")[0] : (d.phone || ""));
         setUser(name, mail || d.phone || "");
       }).catch(function () {});
   }
   function watchAuth() {
     var m = $("authModal"); if (!m) return;
-    new MutationObserver(function () { if (m.classList.contains("show")) setUser("", ""); else { setTimeout(loadUser, 150); if (window.adminPerms) window.adminPerms.reload().then(function () { applyRoute(); }); else setTimeout(applyRoute, 250); } })
+    new MutationObserver(function () {
+      if (m.classList.contains("show")) {
+        pending = null; openPages().forEach(closePage);
+        // Old requests may never finish; a subsequent account must be able to load its own pages.
+        started = Object.create(null); abandoned = Object.create(null);
+        var z = $("zonesFrame"); if (z) z.remove();
+        setUser("", ""); reconcile();
+      } else { setTimeout(loadUser, 150); if (window.adminPerms) window.adminPerms.reload().then(function () { applyRoute(); }); else setTimeout(applyRoute, 250); }
+    })
       .observe(m, { attributes: true, attributeFilter: ["class"] });
   }
 
@@ -305,6 +381,7 @@
   applyInitial();
   applyLabels();
   bindNav(); bindTips(); watch(); watchModals(); watchAuth();
+  if (window.adminPerms) window.adminPerms.onChange(function (perms) { if (perms && hasToken() && !authOpen()) applyRoute(); });
   window.addEventListener("hashchange", applyRoute);           // sidebar clicks, direct links, back / forward
   window.adminNav = { go: go };                                 // lets admin.js navigate (e.g. Customers -> Support chat)
   new MutationObserver(syncTheme).observe(html, { attributes: true, attributeFilter: ["data-theme"] });

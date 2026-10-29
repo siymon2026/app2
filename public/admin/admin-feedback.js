@@ -84,7 +84,9 @@
 
   function fill(id, opts) { const s = $(id), cur = s.value; s.replaceChildren(); opts.forEach(([v, l]) => { const o = mk("option", "", l); o.value = v; s.appendChild(o); }); if ([...s.options].some((o) => o.value === cur)) s.value = cur; }
 
-  function draw() {
+  const detailHasDraft = () => !!(S.active && document.querySelector("#fbDetail .ex-form:not([hidden])"));
+
+  function draw(preserveDraft = false) {
     const x = t(); build();
     $("fbTitle").textContent = x.title; if ($("feedbackText")) $("feedbackText").textContent = x.title;
     $("fbSet").textContent = x.settings; $("fbSet").hidden = S.tab !== "complaints" || !can("complaints.read");
@@ -97,8 +99,9 @@
     if (isC) {
       fill("fbStatus", [["open", x.open], ["", x.all]].concat(Object.keys(x.status).map((k) => [k, x.status[k]])));
       fill("fbAgainst", [["", x.allAgainst]].concat(Object.keys(x.against).map((k) => [k, x.against[k]])));
-      renderStats(); renderList(); renderDetail();
-    } else renderMod();
+      renderStats(); renderList();
+      if (!preserveDraft || (!detailHasDraft() && !S.showSettings)) renderDetail();
+    } else if (!preserveDraft || !moderationHasDraft()) renderMod();
   }
 
   function renderStats() {
@@ -124,10 +127,16 @@
     const r = await api("/api/admin/complaints?" + qs.toString());
     S.list = r.complaints || []; S.counts = r.counts; S.outcomes = r.outcomes || S.outcomes; S.settings = r.settings;
     renderStats(); renderList();
-    if (S.active) { try { await loadDetail(S.active); } catch (e) { if (e.status === 404) { S.active = null; S.detail = null; renderDetail(); } } }
+    const active = S.active;
+    if (active) { try { await loadDetail(active, true); } catch (e) { if (e.status === 404 && S.active === active) { S.active = null; S.detail = null; renderDetail(); } } }
     hint("");
   }
-  async function loadDetail(id) { S.detail = (await api("/api/admin/complaints/" + encodeURIComponent(id))).complaint; renderDetail(); }
+  async function loadDetail(id, preserveDraft = false) {
+    const detail = (await api("/api/admin/complaints/" + encodeURIComponent(id))).complaint;
+    if (S.active !== id) return; // a different complaint was selected while this request was in flight
+    S.detail = detail;
+    if (!preserveDraft || !detailHasDraft()) renderDetail();
+  }
   async function openCase(id) { S.active = id; S.showSettings = false; try { await loadDetail(id); } catch (e) { hint(errText(e)); } renderList(); $("fbBody").classList.add("open"); }
 
   function renderDetail() {
@@ -178,10 +187,13 @@
   }
 
   /* ---------------- comment moderation ---------------- */
+  const moderationHasDraft = () => !!document.querySelector("#fbMod .fb-card .ex-form");
   async function loadMod() {
     const st = (document.querySelector("#fbMod .fb-filter-status") || {}).value || "pending", kind = (document.querySelector("#fbMod .fb-filter-kind") || {}).value || "";
     const r = await api("/api/admin/feedback/moderation?status=" + encodeURIComponent(st) + (kind ? "&kind=" + kind : ""));
-    S.mod = r.items || []; S.modCounts = r.counts; S.modStatus = st; S.modKind = kind; renderMod(); setBadge((r.counts && r.counts.pending) || 0); hint("");
+    S.mod = r.items || []; S.modCounts = r.counts; S.modStatus = st; S.modKind = kind;
+    if (!moderationHasDraft()) renderMod();
+    setBadge((r.counts && r.counts.pending) || 0); hint("");
   }
   function renderMod() {
     const box = $("fbMod"); if (!box) return; const x = t(); box.replaceChildren();
@@ -199,7 +211,7 @@
       if (it.flags) c.appendChild(mk("small", "ex-muted", x.polite + ": " + (it.flags.polite ? x.yes : x.no) + " • " + x.extra + ": " + (it.flags.askedExtraMoney ? x.yes : x.no)));
       if (it.moderation) c.appendChild(mk("small", "ex-muted", (x[it.commentStatus] || it.commentStatus) + " " + x.by + " " + it.moderation.by + " • " + fmt(it.moderation.at) + (it.moderation.reason ? " • " + it.moderation.reason : "")));
       const acts = mk("div", "ex-acts"); c.appendChild(acts);
-      const decide = async (b, decision, reason) => { if (S.busy) return; S.busy = true; b.disabled = true; try { await post("/api/admin/feedback/moderation", { orderId: it.orderId, kind: it.kind, decision, reason }); await loadMod(); hint(x.done, true); } catch (e) { hint(errText(e)); } finally { S.busy = false; b.disabled = false; } };
+      const decide = async (b, decision, reason) => { if (S.busy) return; S.busy = true; b.disabled = true; try { await post("/api/admin/feedback/moderation", { orderId: it.orderId, kind: it.kind, decision, reason }); const completed = c.querySelector(".ex-form"); if (completed) completed.remove(); await loadMod(); hint(x.done, true); } catch (e) { hint(errText(e)); } finally { S.busy = false; b.disabled = false; } };
       if (it.commentStatus !== "published") { const p = mk("button", "ex-b pri", x.publish); p.type = "button"; p.addEventListener("click", () => decide(p, "publish")); acts.appendChild(p); }
       if (it.commentStatus !== "rejected") {
         const r = mk("button", "ex-b bad", x.reject); r.type = "button";
@@ -247,7 +259,7 @@
         showFeedback(true);
       } catch (e) { if (typeof toast === "function") toast(errText(e)); }
     });
-    new MutationObserver(() => { draw(); }).observe(document.documentElement, { attributes: true, attributeFilter: ["lang"] });
+    new MutationObserver(() => { draw(true); }).observe(document.documentElement, { attributes: true, attributeFilter: ["lang"] });
     S.badgeTimer = setInterval(refreshBadge, 30000); setTimeout(refreshBadge, 3500);
   }
   init();

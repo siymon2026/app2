@@ -1,0 +1,19 @@
+{
+  "policy": {
+    "enabled": true,
+    "currency": "MAD",
+    "minTopup": 10,
+    "maxTopup": 20000,
+    "feePercent": 0,
+    "feeFixed": 0,
+    "presets": [
+      50,
+      100,
+      200,
+      500
+    ],
+    "version": 63,
+    "updatedAt": "2026-10-29T17:38:16.660Z",
+    "updatedBy": "legacy"
+  }
+}

@@ -87,7 +87,16 @@ test("server wiring: receipts private, review uses decide + ledger, customer rou
   assert.match(patch, /topupsLib\.decide\(/);
   assert.match(patch, /walletLedger\.applyEntry\(owner/);
   assert.doesNotMatch(patch, /await /, "review must stay synchronous (atomic on the event loop)");
-  assert.strictEqual((SRC.match(/refundOrderWallet\(/g) || []).length, 5);
+  // Wallet refund + loyalty settlement now run in ONE transactional, idempotent
+  // path: settleOrderEffects() must be wired into every cancellation exit
+  // (customer, driver, admin, store-rejection) instead of ad-hoc calls.
+  assert.match(SRC, /function settleOrderEffects\(orderId, meta = \{\}\)/);
+  assert.match(SRC, /function refundWalletInTx\(store, order, meta = \{\}\)/);
+  assert.ok((SRC.match(/settleOrderEffects\(/g) || []).length >= 5, "customer cancel, driver, admin, store review and the wrapper");
+  const storeRoutes = fs.readFileSync(path.join(__dirname, "..", "lib", "store-routes.js"), "utf8");
+  assert.match(storeRoutes, /onOrderSettled\(o\.id/, "a store rejection must refund the wallet and withdraw the points");
+  // the legacy helper stays as a thin wrapper (no second implementation)
+  assert.match(SRC, /function refundOrderWallet\(order, meta\) \{[\s\S]{0,200}settleOrderEffects\(order\.id/);
 });
 test("admin-roles: topup receipt needs topups.review; payment config needs payments.manage", () => {
   const roles = require("../lib/admin-roles");

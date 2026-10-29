@@ -5,19 +5,8 @@
 (function () {
   "use strict";
   var doc = document;
-  var L = function (ar, en, fr) { var l = (doc.documentElement.lang || lang || "ar").slice(0, 2); return l === "ar" ? ar : l === "fr" ? (fr || en) : en; };
+  var L = window.adminPageElements.L, h = window.adminPageElements.h;
   var say = function (m) { try { toast(m); } catch (e) {} };
-  function h(tag, props) {
-    var e = doc.createElement(tag), k, kids = Array.prototype.slice.call(arguments, 2);
-    for (k in (props || {})) {
-      var v = props[k]; if (v == null || v === false) continue;
-      if (k === "class") e.className = v;
-      else if (k.indexOf("on") === 0 && typeof v === "function") e.addEventListener(k.slice(2), v);
-      else e.setAttribute(k, v === true ? "" : String(v));
-    }
-    kids.forEach(function (kid) { (Array.isArray(kid) ? kid : [kid]).forEach(function (c) { if (c == null || c === false) return; e.appendChild(c instanceof Node ? c : doc.createTextNode(String(c))); }); });
-    return e;
-  }
   var KIND = { stripe: ["بطاقة (Stripe)", "Card (Stripe)", "Carte (Stripe)"], cod: ["دفع عند الاستلام", "Cash on delivery", "À la livraison"], tpe: ["TPE عند التسليم", "TPE on delivery", "TPE à la livraison"], transfer: ["تحويل يدوي", "Manual transfer", "Virement manuel"] };
   var CTX = { checkout: ["الدفع عند الطلب", "Order checkout", "Paiement commande"], customerTopup: ["شحن محفظة الزبون", "Customer wallet top-up", "Recharge portefeuille client"], driverTopup: ["شحن محفظة السائق", "Driver wallet top-up", "Recharge portefeuille livreur"] };
   var DET = [["holderName", "اسم صاحب الحساب", "Account holder", "Titulaire"], ["bankName", "اسم البنك/الخدمة", "Bank / service", "Banque / service"], ["rib", "RIB", "RIB", "RIB"], ["iban", "IBAN", "IBAN", "IBAN"], ["accountNumber", "رقم الحساب", "Account number", "N° de compte"], ["paymentIdentifier", "معرّف الدفع (إن لزم)", "Payment identifier (if needed)", "Identifiant de paiement"], ["branch", "الوكالة/الفرع", "Branch / agency", "Agence"], ["referenceFormat", "شكل مرجع التحويل", "Reference format", "Format de référence"]];
@@ -31,13 +20,13 @@
   }
 
   function editor(rec, reload) {
-    var ov = h("div", { class: "sen-ov", onclick: function (e) { if (e.target === ov) ov.remove(); } });
+    var ov = h("div", { class: "sen-ov", "data-payment-editor": "", onclick: function (e) { if (e.target === ov) ov.remove(); } });
     var box = h("div", { class: "sen-box", role: "dialog", "aria-modal": "true", style: "max-height:90vh;overflow:auto" });
     ov.appendChild(box);
     var kindName = KIND[rec.kind] || [rec.kind, rec.kind, rec.kind];
     box.appendChild(h("div", { class: "sen-head" }, h("h3", {}, (rec.name && (rec.name[lang] || rec.name.ar)) || rec.id), h("button", { class: "sen-x", type: "button", "aria-label": L("إغلاق", "Close", "Fermer"), onclick: function () { ov.remove(); } }, "✕")));
     box.appendChild(h("p", { class: "sen-muted" }, L.apply(null, kindName)));
-    if (rec.kind === "stripe") box.appendChild(h("p", { class: "sen-muted" }, "⚠ " + L("لا يوجد تكامل Stripe فعلي في النظام: تبقى هذه الطريقة «غير متوفر حاليا» مهما فُعّلت، حتى يُنجز تكامل حقيقي ويُتحقق منه.", "There is no real Stripe integration in this system: the method stays «unavailable» whatever you toggle, until a real integration is built and verified.", "Aucune intégration Stripe réelle : la méthode reste indisponible tant qu'elle n'est pas développée et vérifiée.")));
+    if (rec.kind === "stripe") box.appendChild(h("p", { class: "sen-muted" }, "⚠ ", L("لا يوجد تكامل Stripe فعلي في النظام: تبقى هذه الطريقة «غير متوفر حاليا» مهما فُعّلت، حتى يُنجز تكامل حقيقي ويُتحقق منه.", "There is no real Stripe integration in this system: the method stays «unavailable» whatever you toggle, until a real integration is built and verified.", "Aucune intégration Stripe réelle : la méthode reste indisponible tant qu'elle n'est pas développée et vérifiée.")));
     if (rec.kind === "transfer") box.appendChild(h("p", { class: "sen-muted" }, L("تحويل يدوي: لا يوجد ربط API مع البنك. لا يُضاف الرصيد إلا بعد أن يتحقق مشرف مخوّل من وصول المبلغ. أدخل بيانات حسابكم الحقيقية فقط.", "Manual transfer: no bank API is connected. Balance is credited only after an authorised supervisor verifies the money arrived. Enter your real account details only.", "Virement manuel : aucune API bancaire. Le solde n'est crédité qu'après vérification par un superviseur autorisé. Saisissez uniquement vos vraies coordonnées.")));
 
     var name = i18nRow(L("الاسم المعروض", "Display name", "Nom affiché"), rec.name);
@@ -48,9 +37,9 @@
     ["checkout", "customerTopup", "driverTopup"].forEach(function (c) {
       if ((rec.kind === "cod" || rec.kind === "tpe") && c !== "checkout") return; // order-payment methods are never wallet-funding
       ctxEls[c] = input("checkbox", rec.contexts && rec.contexts[c]);
-      ctxRow.appendChild(h("label", { class: "sen-muted", style: "display:block" }, ctxEls[c], " " + L.apply(null, CTX[c])));
+      ctxRow.appendChild(h("label", { class: "sen-muted", style: "display:block" }, ctxEls[c], " ", L.apply(null, CTX[c])));
     });
-    box.appendChild(h("label", { class: "sen-muted", style: "display:block" }, enabled, " " + L("مفعّلة", "Enabled", "Activée")));
+    box.appendChild(h("label", { class: "sen-muted", style: "display:block" }, enabled, " ", L("مفعّلة", "Enabled", "Activée")));
     box.appendChild(h("label", { class: "sen-muted" }, L("أماكن الظهور", "Where it appears", "Où elle apparaît")));
     box.appendChild(ctxRow);
     box.appendChild(name.el);
@@ -73,7 +62,7 @@
     var min = input("number", rec.minAmount, L("الحد الأدنى", "Minimum amount", "Montant min"), { min: "0", step: "any" });
     var max = input("number", rec.maxAmount, L("الحد الأقصى", "Maximum amount", "Montant max"), { min: "0", step: "any" });
     var sort = input("number", rec.sortOrder, L("ترتيب العرض", "Display order", "Ordre d'affichage"), { min: "0", step: "1" });
-    if (rec.kind === "transfer") { box.appendChild(h("label", { class: "sen-muted" }, L("صورة QR", "QR image", "Image QR"))); box.appendChild(qr); box.appendChild(h("label", { class: "sen-muted", style: "display:block" }, receipt, " " + L("الإيصال مطلوب", "Receipt required", "Reçu obligatoire"))); box.appendChild(h("p", { class: "sen-muted" }, L("التحقق من المشرف مطلوب دائماً في التحويلات اليدوية.", "Supervisor verification is always required for manual transfers.", "La vérification par un superviseur est toujours requise."))); }
+    if (rec.kind === "transfer") { box.appendChild(h("label", { class: "sen-muted" }, L("صورة QR", "QR image", "Image QR"))); box.appendChild(qr); box.appendChild(h("label", { class: "sen-muted", style: "display:block" }, receipt, " ", L("الإيصال مطلوب", "Receipt required", "Reçu obligatoire"))); box.appendChild(h("p", { class: "sen-muted" }, L("التحقق من المشرف مطلوب دائماً في التحويلات اليدوية.", "Supervisor verification is always required for manual transfers.", "La vérification par un superviseur est toujours requise."))); }
     box.appendChild(h("label", { class: "sen-muted" }, L("الحدود والترتيب", "Limits and order", "Limites et ordre"))); box.appendChild(min); box.appendChild(max); box.appendChild(sort);
 
     var save = h("button", { class: "sen-btn primary", type: "button", onclick: function () {
@@ -101,11 +90,17 @@
     doc.body.appendChild(ov);
   }
 
+  function showPayments(show) {
+    var m = doc.getElementById("paymentsModal"); m.classList.toggle("show", !!show);
+    if (!show) { m.replaceChildren(); doc.querySelectorAll('[data-payment-editor]').forEach(function (e) { e.remove(); }); }
+  }
+  window.showPayments = showPayments;
+
   function open() {
     var list = h("div", { class: "sen-list" }, h("p", { class: "sen-muted" }, "…"));
-    var ov = h("div", { class: "sen-ov", onclick: function (e) { if (e.target === ov) ov.remove(); } });
-    var box = h("div", { class: "sen-box", role: "dialog", "aria-modal": "true", style: "max-height:90vh;overflow:auto" });
-    ov.appendChild(box);
+    var ov = doc.getElementById("paymentsModal");
+    var box = h("div", { class: "modal-card sen-box", role: "region" });
+    ov.replaceChildren(box);
     function load() {
       api("/api/admin/payment-methods").then(function (r) {
         while (list.firstChild) list.removeChild(list.firstChild);
@@ -118,28 +113,17 @@
         });
       }).catch(function (e) { while (list.firstChild) list.removeChild(list.firstChild); list.appendChild(h("p", { class: "sen-muted" }, "❌ " + (e && e.message || "Error"))); });
     }
-    box.appendChild(h("div", { class: "sen-head" }, h("h3", {}, L("طرق الدفع والحسابات البنكية", "Payment methods & bank accounts", "Moyens de paiement et comptes bancaires")), h("button", { class: "sen-x", type: "button", "aria-label": L("إغلاق", "Close", "Fermer"), onclick: function () { ov.remove(); } }, "✕")));
+    box.appendChild(h("div", { class: "sen-head" }, h("h3", {}, L("طرق الدفع والحسابات البنكية", "Payment methods & bank accounts", "Moyens de paiement et comptes bancaires")), h("button", { class: "sen-x", type: "button", "aria-label": L("إغلاق", "Close", "Fermer"), onclick: function () { showPayments(false); } }, "✕")));
     box.appendChild(h("p", { class: "sen-muted" }, L("لا تُدخل إلا بيانات حساباتكم الحقيقية. كل تعديل يُسجَّل في سجل التدقيق (أرقام الحسابات مخفية جزئياً).", "Enter only your real account details. Every change is audited (account numbers masked).", "Saisissez uniquement vos vraies coordonnées. Chaque modification est auditée (numéros masqués).")));
     box.appendChild(list);
-    doc.body.appendChild(ov);
+    showPayments(true);
     load();
   }
 
-  function setup(tries) {
-    var nav = doc.getElementById("sideNav");
-    if (!nav || doc.getElementById("sbPayments")) return;
-    var tok = null; try { tok = localStorage.getItem("siymon_admin_token_v2"); } catch (e) {}
-    if (!tok) { if (tries < 600) setTimeout(function () { setup(tries + 1); }, 2000); return; }
-    api("/api/admin/me").then(function (me) {
-      if (!me || !me.permissions || (me.permissions.indexOf("*") < 0 && me.permissions.indexOf("payments.manage") < 0)) return;
-      if (doc.getElementById("sbPayments")) return;
-      var btn = h("button", { class: "sb-item", id: "sbPayments", type: "button", "data-key": "payments" });
-      btn.innerHTML = '<span class="sb-tile t-green"><svg class="sb-ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></span>';
-      var txt = h("span", { class: "sb-text" }, L("طرق الدفع والبنوك", "Payment methods", "Moyens de paiement")); btn.appendChild(txt);
-      btn.setAttribute("data-tip", txt.textContent);
-      btn.addEventListener("click", function () { open(); doc.body.classList.remove("sb-open"); });
-      nav.appendChild(btn);
-    }).catch(function () { if (tries < 600) setTimeout(function () { setup(tries + 1); }, 2000); });
-  }
-  if (doc.readyState === "loading") doc.addEventListener("DOMContentLoaded", function () { setup(0); }); else setup(0);
+
+  // The shared hash router clicks the original source button after checking the role.
+  doc.getElementById("paymentsBtn").addEventListener("click", function () {
+    if (window.adminPerms && !window.adminPerms.canNav("payments")) return;
+    open();
+  });
 })();

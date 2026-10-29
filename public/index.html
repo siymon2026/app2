@@ -312,6 +312,18 @@
       </div>
     </div>
 
+    <!-- insufficient wallet balance: blocks the payment, offers top-up or another method -->
+    <div class="sheet" id="walletShortSheet" hidden>
+      <div class="sheet-card ws-card" role="dialog" aria-modal="true" aria-labelledby="wsTitle">
+        <div class="sheet-head"><h2 id="wsTitle">رصيد المحفظة غير كافٍ</h2><button type="button" id="wsClose" class="round" aria-label="Close">✕</button></div>
+        <div class="ws-body" id="wsBody"></div>
+        <div class="ws-actions">
+          <button type="button" id="wsTop" class="btn good">شحن المحفظة</button>
+          <button type="button" id="wsOther" class="btn ghost">اختيار طريقة دفع أخرى</button>
+        </div>
+      </div>
+    </div>
+
     <div class="toast" id="toast"></div>
 
     <script src="https://accounts.google.com/gsi/client" async defer></script>

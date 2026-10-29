@@ -1,0 +1,268 @@
+{
+  "items": [
+    {
+      "id": "m1",
+      "cat": "moroccan",
+      "catLabel": {
+        "ar": "مغربي",
+        "en": "Moroccan",
+        "fr": "Marocain"
+      },
+      "price": 40,
+      "img": "https://uploads.onecompiler.io/44avb35xn/44azkc7wy/Photoroom-20260120_003048_5.png",
+      "name": {
+        "ar": "طاجين دجاج",
+        "en": "Chicken Tagine",
+        "fr": "Tajine de poulet"
+      },
+      "desc": {
+        "ar": "طاجين دجاج بالليمون والزيتون",
+        "en": "Chicken tagine with lemon & olives",
+        "fr": "Tajine de poulet au citron & olives"
+      },
+      "restaurantId": "REST-1",
+      "isAvailable": true,
+      "createdAt": "2026-10-29T16:51:10.587Z"
+    },
+    {
+      "id": "m2",
+      "cat": "moroccan",
+      "catLabel": {
+        "ar": "مغربي",
+        "en": "Moroccan",
+        "fr": "Marocain"
+      },
+      "price": 45,
+      "img": "https://uploads.onecompiler.io/44avb35xn/44azkc7wy/Photoroom-20260120_003048_7.png",
+      "name": {
+        "ar": "كسكس",
+        "en": "Couscous",
+        "fr": "Couscous"
+      },
+      "desc": {
+        "ar": "كسكس بالخضر والمرق",
+        "en": "Couscous with vegetables",
+        "fr": "Couscous aux légumes"
+      },
+      "restaurantId": "REST-1",
+      "isAvailable": true,
+      "createdAt": "2026-10-29T16:51:10.587Z"
+    },
+    {
+      "id": "i1",
+      "cat": "italian",
+      "catLabel": {
+        "ar": "إيطالي",
+        "en": "Italian",
+        "fr": "Italien"
+      },
+      "price": 45,
+      "img": "https://images.unsplash.com/photo-1521389508051-d7ffb5dc8ff7?auto=format&fit=crop&w=900&q=70",
+      "name": {
+        "ar": "بيتزا مارغريتا",
+        "en": "Margherita Pizza",
+        "fr": "Pizza Margherita"
+      },
+      "desc": {
+        "ar": "طماطم + جبن + ريحان",
+        "en": "Tomato + cheese + basil",
+        "fr": "Tomate + fromage + basilic"
+      },
+      "restaurantId": "REST-1",
+      "isAvailable": true,
+      "createdAt": "2026-10-29T16:51:10.587Z"
+    },
+    {
+      "id": "i2",
+      "cat": "italian",
+      "catLabel": {
+        "ar": "إيطالي",
+        "en": "Italian",
+        "fr": "Italien"
+      },
+      "price": 40,
+      "img": "https://images.unsplash.com/photo-1604908554085-2c0a82b1f345?auto=format&fit=crop&w=900&q=70",
+      "name": {
+        "ar": "باستا ألفريدو",
+        "en": "Alfredo Pasta",
+        "fr": "Pâtes Alfredo"
+      },
+      "desc": {
+        "ar": "صلصة كريمية وجبن",
+        "en": "Creamy sauce & cheese",
+        "fr": "Sauce crémeuse & fromage"
+      },
+      "restaurantId": "REST-1",
+      "isAvailable": true,
+      "createdAt": "2026-10-29T16:51:10.587Z"
+    },
+    {
+      "id": "a1",
+      "cat": "american",
+      "catLabel": {
+        "ar": "أمريكي",
+        "en": "American",
+        "fr": "Américain"
+      },
+      "price": 50,
+      "img": "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=900&q=70",
+      "name": {
+        "ar": "برغر لحم",
+        "en": "Beef Burger",
+        "fr": "Burger de bœuf"
+      },
+      "desc": {
+        "ar": "برغر مع بطاطس",
+        "en": "Burger with fries",
+        "fr": "Burger avec frites"
+      },
+      "restaurantId": "REST-1",
+      "isAvailable": true,
+      "createdAt": "2026-10-29T16:51:10.587Z"
+    },
+    {
+      "id": "a2",
+      "cat": "american",
+      "catLabel": {
+        "ar": "أمريكي",
+        "en": "American",
+        "fr": "Américain"
+      },
+      "price": 30,
+      "img": "https://images.unsplash.com/photo-1604908176997-125f25cc5002?auto=format&fit=crop&w=900&q=70",
+      "name": {
+        "ar": "دجاج مقرمش",
+        "en": "Crispy Chicken",
+        "fr": "Poulet croustillant"
+      },
+      "desc": {
+        "ar": "قطع دجاج مقرمشة",
+        "en": "Crispy chicken bites",
+        "fr": "Bouchées de poulet croustillantes"
+      },
+      "restaurantId": "REST-1",
+      "isAvailable": true,
+      "createdAt": "2026-10-29T16:51:10.587Z"
+    },
+    {
+      "id": "h1",
+      "cat": "indian",
+      "catLabel": {
+        "ar": "هندي",
+        "en": "Indian",
+        "fr": "Indien"
+      },
+      "price": 55,
+      "img": "https://uploads.onecompiler.io/44avb35xn/44azkc7wy/Photoroom-20260120_003048_2.png",
+      "name": {
+        "ar": "دجاج تيكا ماسالا",
+        "en": "Chicken Tikka Masala",
+        "fr": "Poulet Tikka Masala"
+      },
+      "desc": {
+        "ar": "صلصة متبلة وكريمية",
+        "en": "Spiced creamy sauce",
+        "fr": "Sauce épicée et crémeuse"
+      },
+      "restaurantId": "REST-1",
+      "isAvailable": true,
+      "createdAt": "2026-10-29T16:51:10.587Z"
+    },
+    {
+      "id": "h2",
+      "cat": "indian",
+      "catLabel": {
+        "ar": "هندي",
+        "en": "Indian",
+        "fr": "Indien"
+      },
+      "price": 20,
+      "img": "https://images.unsplash.com/photo-1625944522862-37c4f97e3b16?auto=format&fit=crop&w=900&q=70",
+      "name": {
+        "ar": "برياني دجاج",
+        "en": "Chicken biryani",
+        "fr": "Biryani au poulet"
+      },
+      "desc": {
+        "ar": "أرز هندي طري",
+        "en": "Soft Indian rice",
+        "fr": "Riz indien parfumé"
+      },
+      "restaurantId": "REST-1",
+      "isAvailable": true,
+      "createdAt": "2026-10-29T16:51:10.587Z"
+    },
+    {
+      "id": "j1",
+      "cat": "juice",
+      "catLabel": {
+        "ar": "عصائر",
+        "en": "Juice",
+        "fr": "Jus"
+      },
+      "price": 3,
+      "img": "https://images.unsplash.com/photo-1542444459-db63c3c0e3b4?auto=format&fit=crop&w=900&q=70",
+      "name": {
+        "ar": "عصير برتقال",
+        "en": "Orange Juice",
+        "fr": "Jus d'orange"
+      },
+      "desc": {
+        "ar": "كأس عصير طبيعي",
+        "en": "Fresh orange juice",
+        "fr": "Jus d’orange frais"
+      },
+      "restaurantId": "REST-1",
+      "isAvailable": true,
+      "createdAt": "2026-10-29T16:51:10.587Z"
+    },
+    {
+      "id": "s1",
+      "cat": "soda",
+      "catLabel": {
+        "ar": "مشروبات غازية",
+        "en": "Soda",
+        "fr": "Soda"
+      },
+      "price": 8,
+      "img": "https://uploads.onecompiler.io/44avb35xn/44azkc7wy/lkj%5Ehj%20(8).png",
+      "name": {
+        "ar": "كوكا كولا",
+        "en": "Coca Cola",
+        "fr": "Coca-Cola"
+      },
+      "desc": {
+        "ar": "علبة 330ml",
+        "en": "Can 330ml",
+        "fr": "Canette 330ml"
+      },
+      "restaurantId": "REST-1",
+      "isAvailable": true,
+      "createdAt": "2026-10-29T16:51:10.587Z"
+    },
+    {
+      "id": "w1",
+      "cat": "water",
+      "catLabel": {
+        "ar": "مياه",
+        "en": "Water",
+        "fr": "Eau"
+      },
+      "price": 6,
+      "img": "https://uploads.onecompiler.io/44avb35xn/44azkc7wy/Photoroom-20260120_003048_1.png",
+      "name": {
+        "ar": "ماء معدني",
+        "en": "Mineral Water",
+        "fr": "Eau minérale"
+      },
+      "desc": {
+        "ar": "قارورة 500ml",
+        "en": "Bottle 500ml",
+        "fr": "Bouteille 500ml"
+      },
+      "restaurantId": "REST-1",
+      "isAvailable": true,
+      "createdAt": "2026-10-29T16:51:10.587Z"
+    }
+  ]
+}

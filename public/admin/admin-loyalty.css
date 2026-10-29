@@ -1,0 +1,22 @@
+/* Loyalty & points management page. Tokens come from brand.css / admin.css. */
+#loyaltyModal .sen-box{max-width:880px}
+.loy-stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:6px 0 14px}
+.loy-stat{background:var(--card,#fff);border:1px solid var(--border,rgba(128,128,128,.28));border-radius:14px;padding:12px}
+.loy-stat span{display:block;font-size:11.5px;opacity:.7;margin-bottom:4px}
+.loy-stat b{font-size:17px;direction:ltr;display:block}
+.loy-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin:6px 0 14px}
+.sen-field{display:grid;gap:4px;min-width:0}
+.sen-field label{font-size:12px}
+.loy-preview{display:grid;gap:10px;margin:8px 0 12px}
+.loy-term{border:1px dashed var(--border,rgba(128,128,128,.35));border-radius:12px;padding:10px 12px;font-size:12.5px;line-height:1.7}
+.loy-term b{display:block;margin-bottom:4px;font-size:11px;letter-spacing:.08em;opacity:.65}
+.loy-term p{margin:0 0 6px}
+.loy-customers{margin-top:16px;border-top:1px solid var(--border,rgba(128,128,128,.28));padding-top:14px}
+.loy-customers h4,.loy-settings h4,.loy-detail h4{margin:16px 0 8px;font-size:13.5px}
+#loyaltyModal input,#loyaltyModal select,#loyaltyModal textarea{width:100%}
+#loyaltyModal .sen-acts{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+#loyaltyModal .sen-row{align-items:flex-start}
+@media (max-width:520px){
+  .loy-stat-row{grid-template-columns:repeat(2,1fr)}
+  .loy-grid{grid-template-columns:1fr}
+}

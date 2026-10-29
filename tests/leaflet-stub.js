@@ -29,6 +29,7 @@
   MapObj.prototype = Object.create(Evt.prototype);
   MapObj.prototype.setView = function (c) { this._c = Array.isArray(c) ? { lat: c[0], lng: c[1] } : c; return this; };
   MapObj.prototype.getCenter = function () { return this._c; };
+  MapObj.prototype.invalidateSize = function () { return this; };
   MapObj.prototype.fitBounds = function (b) { this.fits.push(b); return this; };
   MapObj.prototype.removeLayer = function (l) { var k = reg.layers.indexOf(l); if (k >= 0) reg.layers.splice(k, 1); };
   window.L = {

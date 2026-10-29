@@ -101,9 +101,10 @@ html[data-theme="dark"] .t-green{ color:#3ecaa3; } html[data-theme="dark"] .t-bl
 .sb-sub{ margin:0 0 4px; padding-inline-start:46px; display:flex; flex-direction:column; gap:2px; }
 .sb-subitem{ min-height:38px; padding:0 12px; border:0; border-radius:10px; background:transparent; cursor:pointer; text-align:start; font-size:14px; color:var(--sb-muted); display:flex; align-items:center; }
 .sb-subitem:hover{ background:var(--sb-hover); color:var(--sb-text); }
+.sb-subitem.active{ background:var(--sb-active); color:var(--sb-text); font-weight:600; }
 
 /* bottom */
-.sb-bottom{ margin-top:10px; padding-top:10px; display:flex; flex-direction:column; gap:12px; }
+.sb-bottom{ flex:0 0 auto; margin-top:10px; padding-top:10px; display:flex; flex-direction:column; gap:12px; }
 .sb-theme{ display:grid; grid-template-columns:1fr 1fr; padding:4px; border-radius:14px; background:var(--sb-seg); position:relative; }
 .sb-theme button{
   display:flex; align-items:center; justify-content:center; gap:8px; min-height:38px; border:0; border-radius:10px;
@@ -128,8 +129,7 @@ html:not([data-theme="dark"]) .sb-theme button.on{ background:#fff; box-shadow:0
   body.sb-collapsed .sb{ width:var(--sb-w-c); padding-inline:10px; }
   body.sb-collapsed .sb-name, body.sb-collapsed .sb-text, body.sb-collapsed .sb-label, body.sb-collapsed .sb-chev,
   body.sb-collapsed .sb-sub, body.sb-collapsed .sb-user-text, body.sb-collapsed .sb-search input,
-  body.sb-collapsed .sb-theme button span, body.sb-collapsed .sb-theme button.on,
-  body.sb-collapsed .sb-user .sb-logout{ display:none; }
+  body.sb-collapsed .sb-theme button span, body.sb-collapsed .sb-theme button.on{ display:none; }
   body.sb-collapsed .sb-logo img{ width:40px; height:40px; }
   body.sb-collapsed .sb-top{ justify-content:center; padding-inline:0; }
   body.sb-collapsed .sb-toggle{ inset-inline-end:-26px; }
@@ -142,7 +142,7 @@ html:not([data-theme="dark"]) .sb-theme button.on{ background:#fff; box-shadow:0
   body.sb-collapsed .sb-item.notify::after{ inset-inline-start:auto; inset-inline-end:8px; top:7px; }
   body.sb-collapsed .sb-theme{ display:flex; padding:0; background:transparent; justify-content:center; }
   body.sb-collapsed .sb-theme button{ width:44px; height:44px; background:var(--sb-seg); }
-  body.sb-collapsed .sb-user{ justify-content:center; padding:0; }
+  body.sb-collapsed .sb-user{ flex-direction:column; justify-content:center; gap:4px; padding:0; }
   body.sb-collapsed .sb-label{ display:block; height:1px; margin:8px 14px; font-size:0; background:var(--sb-line); }
   body.sb-collapsed .sb-label:first-child{ display:none; }
 }
@@ -260,3 +260,11 @@ body.page-active main.admin-wrap:not(.admin-pages){ display:none; }
 
 /* support is a two-pane chat: give it a stable height inside the page area */
 #supportModal.page-view .modal-card.sc-card{ width:100%; max-width:none; height:calc(100dvh - 130px); min-height:560px; }
+
+/* Standalone managers keep their own scripts/styles, but occupy only the shared content slot. */
+.admin-embedded-page{display:block;width:100%;height:calc(100dvh - 135px);min-height:620px;border:0;border-radius:16px;background:var(--card,#fff)}
+.sen-frame-head{display:flex;justify-content:flex-start;margin:0 0 10px}
+.admin-pages .page-view > .sen-box .sen-list{max-height:none;overflow:visible}
+.sb-top,.sb-search{flex-shrink:0}
+@media (max-height:560px){.sb{padding-block:8px}.sb-top{margin-bottom:4px}.sb-search{margin-bottom:4px}.sb-bottom{gap:4px;margin-top:4px;padding-top:4px}}
+@media (max-width:860px){.admin-embedded-page{height:calc(100dvh - 190px);min-height:560px}}

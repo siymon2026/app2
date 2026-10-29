@@ -1016,13 +1016,20 @@ let PAYMENT_METHODS = [{ id: "cod", kind: "cod", available: true, name: {}, stat
 let SELECTED_PAYMENT = "cod";
 let paymentsLoaded = false;
 function payIcon(m) {
-  const t = { stripe: "💳", cod: "💵", tpe: "🏧" }[m.id] || (m.kind === "transfer" ? "🏦" : "•");
+  const t = { stripe: "💳", cod: "💵", tpe: "🏧", wallet: "👛" }[m.id] || (m.kind === "transfer" ? "🏦" : "•");
   return `<span class="pay-ic pay-ic-${escHtml(m.id)}" aria-hidden="true">${t}</span>`;
 }
 function payName(m) {
   return (m.name && (m.name[lang] || m.name.ar || m.name.en)) || m.id;
 }
 function payNote(m) {
+  if (m.id === "wallet") {
+    const bal = money(WALLET.balance);
+    const goods = Math.max(0, cartSubTotal() - cartDiscount());
+    if (!(WALLET.balance > 0)) return trL("الرصيد فارغ — اشحن محفظتك", "Solde vide — rechargez votre portefeuille", "Empty balance — top up your wallet");
+    if (WALLET.balance + 0.001 < goods) return trL(`الرصيد ${bal} لا يغطي السلة (${money(goods)})`, `Solde ${bal} insuffisant pour ${money(goods)}`, `Balance ${bal} does not cover ${money(goods)}`);
+    return trL(`الرصيد المتاح ${bal}`, `Solde disponible ${bal}`, `Available balance ${bal}`);
+  }
   const msg = m.statusMessage && (m.statusMessage[lang] || m.statusMessage.ar);
   if (msg) return msg;
   if (m.available) return m.kind === "tpe" ? trL("ادفع ببطاقتك عبر جهاز TPE عند التسليم", "Payez par carte via TPE à la livraison", "Pay by card terminal when delivered") : trL("ادفع عند استلام طلبك", "Payez à la réception de votre commande", "Pay when you receive your order");
@@ -1038,7 +1045,11 @@ async function loadPaymentMethods() {
       PAYMENT_METHODS = d.methods;
       paymentsLoaded = true;
       const cur = PAYMENT_METHODS.find((m) => m.id === SELECTED_PAYMENT);
-      if (!cur || !cur.available) { const first = PAYMENT_METHODS.find((m) => m.available); SELECTED_PAYMENT = first ? first.id : ""; }
+      // Never pre-select the wallet: paying from the balance must stay a deliberate choice.
+      if (!cur || !cur.available) {
+        const first = PAYMENT_METHODS.find((m) => m.available && m.id !== "wallet") || PAYMENT_METHODS.find((m) => m.available);
+        SELECTED_PAYMENT = first ? first.id : "";
+      }
     }
   } catch (_e) { /* keep fallback */ }
   renderPayments();
@@ -1068,25 +1079,92 @@ async function loadCheckoutWallet() {
     if (r.ok) { const d = await r.json(); WALLET.balance = Number(d.walletBalance || 0); }
   } catch (_e) {}
   WALLET.loaded = true;
+  if (SELECTED_PAYMENT === "wallet" && !(WALLET.balance > 0) && cart.size > 0) {
+    // The balance no longer exists (or is empty): never keep an unusable method selected.
+    const first = (PAYMENT_METHODS || []).find((m) => m.available && m.id !== "wallet");
+    SELECTED_PAYMENT = first ? first.id : "";
+  }
   renderWalletUse();
+  renderPayments();
 }
-function walletContribution() {
-  if (!WALLET.use) return 0;
-  const goods = Math.max(0, cartSubTotal() - cartDiscount());
-  return Math.round(Math.min(WALLET.balance, goods) * 100) / 100;
-}
+// The wallet pays the GOODS part in full (never a silent partial payment): the server
+// refuses the order when the balance does not cover it. Mixing the wallet with another
+// method is NOT offered until it is fully implemented and tested.
+function walletGoods() { return Math.max(0, cartSubTotal() - cartDiscount()); }
+function walletShortfall() { return Math.max(0, Math.round((walletGoods() - WALLET.balance) * 100) / 100); }
 function renderWalletUse() {
   const box = document.getElementById("walletUse");
   if (!box) return;
-  if (!WALLET.loaded || !(WALLET.balance > 0) || cart.size === 0) { box.style.display = "none"; return; }
-  const w = walletContribution();
-  const due = Math.max(0, cartGrandTotal() - w);
+  const usingWallet = SELECTED_PAYMENT === "wallet";
+  WALLET.use = usingWallet;
+  if (!usingWallet || !WALLET.loaded || cart.size === 0) { box.style.display = "none"; box.innerHTML = ""; return; }
+  const goods = walletGoods();
+  const delivery = Math.max(0, cartGrandTotal() - goods);
   box.style.display = "";
-  box.innerHTML = `<label class="pay-opt${WALLET.use ? " is-selected" : ""}" style="cursor:pointer"><input type="checkbox" id="useWalletChk" ${WALLET.use ? "checked" : ""} style="margin-inline-end:8px"><span class="pay-txt"><b>${trL("استخدم رصيد المحفظة", "Utiliser le portefeuille", "Use wallet balance")} (${money(WALLET.balance)})</b><small>${trL("يغطي قيمة المنتجات فقط؛ رسوم التوصيل تُدفع عند التسليم", "Couvre les articles uniquement; la livraison se paie à la réception", "Covers items only; delivery is paid on delivery")}</small></span></label>` +
-    (WALLET.use ? `<div class="pay-txt" style="padding:6px 4px"><small>${trL("من المحفظة", "Depuis le portefeuille", "From wallet")}: <b>${money(w)}</b> · ${trL("المتبقي عند التسليم", "Reste à payer à la livraison", "Remaining on delivery")}: <b>${money(due)}</b></small></div>` : "");
+  const short = WALLET.balance + 0.001 < goods;
+  box.innerHTML = `<div class="pay-txt" style="padding:6px 4px"><small>${
+    short
+      ? trL(`المطلوب من المحفظة ${money(goods)} والرصيد ${money(WALLET.balance)} — ستحتاج إلى شحن المحفظة.`, `Requis ${money(goods)}, solde ${money(WALLET.balance)} — rechargez votre portefeuille.`, `Required ${money(goods)}, balance ${money(WALLET.balance)} — top up your wallet.`)
+      : trL(`سيُخصم <b>${money(goods)}</b> من محفظتك الآن؛ رسوم التوصيل <b>${money(delivery)}</b> تُدفع عند التسليم.`, `Débit de <b>${money(goods)}</b> du portefeuille ; livraison <b>${money(delivery)}</b> à la réception.`, `<b>${money(goods)}</b> will be debited now; delivery <b>${money(delivery)}</b> is paid on delivery.`)
+  }</small></div>`;
 }
-document.addEventListener("change", (e) => {
-  if (e.target && e.target.id === "useWalletChk") { WALLET.use = !!e.target.checked; renderWalletUse(); }
+
+/* ---- insufficient wallet balance: one modal, real numbers, two ways forward ---- */
+function walletModalEl() { return document.getElementById("walletShortSheet"); }
+function closeWalletShort() {
+  const s = walletModalEl();
+  if (s) { s.hidden = true; if (!document.querySelector(".sheet:not([hidden])")) document.body.classList.remove("no-scroll"); }
+}
+function openWalletShort(info) {
+  const s = walletModalEl();
+  if (!s) return;
+  const available = Number(info && info.available != null ? info.available : WALLET.balance) || 0;
+  const required = Number(info && info.required != null ? info.required : walletGoods()) || 0;
+  const shortfall = Number(info && info.shortfall != null ? info.shortfall : Math.max(0, required - available)) || 0;
+  const cur = (info && info.currency) || "MAD";
+  document.getElementById("wsTitle").textContent = trL("رصيد المحفظة غير كافٍ", "Solde du portefeuille insuffisant", "Wallet balance is not enough");
+  document.getElementById("wsBody").innerHTML =
+    `<p>${trL("رصيد محفظتك غير كافٍ لإتمام الدفع. اختر طريقة دفع أخرى أو اشحن محفظتك للمتابعة.", "Le solde de votre portefeuille est insuffisant pour payer. Choisissez un autre moyen ou rechargez votre portefeuille.", "Your wallet balance is not enough to complete the payment. Choose another method or top up your wallet.")}</p>` +
+    `<div class="ws-figures">` +
+    `<div><span>${trL("الرصيد الحالي", "Solde actuel", "Current balance")}</span><b>${money(available)} ${cur}</b></div>` +
+    `<div><span>${trL("المطلوب", "Requis", "Required")}</span><b>${money(required)} ${cur}</b></div>` +
+    `<div class="short"><span>${trL("النقص", "Manque", "Shortfall")}</span><b>${money(shortfall)} ${cur}</b></div>` +
+    `</div>` +
+    `<p class="ws-note">${trL("طلبك محفوظ في السلة ولم يُرسل — لن يتم خصم أي مبلغ.", "Votre panier est conservé et rien n'a été débité.", "Your cart is kept and nothing was charged.")}</p>`;
+  document.getElementById("wsTop").textContent = trL("شحن المحفظة", "Recharger", "Top up wallet");
+  document.getElementById("wsOther").textContent = trL("اختيار طريقة دفع أخرى", "Choisir un autre moyen", "Choose another method");
+  s.hidden = false;
+  document.body.classList.add("no-scroll");
+  const b = document.getElementById("wsTop");
+  if (b) b.focus();
+}
+
+// Buttons of the insufficient-balance modal: top up (opens the real wallet page in the
+// sheet, the cart is preserved) or go back to the method list (no order is created).
+document.addEventListener("click", (e) => {
+  const hit = (sel) => e.target && e.target.closest && e.target.closest(sel);
+  if (hit("#wsClose") || e.target === walletModalEl()) { closeWalletShort(); return; }
+  if (hit("#wsTop")) {
+    closeWalletShort();
+    if (typeof window.siymonOpenWallet === "function") window.siymonOpenWallet();
+    else location.href = "/wallet/";
+    return;
+  }
+  if (hit("#wsOther")) {
+    closeWalletShort();
+    const first = (PAYMENT_METHODS || []).find((m) => m.available && m.id !== "wallet");
+    if (first) { SELECTED_PAYMENT = first.id; renderPayments(); renderWalletUse(); }
+    const list = document.getElementById("payList");
+    if (list) { list.scrollIntoView({ block: "center", behavior: "smooth" }); const o = list.querySelector(".pay-opt:not(.is-disabled)"); if (o) o.focus(); }
+    return;
+  }
+});
+window.addEventListener("siymon:wallet-closed", () => { loadCheckoutWallet(); });
+window.addEventListener("message", (e) => {
+  const d = e.data || {};
+  if (d.type !== "siymon:wallet") return;
+  if (d.event === "close") { const s = document.getElementById("walletSheet"); if (s) { s.hidden = true; const f = document.getElementById("walletFrame"); if (f) f.removeAttribute("src"); document.body.classList.remove("no-scroll"); } }
+  loadCheckoutWallet();
 });
 document.addEventListener("click", (e) => {
   const o = e.target.closest && e.target.closest("#payList .pay-opt");
@@ -1339,7 +1417,6 @@ function buildOrderPayload() {
       customer: customerInfo,
       items,
       paymentMethod: SELECTED_PAYMENT,
-      ...(WALLET.use && WALLET.balance > 0 ? { useWallet: true } : {}),
       currency: lang === "ar" ? CURRENCY_AR : CURRENCY_EN,
       ...(PROMO.code && PROMO.state === "ok" ? { promoCode: PROMO.code } : {}),
     },
@@ -1359,6 +1436,12 @@ async function placeOrder() {
   if (!SELECTED_PAYMENT) {
     alert(trL("لا توجد طريقة دفع متاحة حاليًا", "Aucun mode de paiement disponible", "No payment method is available right now"));
     return;
+  }
+  if (SELECTED_PAYMENT === "wallet") {
+    // The server re-checks everything; this only avoids a pointless round-trip and
+    // explains the refusal with the real numbers instead of a generic error.
+    if (!getCustomerToken()) { alert(trL("سجّل الدخول لاستخدام المحفظة", "Connectez-vous pour utiliser le portefeuille", "Sign in to use your wallet")); updateLoginGate(); return; }
+    if (WALLET.balance + 0.001 < walletGoods()) { openWalletShort({ available: WALLET.balance, required: walletGoods(), shortfall: walletShortfall() }); loadCheckoutWallet(); return; }
   }
   if (distanceMode() && DQ.state !== "ok") {
     refreshDeliveryQuote();
@@ -1380,7 +1463,17 @@ async function placeOrder() {
     });
     const data = await res.json();
     if (!res.ok) {
-      if (String(data?.code || "").startsWith("WALLET_")) { alert(trL("رصيد المحفظة غير كافٍ أو تغيّر. حاول مجددًا.", "Solde du portefeuille insuffisant ou modifié. Réessayez.", "Wallet balance is insufficient or changed. Please try again.")); WALLET.use = false; loadCheckoutWallet(); return; }
+      if (data?.code === "WALLET_INSUFFICIENT") {
+        openWalletShort(Object.assign({}, data.wallet || {}, { currency: data?.wallet?.currency || "MAD" }));
+        loadCheckoutWallet();
+        return;
+      }
+      if (String(data?.code || "").startsWith("WALLET_")) {
+        alert((data?.message && (data.message[lang] || data.message.ar)) || trL("تعذّر إتمام الدفع من المحفظة. حاول مجددًا.", "Le paiement par portefeuille a échoué. Réessayez.", "The wallet payment could not be completed. Please try again."));
+        loadCheckoutWallet();
+        return;
+      }
+      if (data?.code === "LOGIN_REQUIRED") { alert(trL("سجّل الدخول لاستخدام المحفظة", "Connectez-vous pour utiliser le portefeuille", "Sign in to use your wallet")); updateLoginGate(); return; }
       if (data?.code === "PAYMENT_METHOD_NOT_AVAILABLE") { alert(trL("طريقة الدفع هذه غير متاحة حاليًا. اختر طريقة أخرى.", "Ce mode de paiement n'est pas disponible. Choisissez-en un autre.", "This payment method is not available right now. Please choose another.")); loadPaymentMethods(); return; }
       if (["ADDRESS_LOCATION_REQUIRED", "ROUTING_UNAVAILABLE", "OUT_OF_RANGE", "STORE_LOCATION_MISSING"].includes(data?.code)) {
         DQ.state = data.code === "ADDRESS_LOCATION_REQUIRED" ? "needpin" : "error"; DQ.code = data.code; DQ.key = ""; DQ.msg = data.message && typeof data.message === "object" ? data.message : null;
@@ -1421,7 +1514,7 @@ async function placeOrder() {
     }
     resetPromo();
     clearCart();
-    WALLET.use = false; loadCheckoutWallet();
+    WALLET.use = false; loadCheckoutWallet(); renderPayments();
     // تصفير الإحداثيات بعد نجاح الطلب
     exactLat = null;
     exactLng = null;

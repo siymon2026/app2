@@ -14,8 +14,8 @@
   var NAV = {
     drivers: "drivers.read", dispatch: "dispatch.manage", customers: "customers.read",
     support: "support.use", topups: "finance.read",
-    notifications: "*", payments: "payments.manage", promos: "*", staff: "*", settings: "*", menuManage: "*", subRest: "*", subMeals: "*",
-    portal: "*", enterStore: "*", storeSupport: "support.use", exceptions: "exceptions.read", system: "finance.read", feedback: "complaints.read", reports: "reports.read", zones: "zones.read",
+    notifications: "*", payments: "payments.manage", loyalty: "loyalty.read", promos: "*", staff: "*", settings: "*", menuManage: "*", subRest: "*", subMeals: "*",
+    portal: "*", storeEnter: "*", audit: "audit.read", storeSupport: "support.use", exceptions: "exceptions.read", system: "finance.read", feedback: "complaints.read", reports: "reports.read", zones: "zones.read",
   };
   // permission -> CSS selectors hidden when the role lacks it
   var ACTIONS = {
@@ -26,6 +26,9 @@
     "orders.manage": ['[data-action="accept"]', '[data-action="done"]', '[data-action="wifi"]', "#detailDoneBtn", "#detailWifiBtn"],
     "orders.exception": ["#verifyExceptionBtn"],
     "stores.read": ['[data-action="store-profile"]'],
+    "loyalty.adjust": ["#loyaltyAdjustBox"],
+    "loyalty.settings": ["#loyaltySettingsBox"],
+    "wallet.adjust": ["[data-wallet-adjust]"],
     "*": ['[data-action="review-store"]', '[data-action="edit-rest"]', '[data-action="del-rest"]', '[data-action="archive-rest"]', '[data-action="toggle-rest"]',
           '[data-action="auth-rest"]', "#restToggleBtn", "#restaurantPortalBtn", "#sbPortal", "#sbEnterStore", "#sbEnterRest"],
   };
@@ -52,7 +55,7 @@
     });
     // generic: any element can declare data-perm="orders.manage" (or "*") in markup
     var tagged = {};
-    Object.keys(ACTIONS).concat(Object.keys(NAV).map(function (k) { return NAV[k]; }), ["orders.manage", "orders.exception", "support.use", "finance.read", "finance.write", "stores.read", "drivers.read"]).forEach(function (p) {
+    Object.keys(ACTIONS).concat(Object.keys(NAV).map(function (k) { return NAV[k]; }), ["orders.manage", "orders.exception", "support.use", "finance.read", "finance.write", "stores.read", "drivers.read", "loyalty.read", "loyalty.adjust", "loyalty.settings", "wallet.adjust", "wallet.settings"]).forEach(function (p) {
       if (!hasP(p) && !tagged[p]) { tagged[p] = 1; css.push('[data-perm="' + p + '"]'); }
     });
     return css;
