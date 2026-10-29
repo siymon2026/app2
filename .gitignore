@@ -3,3 +3,12 @@ node_modules/
 .venv/
 __pycache__/
 *.py[cod]
+
+# Runtime data, logs and user uploads must never be committed:
+# they hold customer/admin records, wallet ledgers, session refresh tokens and
+# driver identity documents. The server recreates empty stores on first run and
+# the real data lives on the server (or in a backup), not in git.
+data/
+logs/
+backups/
+public/uploads/
