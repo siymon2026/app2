@@ -48,7 +48,7 @@ function drawFrame(ctx, def, t, frame) {
     ctx.fillStyle = `rgba(4,5,4,${tr * 0.92})`;
     ctx.fillRect(0, 0, E.W, E.H);
   }
-  E.post(ctx, def._post, frame, { bloom: s.bloom === undefined ? 0.5 : s.bloom, grain: s.grain });
+  E.post(ctx, def._post, frame, { bloom: (s.bloom === undefined ? 0.5 : s.bloom) * (def.BLOOM_K || 0.62), grain: s.grain });
 }
 
 async function renderFull(def) {

@@ -256,16 +256,16 @@ function mapBase(ctx, x, y, w, h, t, opt = {}) {
   ctx.fillStyle = g;
   ctx.fillRect(x, y, w, h);
   // street network (isometric-ish)
-  ctx.strokeStyle = "rgba(248,248,248,0.075)";
-  ctx.lineWidth = 2;
-  for (let i = -6; i < 14; i++) {
+  ctx.strokeStyle = "rgba(248,248,248,0.05)";
+  ctx.lineWidth = 3;
+  for (let i = -4; i < 10; i++) {
     ctx.beginPath();
-    ctx.moveTo(x + i * 54, y - 20);
-    ctx.lineTo(x + i * 54 + 160, y + h + 20);
+    ctx.moveTo(x + i * 120, y - 20);
+    ctx.lineTo(x + i * 120 + 260, y + h + 20);
     ctx.stroke();
     ctx.beginPath();
-    ctx.moveTo(x + i * 54, y + h + 20);
-    ctx.lineTo(x + i * 54 + 160, y - 20);
+    ctx.moveTo(x + i * 120, y + h + 20);
+    ctx.lineTo(x + i * 120 + 260, y - 20);
     ctx.stroke();
   }
   // blocks
@@ -290,4 +290,43 @@ function mapBase(ctx, x, y, w, h, t, opt = {}) {
   return { x, y, w, h };
 }
 
-module.exports = { P, rr, fillRR, card, bar, barG, pill, ripple, icon, thumb, IMG, setImages, statusBar, bottomNav, mapBase };
+
+/* hex-cell dispatch grid (H3-style) for driver map screens */
+function hexGrid(ctx, x, y, w, h, t, opt = {}) {
+  const R = opt.R || h * 0.042;
+  const hx = Math.sqrt(3) * R, vy = R * 1.5;
+  const cols = Math.ceil(w / hx) + 2, rows = Math.ceil(h / vy) + 2;
+  const cx = x + w * (opt.cx === undefined ? 0.55 : opt.cx);
+  const cy = y + h * (opt.cy === undefined ? 0.55 : opt.cy);
+  const pulse = 0.5 + 0.5 * Math.sin(t * 2.2);
+  const hexPath = (px, py) => {
+    ctx.beginPath();
+    for (let k = 0; k < 6; k++) {
+      const a = (Math.PI / 3) * k - Math.PI / 2;
+      const X = px + Math.cos(a) * R, Y = py + Math.sin(a) * R;
+      k ? ctx.lineTo(X, Y) : ctx.moveTo(X, Y);
+    }
+    ctx.closePath();
+  };
+  ctx.save();
+  ctx.lineWidth = Math.max(1.2, R * 0.06);
+  for (let r = -1; r < rows; r++) {
+    for (let c = -1; c < cols; c++) {
+      const px = x + c * hx + (r % 2 ? hx / 2 : 0);
+      const py = y + r * vy;
+      const d = Math.hypot(px - cx, py - cy) / (w * 0.5);
+      if (d > 1.95) continue;
+      const near = Math.max(0, 1 - d * 0.85);
+      hexPath(px, py);
+      if (near > 0.02) {
+        ctx.fillStyle = rgba(P.green, 0.035 + near * 0.07 * (0.7 + 0.3 * pulse));
+        ctx.fill();
+      }
+      ctx.strokeStyle = rgba(P.green, 0.05 + near * 0.16);
+      ctx.stroke();
+    }
+  }
+  ctx.restore();
+}
+
+module.exports = { P, rr, fillRR, card, bar, barG, pill, ripple, icon, thumb, IMG, setImages, statusBar, bottomNav, mapBase, hexGrid };

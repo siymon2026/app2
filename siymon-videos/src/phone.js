@@ -140,7 +140,7 @@ function renderDevice(ctx, cam, m, screenImg, opts = {}) {
 
   if (opts.edgeGlow) {
     const c = cam.project(M([0, 0, 0]));
-    if (c) glow(ctx, c.x, c.y, (opts.edgeGlowR || 520) * (c.s / 620), opts.edgeGlowColor || C.green, opts.edgeGlow);
+    if (c) glow(ctx, c.x, c.y, (opts.edgeGlowR || 520) * (c.s / 620), opts.edgeGlowColor || C.green, opts.edgeGlow * 0.42);
   }
   return { corners: (() => { const scr = ring(w, h, R + 0.001, bezel, t / 2 + 0.002).map(M); const p2 = scr.map((p) => cam.project(p)); return [p2[0], p2[7], p2[14], p2[21]]; })() };
 }

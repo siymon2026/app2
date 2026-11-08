@@ -176,7 +176,7 @@ function faceColor(base, normal, camPos, center, opts = {}) {
   const d1 = Math.max(0, V.dot(n, LIGHT));
   const d2 = Math.max(0, V.dot(n, LIGHT2));
   const rim = Math.pow(1 - Math.max(0, Math.abs(V.dot(n, view))), 3);
-  const amb = opts.amb === undefined ? 0.52 : opts.amb;
+  const amb = opts.amb === undefined ? 0.60 : opts.amb;
   const k = amb + d1 * (opts.key === undefined ? 0.95 : opts.key) + d2 * 0.30;
   let col = mix("#000000", base, clamp(k, 0, 1.35));
   if (rim > 0.78 && opts.rim !== false) col = mix(col, C.green, Math.min(0.5, (rim - 0.78) * 1.1 * (opts.rimK || 1)));
@@ -632,6 +632,9 @@ function post(ctx, postCtx, frame, opts = {}) {
     ctx.drawImage(bloom, 0, 0, W, H);
     ctx.restore();
   }
+  // deepen blacks a touch so the green haze never dominates
+  ctx.fillStyle = "rgba(0,0,0,0.10)";
+  ctx.fillRect(0, 0, W, H);
   // vignette
   const vg = ctx.createRadialGradient(W / 2, H * 0.48, H * 0.18, W / 2, H * 0.5, H * 0.78);
   vg.addColorStop(0, "rgba(0,0,0,0)");

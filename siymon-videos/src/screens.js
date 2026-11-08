@@ -1,7 +1,7 @@
 "use strict";
 const { rgba, mix, C, clamp, lerp, easeOut, easeInOut, easeOutBack, smoothstep } = require("./engine");
 const U = require("./ui");
-const { P, rr, fillRR, card, bar, barG, pill, ripple, icon, thumb, IMG, statusBar, bottomNav, mapBase } = U;
+const { P, rr, fillRR, card, bar, barG, pill, ripple, icon, thumb, IMG, statusBar, bottomNav, mapBase, hexGrid } = U;
 
 const RT = (w, pad, width) => w - pad - width;
 
@@ -728,8 +728,27 @@ function driverHome(ctx, w, h, t, o = {}) {
    ========================================================= */
 function driverOffer(ctx, w, h, t, o = {}) {
   ctx.fillStyle = P.bg; ctx.fillRect(0, 0, w, h);
-  mapBase(ctx, 0, 0, w, h, t, { route: [[0.2, 0.85], [0.4, 0.6], [0.62, 0.5], [0.8, 0.22]], routeW: 7 });
-  ctx.fillStyle = "rgba(9,10,9,0.55)"; ctx.fillRect(0, 0, w, h);
+  mapBase(ctx, 0, 0, w, h, t, {});
+  ctx.fillStyle = "rgba(9,10,9,0.62)"; ctx.fillRect(0, 0, w, h);
+  hexGrid(ctx, 0, 0, w, h, t, { R: h * 0.040, cx: 0.62, cy: 0.42 });
+  {
+    const rt = [[0.16, 0.41], [0.34, 0.34], [0.52, 0.35], [0.72, 0.23]];
+    ctx.save();
+    ctx.strokeStyle = rgba(P.green, 0.95); ctx.lineWidth = 8; ctx.lineCap = "round"; ctx.lineJoin = "round";
+    ctx.shadowColor = rgba(P.green, 0.9); ctx.shadowBlur = 18;
+    ctx.beginPath();
+    rt.forEach((p, i) => (i ? ctx.lineTo(p[0] * w, p[1] * h) : ctx.moveTo(p[0] * w, p[1] * h)));
+    ctx.stroke();
+    ctx.restore();
+    // store pin + rider dot
+    const sp = { x: rt[3][0] * w, y: rt[3][1] * h };
+    glowLocal(ctx, sp.x, sp.y, 46, P.green, 0.5);
+    fillRR(ctx, sp.x - 15, sp.y - 15, 30, 30, 10, P.green);
+    icon(ctx, "store", sp.x - 9, sp.y - 9, 18, "#0F0F0F");
+    const rp = { x: rt[0][0] * w, y: rt[0][1] * h };
+    glowLocal(ctx, rp.x, rp.y, 40, P.green, 0.6);
+    ctx.fillStyle = P.white; ctx.beginPath(); ctx.arc(rp.x, rp.y, 9, 0, Math.PI * 2); ctx.fill();
+  }
   statusBar(ctx, w);
   const p = clamp(o.p === undefined ? 1 : o.p);
   const sh = 620;
@@ -851,7 +870,7 @@ function verify(ctx, w, h, t, o = {}) {
   card(ctx, 60, cy, w - 120, 104, 20, "#1B1D1B", "rgba(248,248,248,0.10)");
   ctx.save();
   ctx.beginPath(); ctx.arc(60 + 52, cy + 52, 30, 0, Math.PI * 2); ctx.clip();
-  thumb(ctx, o.who === "customer" ? "customer" : "storefront", 60 + 22, cy + 22, 60, 60, 30, "#232");
+  thumb(ctx, o.who === "customer" ? "customer" : "storefront", 60 + 22, cy + 22, 60, 60, 30, "#222222");
   ctx.restore();
   bar(ctx, RT(w - 60, 96, 130), cy + 28, 130, 11, 0.7);
   bar(ctx, RT(w - 60, 96, 88), cy + 50, 88, 8, 0.28);

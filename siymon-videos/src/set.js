@@ -47,17 +47,18 @@ function avenue(ctx, cam, t, o = {}) {
     ctx.fillRect(0, Math.max(0, hz.y - 700), W, 900);
   }
   // road + sidewalks
-  const roadPts = [[0, 16], [0, 4], [0, -8], [0, -34]];
-  road(ctx, cam, [[-4.6, 16], [-4.6, -34]], 1.4, { fill: "#1B201A", y: 0.012 });
-  road(ctx, cam, [[4.6, 16], [4.6, -34]], 1.4, { fill: "#1B201A", y: 0.012 });
-  road(ctx, cam, roadPts, 6.4, { fill: "#191D18", edge: rgba(C.green, 0.55), edgeW: 2.6, y: 0.016 });
+  const zN = Math.min(2.2, (cam.pos ? cam.pos[2] : 0) - 0.6);
+  const roadPts = zN > -11 ? [[0, zN], [0, -12], [0, -34]] : [[0, zN], [0, -34]];
+  road(ctx, cam, [[-4.6, zN], [-4.6, -34]], 1.4, { fill: "#1B201A", y: 0.012 });
+  road(ctx, cam, [[4.6, zN], [4.6, -34]], 1.4, { fill: "#1B201A", y: 0.012 });
+  road(ctx, cam, roadPts, 6.4, { fill: "#232823", edge: rgba(C.green, 0.6), edgeW: 2.8, y: 0.016 });
   // lane dashes
-  for (let z = -32; z < 15; z += 3.2) {
+  for (let z = -32; z < zN + 1; z += 3.2) {
     drawQuad(ctx, cam, [[0.11, 0.04, z], [-0.11, 0.04, z], [-0.11, 0.04, z + 1.5], [0.11, 0.04, z + 1.5]], "rgba(223,255,206,0.18)");
   }
   // kerb glow
   for (const sx of [-3.3, 3.3]) {
-    const a = cam.project([sx, 0.05, 14]), b = cam.project([sx, 0.05, -34]);
+    const a = cam.project([sx, 0.05, zN]), b = cam.project([sx, 0.05, -34]);
     if (a && b) {
       const g = ctx.createLinearGradient(a.x, a.y, b.x, b.y);
       g.addColorStop(0, rgba(C.green, 0.5)); g.addColorStop(0.55, rgba(C.green, 0.22)); g.addColorStop(1, rgba(C.green, 0));
@@ -121,11 +122,12 @@ function avenue(ctx, cam, t, o = {}) {
     }
   }
   // foreground haze
-  const fg = ctx.createLinearGradient(0, H * 0.55, 0, H);
+  const fg = ctx.createLinearGradient(0, H * 0.30, 0, H);
   fg.addColorStop(0, rgba(fogC, 0));
-  fg.addColorStop(1, rgba(fogC, 0.85));
+  fg.addColorStop(0.55, rgba(fogC, 0.28));
+  fg.addColorStop(1, rgba(fogC, 0.78));
   ctx.fillStyle = fg;
-  ctx.fillRect(0, H * 0.55, W, H * 0.45);
+  ctx.fillRect(0, H * 0.30, W, H * 0.70);
   particles(ctx, cam, t, { n: 26, spread: 12, height: 6, depth: 16, base: 0.4, size: 2.2, seed: 31 });
 }
 
