@@ -147,8 +147,8 @@ function mapWorld(ctx, cam, t, o = {}) {
   }
   blocks.sort((a, b) => cam.depth([b.x, 0, b.z]) - cam.depth([a.x, 0, a.z]));
   for (const b of blocks) {
-    drawBox(ctx, cam, { p: [b.x, b.h / 2, b.z] }, [b.w, b.h, b.d], o.blockColor || "#2C3929", {
-      amb: 0.55, key: 0.9, rimK: 0.9, edge: rgba(C.green, 0.30), edgeW: 1.2,
+    drawBox(ctx, cam, { p: [b.x, b.h / 2, b.z] }, [b.w, b.h, b.d], o.blockColor || "#181E16", {
+      amb: 0.34, key: 0.55, rimK: 0.9, edge: rgba(C.green, 0.34), edgeW: 1.3,
     });
     if (b.h > 1.6) {
       const top = cam.project([b.x, b.h + 0.01, b.z]);

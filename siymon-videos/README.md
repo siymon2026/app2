@@ -5,9 +5,9 @@ flows in this repository — no speech, no on-screen text, no narration.
 
 | # | Film | Duration | Story |
 |---|------|----------|-------|
-| 1 | Customer experience | ~46 s | open app → discover stores → pick products → set address → pay → store prepares → live tracking → handover |
-| 2 | Restaurants & stores | ~44 s | merchant dashboard → manage products/stock → new order → accept → prepare → driver pickup |
-| 3 | Driver experience | ~49 s | go online → hex dispatch → offer → accept → ride to store → pickup code → deliver → delivery code → earnings |
+| 1 | Customer experience | 46.6 s | open app → discover stores → pick products → set address → pay → store prepares → live tracking → handover |
+| 2 | Restaurants & stores | 44.6 s | merchant dashboard → manage products/stock → new order → accept → prepare → driver pickup |
+| 3 | Driver experience | 49.8 s | go online → hex dispatch → offer → accept → ride to store → pickup code → deliver → delivery code → earnings |
 
 ## Read this first
 
@@ -45,12 +45,23 @@ software 3D engine:
   engine, impact). No voice.
 * `src/video.js` — frame loop → ffmpeg (H.264, yuv420p, 1080×1920, 30 fps) + AAC mux.
 
+### Output files
+
+```
+SIYMON-01-CUSTOMER-EXPERIENCE.mp4   1080x1920  30 fps  46.6 s  H.264 + AAC
+SIYMON-02-MERCHANT-EXPERIENCE.mp4   1080x1920  30 fps  44.6 s  H.264 + AAC
+SIYMON-03-DRIVER-EXPERIENCE.mp4     1080x1920  30 fps  49.8 s  H.264 + AAC
+```
+
+All three are silent-voice (music + SFX only), text-free, and share one phone/tablet model,
+one logo asset and one palette.
+
 ### Render
 
 ```bash
 cd siymon-videos/src
 export NODE_PATH=/path/to/node_modules   # @napi-rs/canvas + @ffmpeg-installer/ffmpeg
-node video.js 1        # full film  → sisymon-videos/SIYMON-01-CUSTOMER-EXPERIENCE.mp4
+node video.js 1        # full film  → siymon-videos/SIYMON-01-CUSTOMER-EXPERIENCE.mp4
 node video.js 2 12 20  # stills at t=12s, 20s → renders/stills/
 node video.js 3 audio  # music+SFX only → renders/*.wav
 ```

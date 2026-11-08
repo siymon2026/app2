@@ -219,7 +219,7 @@ const s8 = {
 
 module.exports = {
   name: "SIYMON-02-MERCHANT",
-  file: "SIYMON-02-MERCHANTS.mp4",
+  file: "SIYMON-02-MERCHANT-EXPERIENCE.mp4",
   duration: 44.6,
   bpm: 108,
   energy: 1,
